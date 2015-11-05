@@ -10,8 +10,10 @@ Spiesze z odpowiedzia.
 
 ### Wstepna Konfiguracja
 
+Najpierw upewnij sie ze masz skonfigurowany klucz RSA, czyli masz klucz prywatny w ~/.ssh i publiczny na githubie.
+
 Odpal terminal i przejdz do jakego folderu, np. ~/Documents.
-Wpisz tam 'git clone git@github.com/mpyzik/winery.git'.
+Wpisz tam 'git clone git@github.com:mpyzik/winery.git'.
 Efekt powinien być taki, ze skopiowales wlasnie nasze repo na swoj komputer.
 Ponadto, wie juz ono, gdzie jest jego oryginalna wersja.
 

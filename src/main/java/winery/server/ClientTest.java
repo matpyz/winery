@@ -1,6 +1,5 @@
 package winery.server;
 
-import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +50,7 @@ public class ClientTest {
 		} catch (IOException e) {
 			System.out.println("IO Connection failure");
 		}
-		while (text!=null) {
+		while (text != null) {
 			try {
 				text = br.readLine();
 				System.out.println(text);

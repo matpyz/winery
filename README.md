@@ -15,7 +15,7 @@ Aby przygotować commita:
 	git commit -m "Tekst z komentarzem"
 
 Aby wysłać commita:
-	git push master
+	git push
 
 Aby ściągnąć pliki z repozytorium:
 	git pull

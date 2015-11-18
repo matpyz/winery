@@ -1,0 +1,67 @@
+package winery.server;
+
+import java.util.ArrayList;
+/**
+ * Klasa reprezentująca komunikaty JSON, jakie może odbierać serwer
+ * @author aleks
+ *
+ */
+public class JSONObject {
+	// Pola użyteczne dla aplikacji mobilnej
+	private String type;
+	private String user_id;
+	private String user_pass;
+	private String code;
+	private ArrayList<String> place;
+	private String other;
+	private String data;
+	
+	/*
+	 * TODO: Tutaj będą dalsze pola, dla innych komunikatów niż z aplikacji mobilnej
+	 */
+	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getUser_id() {
+		return user_id;
+	}
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
+	}
+	public String getUser_pass() {
+		return user_pass;
+	}
+	public void setUser_pass(String user_pass) {
+		this.user_pass = user_pass;
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public ArrayList<String> getPlace() {
+		return place;
+	}
+	public void setPlace(ArrayList<String> place) {
+		this.place = place;
+	}
+	public String getOther() {
+		return other;
+	}
+	public void setOther(String other) {
+		this.other = other;
+	}
+	public String getData() {
+		return data;
+	}
+	public void setData(String data) {
+		this.data = data;
+	}
+
+
+}

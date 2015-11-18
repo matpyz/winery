@@ -18,10 +18,14 @@ public class ServerThread extends Thread {
 
 	private BufferedReader in = null;
 	private PrintWriter out = null;
-	private String dataIn = "";
 
+	ServerThread() {
+		
+	}
+	
 	ServerThread(Socket client) {
 		try {
+			this.client = client;
 			out = new PrintWriter(client.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			out.println("Welcome");
@@ -31,24 +35,24 @@ public class ServerThread extends Thread {
 	}
 
 	public void run() {
+		String dataIn = "";
+		String data = "";
 		try {
-			// na pewno pętla? Moze raczej jedno odebranie danych?
-			/*
-			 * // read from the URL Scanner scan = new
-			 * Scanner(url.openStream()); String str = new String(); while
-			 * (scan.hasNext()) str += scan.nextLine(); scan.close();
-			 */
+			dataIn = in.readLine();
+			System.out.println("Odebralem: " + dataIn);
 			while (dataIn != null) {
+				data += dataIn;
 				dataIn = in.readLine();
-				if (dataIn != null) {
-					// Zapewne rozpakowywanie jakiegoś JSON-a
-					// JSONObject json = new JSONObject(dataIn);
-					// if (json.has("Raport")) {
-					// przekaż Wojtkowi
-					// }
-					// System.out.println(id + "received: " + dataIn + " " +
-					// statusInAction);
-					// codeOfOperation = dataIn.substring(4, 6);
+			}
+
+			JSONObject receivedJSONObject = JSONOperations.parseJSONToObject(data);
+			if (receivedJSONObject != null) {
+				if (receivedJSONObject.getType().equals("Raport")) {
+					// TODO: przekazać obiekt receivedJSONObject modułowi Wojtka
+				}
+				// TODO: Ze znakiem zapytania - czy ten typ?...
+				else if (receivedJSONObject.getType().equals("Strona")) {
+					//TODO: przekazać obiekt modułowi generowania faktur
 				}
 			}
 

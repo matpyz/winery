@@ -32,7 +32,6 @@ public class ClientTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
 		try {
 			System.out.println("Connecting...");
@@ -44,6 +43,7 @@ public class ClientTest {
 			out = s.getOutputStream();
 			InputStreamReader isr = new InputStreamReader(in);
 			br = new BufferedReader(isr);
+			@SuppressWarnings("unused")
 			PrintWriter pw = new PrintWriter(out);
 		} catch (UnknownHostException e) {
 			System.out.println("Unknown Host");

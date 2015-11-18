@@ -20,10 +20,6 @@ public class ServerThread extends Thread {
 	private PrintWriter out = null;
 	private String dataIn = "";
 
-	protected void sendToOut(String content) {
-		out.println(content);
-	}
-
 	ServerThread(Socket client) {
 		try {
 			out = new PrintWriter(client.getOutputStream(), true);
@@ -62,6 +58,10 @@ public class ServerThread extends Thread {
 		} catch (IOException e) {
 			System.out.println("Accept failed: 4444");
 		}
+	}
+
+	protected void sendToOut(String content) {
+		out.println(content);
 	}
 
 }

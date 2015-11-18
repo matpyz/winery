@@ -18,16 +18,6 @@ public class Server {
 	private static int port = 4444;
 
 	/**
-	 * @param args
-	 *            arguments of calling program.
-	 */
-	public static void main(String[] args) {
-		// Utworzenie servera
-		listen();
-
-	}
-
-	/**
 	 * @author aleks Method which listen and wait for clients. Client will be
 	 *         added only if he is needed.
 	 */
@@ -53,6 +43,16 @@ public class Server {
 		} catch (IOException e) {
 			System.out.println("I can not listen on that port " + port);
 		}
+	}
+
+	/**
+	 * @param args
+	 *            arguments of calling program.
+	 */
+	public static void main(String[] args) {
+		// Utworzenie servera
+		listen();
+
 	}
 
 }

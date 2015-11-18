@@ -11,6 +11,12 @@ Nastaw poprawnie zmienną środowiskową JAVA_HOME (sprawdź, odpalając mvn -v)
 Odpal mvn eclipse:eclipse, to może trochę potrwać.
 Z konsoli można skompilować za pomocą mvn compile, ale raczej kompilujcie z eclipse, mamy XXI wiek. ;)
 
+0.1. ALTERNATYWNA INSTRUKCJA KAMILA:
+0. W Eclipse potrzeba nam EGit i m2e.
+1. W wybranym miejscu ściągamy repozytorium: git clone git@github.com:mpyzik/winery.git
+2. W Eclipse w eksploratorze projektów (lewy tab) wybieramy Import... -> Maven -> Existing Maven Project i wybieramy folder ze ściągniętym repozytorium
+3. Aby pobrać/wysłać klikamy prawym na projekt w eksploratorze: Team -> Pull/Commit
+
 1. Instrukcja użytkowania gita
 
 W folderze, w którym będziemy trzymać pliki gita:

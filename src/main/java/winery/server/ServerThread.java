@@ -39,11 +39,14 @@ public class ServerThread extends Thread {
 		String data = "";
 		try {
 			dataIn = in.readLine();
-			System.out.println("Odebralem: " + dataIn);
-			while (dataIn != null) {
-				data += dataIn;
-				dataIn = in.readLine();
-			}
+			System.out.println("Odebralem1: " + dataIn);
+			data += dataIn;
+			
+			//while (dataIn != null) {
+			//	data += dataIn;
+			//	dataIn = in.readLine();
+			//	System.out.println("Odebralem2: " + dataIn);
+			//}
 
 			JSONObject receivedJSONObject = JSONOperations.parseJSONToObject(data);
 			if (receivedJSONObject != null) {

@@ -17,8 +17,6 @@ public class ClientTest {
 
 	private static Socket s;
 	private static Scanner localIn = new Scanner(System.in);
-	private static BufferedReader in;
-	private static PrintWriter out;
 
 	/**
 	 * @param args
@@ -28,13 +26,14 @@ public class ClientTest {
 		try {
 			s = new Socket(InetAddress.getLocalHost(), 4444);
 			System.out.println("Connected");
-			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			out = new PrintWriter(s.getOutputStream());
+			BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+			PrintWriter out = new PrintWriter(s.getOutputStream());
 			System.out.println(in.readLine());
 			System.out.println("Wprowadź tekst komunikatu JSON do wysłania");
 			String textToSend = localIn.nextLine();
 			System.out.println("Wpisales: " + textToSend);
 			out.println(textToSend);
+			out.flush();
 			
 			String textReceived = in.readLine();
 			System.out.println(textReceived);

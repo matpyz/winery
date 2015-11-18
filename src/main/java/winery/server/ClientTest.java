@@ -12,10 +12,6 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /**
- * 
- */
-
-/**
  * @author papq
  *
  */

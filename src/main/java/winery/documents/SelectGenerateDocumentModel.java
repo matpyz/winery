@@ -5,115 +5,121 @@ import javax.swing.JOptionPane;
 import winery.documents.ChangeDataDocumentGui;
 
 /**
-Klasa s≥uøaca do obs≥ugi gui WybieranieDokumentu.  
-@author Przemys≥aw Iskra
-@version 1.0  */
+ * Klasa s≈Çu≈ºaca do obs≈Çugi gui WybieranieDokumentu.
+ * 
+ * @author Przemys≈Çaw Iskra
+ * @version 1.0
+ */
 public class SelectGenerateDocumentModel {
-	
-	String title, path="";
-//	title to zmienna odpowiadajπca za rozpoznanie dokumentu
-	// to zmienna zawierajπca scieøka do katalogu i nazwÍ pliku
-	String[] docTable = new String[] {"<html>Deklaracja o iloúci win bia≥ych lub czerwonych <br> wprowadzonych do obrotu w poprzednimroku gospodarczym <br>",
-	"<html>Testowy tworzy uproszczony dokument. "};
-	DocumentBasic doc;
-//   docTable zawiera dokumenty do wyboru
-	public SelectGenerateDocumentModel()
-   {
-	   
-   }
-   
-   public String getdocTable(int i)
-   {   if(i<docTable.length)
-	   return docTable[i];
-       else return "";
-   }
-   public String[] getTable()
-   {
-	   return docTable;
-   }
-   
-   public void setVtitle(String title)
-   {
-	   this.title=title;
-	   doc=getDokument(title);
-	  
-   }
-   public String getVtitle()
-   { //ustawiÊ, øe tytu≥ tworzy teø Dokument. 
-	  return title;
-   }
-   public void setVpath(String path)
-   {
-	   this.path=path;
-   }
-   public String getVpath()
-   {
-	  return path;
-   }
-   
-   public DocumentBasic getDokument(String title)
-   {  //Jak bÍdzie wiÍcej dokumentÛw to napisaÊ lepsza wersje tej funkcji. We
-	   if (title.equals(docTable[0])) 
-			{DocumentOne doc =new DocumentOne();
-			
-			return doc;
-			//doc.createPDF(path, data);   //Generowanie dokumentu. 
-			} 
-			else if (title.equals(docTable[1]))
-			{
-				DocumentBasic doc =new DocumentBasic();  
-				return doc;
-				//doc2.createPDF(path , data);  //Generowanie dokumentu. 
 
-			}
-	   return null;
-   }
-   
-   public DocumentBasic getDokument()
-   {
-	   return getDokument(title);
-   }
-   /**
-    * Funkcja generujπca dokument. 
-    * @param info informacje o firmie. 
-    * @param data  dane jakie dokument wymaga od firmy
-    */
-   
-   public void generate( String info, String [][] data)
-   {  DocumentBasic  doc=getDokument(title);
-      doc.createPDF(path, info, data);
-	   
-   }
-   /**
-    * 
-    * @param path úcieøka do pliku
-    * @param firmInfo informacje o firmie
-    */
-   
-   
-   public void createTableData(String path, String firmInfo) {
-		String[][] data = new String[doc.size][doc.size2];
-		for(int i=0; i<doc.size; i++)
-			{for(int k=0; k<doc.size2; k++)
-			    data[i][k]="";
-			}
-		if(doc.needtable==true)
-			{
-			
-			
-			@SuppressWarnings("unused")
-			
-			ChangeDataDocumentGui  zm= new ChangeDataDocumentGui(doc.horizontal, doc.vertical, data, path, firmInfo, new DocumentOne());
-			}
-		else
-		{
-			
-			doc.createPDF(path,firmInfo,data);
-			JOptionPane.showMessageDialog(null, "Dokument przygotowany. ");
-			
-		}
-		//Otworzenia okienka do poprawy danych, ale te dane poprawione tutaj nie wracajπ, bo jeszcze tego nie zrobi≥em. :D
-		//return data;
+	String title, path = "";
+	// title to zmienna odpowiadajƒÖca za rozpoznanie dokumentu
+	// to zmienna zawierajƒÖca scie≈ºka do katalogu i nazwƒô pliku
+	String[] docTable = new String[] {
+			"<html>Deklaracja o ilo≈õci win bia≈Çych lub czerwonych <br> wprowadzonych do obrotu w poprzednimroku gospodarczym <br>",
+			"<html>Testowy tworzy uproszczony dokument. " };
+	DocumentBasic doc;
+
+	// docTable zawiera dokumenty do wyboru
+	public SelectGenerateDocumentModel() {
+
 	}
-   
+
+	public String getdocTable(int i) {
+		if (i < docTable.length)
+			return docTable[i];
+		else
+			return "";
+	}
+
+	public String[] getTable() {
+		return docTable;
+	}
+
+	public void setVtitle(String title) {
+		this.title = title;
+		doc = getDokument(title);
+
+	}
+
+	public String getVtitle() { // ustawiƒá, ≈ºe tytu≈Ç tworzy te≈º Dokument.
+		return title;
+	}
+
+	public void setVpath(String path) {
+		this.path = path;
+	}
+
+	public String getVpath() {
+		return path;
+	}
+
+	public DocumentBasic getDokument(String title) { // Jak bƒôdzie wiƒôcej
+														// dokument√≥w to napisaƒá
+														// lepsza wersje tej
+														// funkcji. We
+		if (title.equals(docTable[0])) {
+			DocumentOne doc = new DocumentOne();
+
+			return doc;
+			// doc.createPDF(path, data); //Generowanie dokumentu.
+		} else if (title.equals(docTable[1])) {
+			DocumentBasic doc = new DocumentBasic();
+			return doc;
+			// doc2.createPDF(path , data); //Generowanie dokumentu.
+
+		}
+		return null;
+	}
+
+	public DocumentBasic getDokument() {
+		return getDokument(title);
+	}
+
+	/**
+	 * Funkcja generujƒÖca dokument.
+	 * 
+	 * @param info
+	 *            informacje o firmie.
+	 * @param data
+	 *            dane jakie dokument wymaga od firmy
+	 */
+
+	public void generate(String info, String[][] data) {
+		DocumentBasic doc = getDokument(title);
+		doc.createPDF(path, info, data);
+
+	}
+
+	/**
+	 * 
+	 * @param path
+	 *            ≈õcie≈ºka do pliku
+	 * @param firmInfo
+	 *            informacje o firmie
+	 */
+
+	public void createTableData(String path, String firmInfo) {
+		String[][] data = new String[doc.size][doc.size2];
+		for (int i = 0; i < doc.size; i++) {
+			for (int k = 0; k < doc.size2; k++)
+				data[i][k] = "";
+		}
+		if (doc.needtable == true) {
+
+			@SuppressWarnings("unused")
+
+			ChangeDataDocumentGui zm = new ChangeDataDocumentGui(doc.horizontal, doc.vertical, data, path, firmInfo,
+					new DocumentOne());
+		} else {
+
+			doc.createPDF(path, firmInfo, data);
+			JOptionPane.showMessageDialog(null, "Dokument przygotowany. ");
+
+		}
+		// Otworzenia okienka do poprawy danych, ale te dane poprawione tutaj
+		// nie wracajƒÖ, bo jeszcze tego nie zrobi≈Çem. :D
+		// return data;
+	}
+
 }

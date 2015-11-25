@@ -11,5 +11,16 @@ package winery.view;
  *
  */
 public interface Controller {
+	
+	/**
+	 * Udostępnia unikalny widok podporządkowany kontrolerowi.
+	 * @return widok przypisany do kontrolera
+	 */
+	public abstract View getView();
 
+	/**
+	 * Udostępnia tytuł zakładki.
+	 * @return tytuł zakładki
+	 */
+	public abstract String getTitle();
 }

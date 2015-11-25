@@ -3,6 +3,7 @@ package winery.documents;
 import javax.swing.JOptionPane;
 
 import winery.documents.ChangeDataDocumentGui;
+import winery.model.Model;
 
 /**
  * Klasa służaca do obsługi gui WybieranieDokumentu.
@@ -10,7 +11,7 @@ import winery.documents.ChangeDataDocumentGui;
  * @author Przemysław Iskra
  * @version 1.0
  */
-public class SelectGenerateDocumentModel {
+public class SelectGenerateDocumentModel extends Model {
 
 	String title, path = "";
 	// title to zmienna odpowiadająca za rozpoznanie dokumentu

@@ -16,6 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
+import winery.model.Model;
+import winery.view.Controller;
+import winery.view.View;
+
 /**
  * Klasa Gui do wyboru generowanego dokumentu oraż scieżki gdzie zapisać
  * utworzony.
@@ -23,7 +27,7 @@ import javax.swing.SwingConstants;
  * @author Przemysław Iskra
  * @version 2.0
  */
-public class SelectGenerateDocumentGui extends JPanel {
+public class SelectGenerateDocumentGui extends View implements Controller {
 
 	/**
 	 * 
@@ -219,5 +223,21 @@ public class SelectGenerateDocumentGui extends JPanel {
 		j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		j.setVisible(true);
 
+	}
+
+	@Override
+	protected void update(Model model) {
+		// TODO: Być może należy tutaj dopisać obsługę zmian, do rozważenia.
+		
+	}
+
+	@Override
+	public String getTitle() {
+		return "Utwórz dokument";
+	}
+
+	@Override
+	public View getView() {
+		return this;
 	}
 }

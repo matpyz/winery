@@ -14,7 +14,7 @@ public class JSONObject {
 	private String code;
 	private ArrayList<String> place;
 	private String other;
-	private String data;
+	private String date;
 	
 	/*
 	 * TODO: Tutaj będą dalsze pola, dla innych komunikatów niż z aplikacji mobilnej
@@ -56,11 +56,11 @@ public class JSONObject {
 	public void setOther(String other) {
 		this.other = other;
 	}
-	public String getData() {
-		return data;
+	public String getDate() {
+		return date;
 	}
-	public void setData(String data) {
-		this.data = data;
+	public void setDate(String data) {
+		this.date = data;
 	}
 
 

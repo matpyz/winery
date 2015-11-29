@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas wygenerowania: 24 Lis 2015, 19:56
+-- Czas wygenerowania: 29 Lis 2015, 21:38
 -- Wersja serwera: 5.6.27-0ubuntu0.14.04.1
 -- Wersja PHP: 5.5.9-1ubuntu4.14
 
@@ -46,8 +46,11 @@ CREATE TABLE IF NOT EXISTS `documents` (
 
 CREATE TABLE IF NOT EXISTS `group` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `name_2` (`name`),
+  UNIQUE KEY `name_3` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -59,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `group` (
 CREATE TABLE IF NOT EXISTS `group2permission` (
   `groupId` int(10) unsigned DEFAULT NULL,
   `permissionId` int(10) unsigned DEFAULT NULL,
-  `access` int(11) DEFAULT NULL,
+  `access` int(11) NOT NULL,
   KEY `group2permission_permission` (`permissionId`),
   KEY `group2permission_group` (`groupId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -75,16 +78,17 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `name` varchar(255) NOT NULL,
   `run_on` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Zrzut danych tabeli `migrations`
 --
 
 INSERT INTO `migrations` (`id`, `name`, `run_on`) VALUES
-(1, '/20151123195417-create-docs', '2015-11-24 19:53:51'),
-(2, '/20151124180938-create-rbac', '2015-11-24 19:53:51'),
-(4, '/20151124184751-document2user', '2015-11-24 19:55:52');
+(1, '/20151123195417-create-docs', '2015-11-29 21:21:07'),
+(2, '/20151124180938-create-rbac', '2015-11-29 21:21:07'),
+(3, '/20151124184751-document2user', '2015-11-29 21:21:07'),
+(6, '/20151129204858-user-fix1', '2015-11-29 21:37:38');
 
 -- --------------------------------------------------------
 
@@ -94,8 +98,11 @@ INSERT INTO `migrations` (`id`, `name`, `run_on`) VALUES
 
 CREATE TABLE IF NOT EXISTS `permission` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `name_2` (`name`),
+  UNIQUE KEY `name_3` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -107,9 +114,13 @@ CREATE TABLE IF NOT EXISTS `permission` (
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `login` varchar(255) NOT NULL,
+  `surname` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `login` (`login`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------

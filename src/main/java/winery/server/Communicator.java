@@ -30,11 +30,11 @@ public class Communicator {
 			//change password
 			newPasswd(json.getUser_id(), json.getUser_pass(), json.getOther());
 		}
-		if(data == null) {
+		/*if(data == null) {
 			System.err.println("ERROR! Given JSONObject has wrong format or holds"
 					+ "not enough data.");
 			return;
-		}
+		}*/
 		//Creating JSONObject for getOutput() method.
 		//returnObj = JSONOperations.parseJSONToObject(data);
 	}
@@ -43,17 +43,15 @@ public class Communicator {
 		return returnObj;
 	}
 	
-	private String newPasswd(String user_id, String user_pass, String other) {
+	private void newPasswd(String user_id, String user_pass, String other) {
 		//ask for new password
-		return null;
 	}
 
-	private String login(String user_id, String user_pass) {
+	private void login(String user_id, String user_pass) {
 		//authorize user
-		return null;
 	}
 
-	private String updateRequest(String user_id, String user_pass,
+	private void updateRequest(String user_id, String user_pass,
 			ArrayList<String> place, String other) {
 		if(other.equals("date")) {
 			//ask for date of last report for given place
@@ -62,13 +60,11 @@ public class Communicator {
 		} else if (other.equals("all")) {
 			//ask for last report for given place
 		}
-		return null;
 	}
 
-	private String updateDB(String user_id, String user_pass,
+	private void updateDB(String user_id, String user_pass,
 			ArrayList<String> place, String other, String date) {
 		// TODO Connect with DB for setting additional status 
-		return null;
 		
 	}
 }

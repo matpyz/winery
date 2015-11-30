@@ -1,6 +1,8 @@
-package winery.model;
+package winery.accounts;
 
 import java.sql.ResultSet;
+
+import winery.model.Model;
 
 /**
  * @author Kamil L

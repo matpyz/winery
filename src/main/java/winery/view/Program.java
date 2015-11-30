@@ -5,7 +5,7 @@ import javax.swing.JTabbedPane;
 
 // Widoki
 import winery.documents.SelectGenerateDocumentGui;
-import winery.model.AccountsModel;
+import winery.accounts.AccountsController;
 
 /**
  * Zawiera punkt startowy programu. Jako główne okno, prezentuje panele-widoki
@@ -28,9 +28,7 @@ public class Program {
 	 *            argumenty wywołania, ignorowane
 	 */
 	public static void main(String[] args) {
-		new Program(
-				new SelectGenerateDocumentGui(),
-				new AccountsController(new AccountsModel(), new AccountsView()));
+		new Program(new SelectGenerateDocumentGui(), new AccountsController());
 	}
 
 	private JFrame frame_;

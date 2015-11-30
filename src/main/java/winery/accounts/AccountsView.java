@@ -1,9 +1,9 @@
-package winery.view;
+package winery.accounts;
 
 import winery.model.Model;
+import winery.view.View;
 
 import javax.swing.JComboBox;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -47,13 +47,13 @@ public class AccountsView extends View implements ActionListener {
 	private JLabel lbl_name;
 	private JLabel lbl_password;
 	private JLabel lbl_gmail;
-
-	AccountsController accountsController;
+	
+	AccountsController controller;
 
 	/**
 	 * Wielka litania do Pana naszego Swing'a.
 	 */
-	public AccountsView() {
+	public AccountsView(AccountsModel model) {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0 };
@@ -221,13 +221,13 @@ public class AccountsView extends View implements ActionListener {
 		accountData.add(txt_password.getText());
 		accountData.add(txt_gmail.getText());
 
-		lbl_result.setText(accountsController.modifyAccount(accountData));
+		lbl_result.setText(controller.modifyAccount(accountData));
 	}
 
 	private void rmvAccount() {
 		String accountId = txt_name.getText() + txt_surname.getText();
 
-		lbl_result.setText(accountsController.deleteAccount(accountId));
+		lbl_result.setText(controller.deleteAccount(accountId));
 	}
 
 	private void addAccount() {
@@ -268,7 +268,7 @@ public class AccountsView extends View implements ActionListener {
 		accountData.add(txt_password.getText());
 		accountData.add(txt_gmail.getText());
 
-		lbl_result.setText(accountsController.newAccount(accountData));
+		lbl_result.setText(controller.newAccount(accountData));
 	}
 
 }

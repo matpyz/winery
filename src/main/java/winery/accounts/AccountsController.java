@@ -1,10 +1,13 @@
-package winery.view;
+package winery.accounts;
 
 import java.util.List;
 
-import winery.model.AccountsModel;
+import winery.guardian.Guardian;
+import winery.view.Actions;
+import winery.view.Controller;
+import winery.view.View;
 
-class AccountsController implements Controller {
+public class AccountsController implements Controller {
 
 	AccountsModel model;
 	AccountsView view;
@@ -13,21 +16,9 @@ class AccountsController implements Controller {
 	 * @param model
 	 *            AccountsModel do komunikacji z bazą
 	 */
-	public AccountsController(AccountsModel model, AccountsView view) {
-		this.model = model;
-		this.view = view;
-	}
-
-	/**
-	 * Sprawdza czy użytkownik ma uprawnienia dla danej akcji.
-	 * 
-	 * @param action
-	 *            enum typu Actions
-	 * @return boolean
-	 */
-	public boolean checkPrivileges(Actions action) {
-		model.accessDB(null);
-		return false;
+	public AccountsController() {
+		this.model = new AccountsModel();
+		this.view = new AccountsView(model);
 	}
 
 	/**
@@ -38,7 +29,7 @@ class AccountsController implements Controller {
 	 * @return string potwierdzający lub opisujący napotkany błąd
 	 */
 	public String newAccount(List<String> accountData) {
-		if (checkPrivileges(Actions.ADD_ACCOUNT))
+		if (Guardian.checkPermission(Actions.ADD_ACCOUNT))
 			model.accessDB(null);
 		else
 			return "Brak uprawnień";
@@ -52,7 +43,7 @@ class AccountsController implements Controller {
 	 * @return string potwierdzający lub opisujący napotkany błąd
 	 */
 	public String modifyAccount(List<String> accountData) {
-		if (checkPrivileges(Actions.EDIT_ACCOUNT))
+		if (Guardian.checkPermission(Actions.EDIT_ACCOUNT))
 			model.accessDB(null);
 		else
 			return "Brak uprawnień";
@@ -66,7 +57,7 @@ class AccountsController implements Controller {
 	 * @return string potwierdzający lub opisujący napotkany błąd
 	 */
 	public String deleteAccount(String accountId) {
-		if (checkPrivileges(Actions.REMOVE_ACCOUNT))
+		if (Guardian.checkPermission(Actions.REMOVE_ACCOUNT))
 			model.accessDB(null);
 		else
 			return "Brak uprawnień";

@@ -51,7 +51,11 @@ exports.up = function(db) {
         primaryKey: true,
         autoIncrement: true
       },
-      name: 'string'
+      name: {
+        type: 'string',
+        notNull: true,
+        unique: true
+      }
     },
     ifNotExists: true
   });

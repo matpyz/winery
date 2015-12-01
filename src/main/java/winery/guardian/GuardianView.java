@@ -33,6 +33,12 @@ class GuardianView extends JFrame implements ActionListener {
 
 		this.controller = controller;
 
+		createGUI(width, height);
+		pack();
+		setVisible(true);
+	}
+
+	private void createGUI(int width, int height) {
 		setLayout(new GridBagLayout());
 		setMinimumSize(new Dimension(width + 20, 160));
 		setPreferredSize(new Dimension(width, height));
@@ -74,20 +80,25 @@ class GuardianView extends JFrame implements ActionListener {
 				borderWidth, borderWidth, borderWidth));
 
 		add(pane, new GridBagConstraints());
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (controller.login(txt_login.getText(), txt_password.getText())) {
-			setVisible(false); // you can't see me!
+			setVisible(false); 
 			dispose(); // Destroy the JFrame object
 		} else
 			JOptionPane.showMessageDialog(this, "Nieudane logowanie");
 	}
-	/*
-	 * public static void main(String[] args) { GuardianModel model = new
-	 * GuardianModel(); GuardianView gView = new GuardianView(model, 400, 400);
-	 * gView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); gView.pack();
-	 * gView.setVisible(true); }
-	 */
+/*	
+	public static void main(String[] args) {
+		Guardian model = new Guardian();
+		GuardianView gView = new GuardianView(model, 400, 400);
+		gView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gView.pack();
+		gView.setVisible(true);
+	}
+*/
 }

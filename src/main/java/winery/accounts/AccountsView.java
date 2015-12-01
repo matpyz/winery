@@ -6,6 +6,7 @@ import winery.view.View;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -31,7 +32,9 @@ public class AccountsView extends View implements ActionListener {
 	 */
 	protected static final long serialVersionUID = 1L;
 
-	JComboBox cBox_accountList;
+	private static int actionNumber = 0;
+
+	JComboBox<String> cBox_accountList;
 
 	private JTextField txt_name;
 	private JTextField txt_surname;
@@ -47,13 +50,25 @@ public class AccountsView extends View implements ActionListener {
 	private JLabel lbl_name;
 	private JLabel lbl_password;
 	private JLabel lbl_gmail;
-	
+
 	AccountsController controller;
+
+	public AccountsView(AccountsController controller) {
+
+		this.controller = controller;
+
+		createGUI();
+
+		List<String> accountList = controller.getAccountList();
+		for (String account : accountList)
+			cBox_accountList.addItem(account);
+
+	}
 
 	/**
 	 * Wielka litania do Pana naszego Swing'a.
 	 */
-	public AccountsView(AccountsModel model) {
+	private void createGUI() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0 };
@@ -63,8 +78,7 @@ public class AccountsView extends View implements ActionListener {
 				Double.MIN_VALUE };
 		setLayout(gridBagLayout);
 
-		cBox_accountList = new JComboBox();
-
+		cBox_accountList = new JComboBox<String>();
 		GridBagConstraints gbc_cBox_accountList = new GridBagConstraints();
 		gbc_cBox_accountList.fill = GridBagConstraints.HORIZONTAL;
 		gbc_cBox_accountList.insets = new Insets(0, 0, 5, 5);
@@ -150,7 +164,7 @@ public class AccountsView extends View implements ActionListener {
 		btn_rmv.addActionListener(this);
 		btn_edit.addActionListener(this);
 
-		lbl_result = new JLabel(" ");
+		lbl_result = new JLabel(actionNumber + "");
 		GridBagConstraints gbc_lbl_result = new GridBagConstraints();
 		gbc_lbl_result.gridwidth = 4;
 		gbc_lbl_result.fill = GridBagConstraints.HORIZONTAL;
@@ -182,10 +196,18 @@ public class AccountsView extends View implements ActionListener {
 			break;
 		case "end_edit":
 			endEdit();
-
+			break;
 		default:
 			break;
 		}
+	}
+
+	private void showResult(String result) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				lbl_result.setText(++actionNumber + ": " + result);
+			}
+		});
 	}
 
 	private void editAccount() {
@@ -221,13 +243,13 @@ public class AccountsView extends View implements ActionListener {
 		accountData.add(txt_password.getText());
 		accountData.add(txt_gmail.getText());
 
-		lbl_result.setText(controller.modifyAccount(accountData));
+		showResult(controller.modifyAccount(accountData));
 	}
 
 	private void rmvAccount() {
 		String accountId = txt_name.getText() + txt_surname.getText();
 
-		lbl_result.setText(controller.deleteAccount(accountId));
+		showResult(controller.deleteAccount(accountId));
 	}
 
 	private void addAccount() {
@@ -268,7 +290,7 @@ public class AccountsView extends View implements ActionListener {
 		accountData.add(txt_password.getText());
 		accountData.add(txt_gmail.getText());
 
-		lbl_result.setText(controller.newAccount(accountData));
+		showResult(controller.newAccount(accountData));
 	}
 
 }

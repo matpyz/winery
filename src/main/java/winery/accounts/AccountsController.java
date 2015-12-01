@@ -1,5 +1,6 @@
 package winery.accounts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import winery.guardian.Guardian;
@@ -9,8 +10,8 @@ import winery.view.View;
 
 public class AccountsController implements Controller {
 
-	AccountsModel model;
-	AccountsView view;
+	private AccountsModel model;
+	private AccountsView view;
 
 	/**
 	 * @param model
@@ -18,7 +19,7 @@ public class AccountsController implements Controller {
 	 */
 	public AccountsController() {
 		this.model = new AccountsModel();
-		this.view = new AccountsView(model);
+		this.view = new AccountsView(this);
 	}
 
 	/**
@@ -33,21 +34,22 @@ public class AccountsController implements Controller {
 			model.accessDB(null);
 		else
 			return "Brak uprawnień";
-		return null;
+		return "Konto zostało dodane";
 	}
 
 	/**
-	 * Usuwa konto.
+	 * Modyfikuje konto.
 	 * 
-	 * @param accountId
+	 * @param accountData
 	 * @return string potwierdzający lub opisujący napotkany błąd
 	 */
 	public String modifyAccount(List<String> accountData) {
-		if (Guardian.checkPermission(Actions.EDIT_ACCOUNT))
+		if (Guardian.checkPermission(Actions.EDIT_ACCOUNT)) {
 			model.accessDB(null);
+			return "Dane konta zostały zaktualizowane";
+		}
 		else
 			return "Brak uprawnień";
-		return null;
 	}
 
 	/**
@@ -61,7 +63,7 @@ public class AccountsController implements Controller {
 			model.accessDB(null);
 		else
 			return "Brak uprawnień";
-		return null;
+		return "Konto zostało usunięte";
 	}
 
 	/**
@@ -83,7 +85,9 @@ public class AccountsController implements Controller {
 	 */
 	List<String> getAccountList() {
 		model.accessDB(null);
-		return null;
+		List<String> accounts = new ArrayList<>();
+		accounts.add("Jan Kowalski");
+		return accounts;
 	}
 
 	@Override
@@ -95,5 +99,8 @@ public class AccountsController implements Controller {
 	public String getTitle() {
 		return "Konta";
 	}
-
+	
+	public static String getID() {
+		return "accounts";
+	}
 }

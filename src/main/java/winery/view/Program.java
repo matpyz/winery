@@ -1,10 +1,16 @@
 package winery.view;
 
+import java.util.concurrent.CountDownLatch;
+
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
+
+
+
 // Widoki
 import winery.documents.SelectGenerateDocumentGui;
+import winery.guardian.Guardian;
 import winery.accounts.AccountsController;
 
 /**
@@ -41,6 +47,19 @@ public class Program {
 	 *            widoki do załadowania
 	 */
 	public Program(Controller... controllers) {
+		/**
+		 * Tworzy sygnał o wartości 1, który Guardian aktywuje (obniży do 0),
+		 * gdy logowanie przebiegnie pomyślnie. Wtedy program ruszy dalej i
+		 * wyświetli właściwe okno programu.
+		 */
+		CountDownLatch loginSignal = new CountDownLatch(1);
+		new Guardian(loginSignal);
+		try {
+			loginSignal.await();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		frame_ = new JFrame("Winery");
 		tabbedPane_ = new JTabbedPane();
 

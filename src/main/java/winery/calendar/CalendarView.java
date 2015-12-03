@@ -1,4 +1,4 @@
-import MyMouseListener;
+package winery.calendar;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -104,13 +104,9 @@ public class CalendarView extends View implements ActionListener {
 		add(monthNameLabel);
 		add(dayNamesPanel);
 		add(days);
-		add(windowPanel);
+		//add(windowPanel);
 	}
 	
-	public static void main(String[] args) {
-		CalendarView calendar = new CalendarView();
-	}
-
 	@Override
 	protected void update(Model model) {
 		// TODO Auto-generated method stub

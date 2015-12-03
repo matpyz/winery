@@ -16,10 +16,11 @@ import java.awt.event.ActionListener;
 
 import winery.accounts.AccountsController;
 import winery.model.Model;
+import winery.view.Controller;
 import winery.view.View;
 
 
-public class CalendarView extends View implements ActionListener {
+public class CalendarView extends View implements ActionListener, Controller {
 	
 	private JButton previousButton;
 	private JButton nextButton;
@@ -32,16 +33,9 @@ public class CalendarView extends View implements ActionListener {
 	private JPanel days;
 	
 	private String[] months = {"Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzien"};
-
-	AccountsController controller;
 	
-	
-	public CalendarView(AccountsController controller) {
-		this.controller = controller;
-
+	public CalendarView() {
 		createGUI();
-		
-		
 	}
 	
 	private void createGUI() {		
@@ -125,6 +119,16 @@ public class CalendarView extends View implements ActionListener {
 		default:
 			break;
 		}
+	}
+	
+	@Override
+	public View getView() {
+		return this;
+	}
+	
+	@Override
+	public String getTitle() {
+		return "Kalendarz";
 	}
 
 	public void previousMonth() {

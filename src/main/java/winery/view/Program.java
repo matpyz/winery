@@ -12,6 +12,7 @@ import javax.swing.JTabbedPane;
 import winery.documents.SelectGenerateDocumentGui;
 import winery.guardian.Guardian;
 import winery.accounts.AccountsController;
+import winery.calendar.CalendarView;
 
 /**
  * Zawiera punkt startowy programu. Jako główne okno, prezentuje panele-widoki
@@ -34,7 +35,7 @@ public class Program {
 	 *            argumenty wywołania, ignorowane
 	 */
 	public static void main(String[] args) {
-		new Program(new SelectGenerateDocumentGui(), new AccountsController());
+		new Program(new SelectGenerateDocumentGui(), new AccountsController(), new CalendarView());
 	}
 
 	private JFrame frame_;

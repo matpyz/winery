@@ -1,5 +1,7 @@
 package dbapi;
 
+import java.util.HashMap;
+
 public class User {
 
 	private int id;
@@ -9,7 +11,8 @@ public class User {
 	private String mail;
 	private int groupId;
 	private String groupName;
-	
+	private HashMap<Integer, Permission> permissions;
+
 	public User(int id, String login, String name, String surname, String mail, int groupId, String groupName) {
 		super();
 		this.id = id;
@@ -63,5 +66,13 @@ public class User {
 
 	public String getGroupName() {
 		return groupName;
+	}
+	
+	public HashMap<Integer, Permission> getPermissions() {
+		return permissions;
+	}
+
+	public void setPermissions(HashMap<Integer, Permission> permissions) {
+		this.permissions = permissions;
 	}
 }

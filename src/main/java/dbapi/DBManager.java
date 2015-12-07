@@ -65,11 +65,32 @@ public class DBManager {
 				System.out.println(ex.getMessage());
 			}
 			for (User user : users.values()) {
-				user.setPermissions(DBManager.getPermissionsForGroupid(user.getGroupId()));
+				user.setPermissions(DBManager.getPermissionsForGroupId(user.getGroupId()));
 				DBManager.users.put(user.getId(), user);
 			}
 		}
 		return DBManager.users;
+	}
+	
+	/**
+	 * Metoda zwraca użytkownika o zadanym id z bazy danych oraz aktualizuje HashMapę użytkowników 
+	 * @param userId - id użytkownika
+	 * @return - obiekt użytkownika
+	 */
+	public static User getUserById(int userId) {
+		String query = "SELECT `user`.`id`, `login`, `user`.`name`, `surname`, `email`, `groupId`, `group`.`name` as `groupName` FROM `user`, `user2group`, `group` WHERE `user`.`id`="+userId+" AND `user`.`id`=`user2group`.`userId` AND `user2group`.`groupId`=`group`.`id`";
+		ResultSet rs = dbManager.query(query);
+		User user = null;
+		try {
+			user = new User(rs.getInt("id"), rs.getString("login"), rs.getString("name"), rs.getString("surname"), rs.getString("email"), rs.getInt("groupId"), rs.getString("groupName"));
+			if(DBManager.users !=null) {
+				DBManager.users.replace(userId, user);
+			}
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return user;
 	}
 	
 	/**
@@ -93,6 +114,7 @@ public class DBManager {
 	}
 	
 	/**
+	 * Metoda do usuwania użytkownika
 	 * @param id - id użytkownika, który ma być usunięty
 	 */
 	public static void removeUserById(int id) {
@@ -174,10 +196,65 @@ public class DBManager {
 	}
 	
 	/**
+	 * Metoda odpowiedzialna za aktualizowanie wszystkich rozsądnych danych użytkownika
+	 * W przypadku pól typu String - jeżeli puste, tzn "" to nie zmieniaj
+	 * W przypadku pól typu Integer - jeżeli puste, tzn <=0 to nie zmieniaj
+	 * @param userId - id potrzebne do zlokalizowania usera, którego dane mają być zmienione
+	 * @param login - nowy Login
+	 * @param password - nowe Hasło
+	 * @param mail - nowy Mail
+	 * @param name - nowe Imię
+	 * @param surname - nowe Nazwisko
+	 * @param groupId - id grupy do której użytkownik ma być przeniesiony
+	 * @return Zwraca true jeśli operacja się udała, a w przeciwnym wypadku domyśl się
+	 */
+	public static boolean changeUserData(int userId, String login, String password, String mail, String name, String surname, int groupId) {
+		String query = "";
+		boolean isUpdateAllWithoutGroup = true;
+		boolean isUpdateGroup = true;
+		if(!login.isEmpty()) query += "`login` = '"+login+"'";
+		if(!password.isEmpty()) {
+			if(!query.isEmpty()) query += " AND ";
+			query += "`password` = '"+password+"'";
+		}
+		if(!mail.isEmpty()) {
+			if(!query.isEmpty()) query += " AND ";
+			query += "`email` = '"+mail+"'";
+		}
+		if(!name.isEmpty()) {
+			if(!query.isEmpty()) query += " AND ";
+			query += "`name` = '"+name+"'";
+		}
+		if(!surname.isEmpty()) {
+			if(!query.isEmpty()) query += " AND ";
+			query += "`surname` = '"+surname+"'";
+		}
+		if(!query.isEmpty()) {
+			query = "UPDATE `user` SET " + query + " WHERE `user`.`id`="+userId+";";
+			ResultSet rs = dbManager.query(query);
+			try {
+				isUpdateAllWithoutGroup =  rs.rowUpdated();
+				conn.close();
+				if(groupId > 0) {
+					query = "UPDATE `user2group` SET `groupId`="+groupId+" WHERE `user2group`.`userId`="+userId+";";
+					rs = dbManager.query(query);
+					isUpdateGroup = rs.rowUpdated();
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				return false;
+			}
+		}
+		if(isUpdateAllWithoutGroup && isUpdateGroup) return true;
+		else return false;
+	}
+	
+	/**
 	 * @param groupId - Id grupy której chcemy pobrać uprawnienia
 	 * @return HashMapa uprawnień
 	 */
-	public static HashMap<Integer, Permission> getPermissionsForGroupid(int groupId) {
+	public static HashMap<Integer, Permission> getPermissionsForGroupId(int groupId) {
 		String query = "SELECT * FROM `permission`, `group2permission` WHERE `group2permission`.`groupId` = '"+groupId+"' AND `group2permission`.`permissionId` = `permission`.`id`";
 		ResultSet rs = dbManager.query(query);
 		HashMap<Integer, Permission> permissions = new HashMap<Integer, Permission>();
@@ -192,5 +269,50 @@ public class DBManager {
 			System.out.println(ex.getMessage());
 		}
 		return permissions;
+	}
+	
+	/**
+	 * @param userLogin - login użytkownika
+	 * @return Zwraca id użytkownika lub 0 jeśli błąd
+	 */
+	public static int getUserIdBylogin(String userLogin) {
+		String query = "SELECT `id` FROM `user` WHERE `login`='"+userLogin+"'";
+		ResultSet rs = dbManager.query(query);
+		try {
+			return rs.getInt("id");
+		} catch(SQLException ex) {
+			System.out.println(ex.getMessage());
+			return 0;
+		}
+	}
+	
+	/**
+	 * @param groupName - nazwa grupy
+	 * @return Zwraca id grupy lub 0 jeśli błąd
+	 */
+	public static int getGroupIdByName(String groupName) {
+		String query = "SELECT `id` FROM `group` WHERE `name`='"+groupName+"'";
+		ResultSet rs = dbManager.query(query);
+		try {
+			return rs.getInt("id");
+		} catch(SQLException ex) {
+			System.out.println(ex.getMessage());
+			return 0;
+		}
+	}
+	
+	/**
+	 * @param permissionName - nazwa uprawnienia
+	 * @return Zwraca id uprawnienia lub 0 jeśli błąd
+	 */
+	public static int getPermissionIdByName(String permissionName) {
+		String query = "SELECT `id` FROM `permission` WHERE `name`='"+permissionName+"'";
+		ResultSet rs = dbManager.query(query);
+		try {
+			return rs.getInt("id");
+		} catch(SQLException ex) {
+			System.out.println(ex.getMessage());
+			return 0;
+		}
 	}
 }

@@ -83,8 +83,8 @@ public class ChangeDataDocumentGui extends JFrame {
 		// horizontal vertical tablic.
 		itt = 0;
 		Pmax = new JPanel(); // Duży panel do którego wszystko wrzucamy.
-		Pmax.setSize(500, 500);
-		setSize(500, 500);
+		  Pmax.setSize(700,500);
+	      setSize(700,500);
 		add(Pmax);
 		Pmax.setLayout(new BorderLayout());
 		Pcenter = new JPanel(); // PodPanel środkowy, tutaj będziemy zmieniać

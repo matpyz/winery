@@ -12,13 +12,13 @@ import com.itextpdf.text.pdf.PdfPTable;
  */
 
 // Jeszcze bez pobierania danych wymaganych przez ten ów dokument.
-public class DocumentOne extends DocumentBasic {
+public class Document1 extends DocumentBasic {
 	/** Konstruktor klasy tworzącej sprecyzowany dokumentu */
 
-	public DocumentOne() {
+	public Document1() {
 		needtable = true;
-		horizontal = new String[3];
-		vertical = new String[5];
+		horizontal = new String[3]; size=5;
+		vertical = new String[5]; size2=2;
 		horizontal[0] = " Wina  ";
 		horizontal[1] = "Czerwone albo różowe";
 		horizontal[2] = "Białe";

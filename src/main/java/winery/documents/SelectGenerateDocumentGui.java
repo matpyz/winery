@@ -212,10 +212,10 @@ public class SelectGenerateDocumentGui extends View implements Controller {
 
 		}
 	}
-
+    /*
 	public static void main(String args[]) {
 
-		SelectGenerateDocumentGui b = new SelectGenerateDocumentGui();
+		SelectGenerateDocumentViewController b = new SelectGenerateDocumentViewController();
 		JFrame j = new JFrame();
 		j.setSize(600, 600);
 		b.setVisible(true);
@@ -223,7 +223,7 @@ public class SelectGenerateDocumentGui extends View implements Controller {
 		j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		j.setVisible(true);
 
-	}
+	} */
 
 	@Override
 	protected void update(Model model) {

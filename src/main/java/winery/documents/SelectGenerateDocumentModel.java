@@ -2,6 +2,7 @@ package winery.documents;
 
 import javax.swing.JOptionPane;
 
+
 import winery.documents.ChangeDataDocumentGui;
 import winery.model.Model;
 
@@ -16,10 +17,11 @@ public class SelectGenerateDocumentModel extends Model {
 	String title, path = "";
 	// title to zmienna odpowiadająca za rozpoznanie dokumentu
 	// to zmienna zawierająca scieżka do katalogu i nazwę pliku
-	String[] docTable = new String[] {
-			"<html>Deklaracja o ilości win białych lub czerwonych <br> wprowadzonych do obrotu w poprzednimroku gospodarczym <br>",
-			"<html>Testowy tworzy uproszczony dokument. " };
-	DocumentBasic doc;
+	String[] docTable = new String[] {"<html>Deklaracja o ilości win białych lub czerwonych <br> wprowadzonych do obrotu w poprzednimroku gospodarczym <br>",
+			"<html>Deklaracja o szacowanej ilości wina, jaka będzie wyrobiona <br>w danym roku gospodarczym ",
+			"<html> Deklaracja o szacowanej ilości win, winogron lub moszczu winogronowego, ktęre  <br>będą dostarczone do przedsiębiorcy, oraz o szacowanej ilości ich wykorzystania w <br>  danym roku gospodarczym",
+			"<html>Deklaracja o zapasach win lub moszczów winogronowych posiadanych w dniu pobrać datę!"};
+    DocumentBasic doc;
 
 	// docTable zawiera dokumenty do wyboru
 	public SelectGenerateDocumentModel() {
@@ -55,24 +57,38 @@ public class SelectGenerateDocumentModel extends Model {
 		return path;
 	}
 
-	public DocumentBasic getDokument(String title) { // Jak będzie więcej
-														// dokumentów to napisać
-														// lepsza wersje tej
-														// funkcji. We
-		if (title.equals(docTable[0])) {
-			DocumentOne doc = new DocumentOne();
+	  public DocumentBasic getDokument(String title)
+	   {  //Jak b�dzie wi�cej dokument�w to napisa� lepsza wersje tej funkcji. We
+		   if (title.equals(docTable[0])) 
+				{Document1 doc =new Document1();
+				
+				return doc;
+				//doc.createPDF(path, data);   //Generowanie dokumentu. 
+				} 
+				else if (title.equals(docTable[1]))
+				{
+					Document2 doc =new Document2();  
+					return doc;
+					//doc2.createPDF(path , data);  //Generowanie dokumentu. 
 
-			return doc;
-			// doc.createPDF(path, data); //Generowanie dokumentu.
-		} else if (title.equals(docTable[1])) {
-			DocumentBasic doc = new DocumentBasic();
-			return doc;
-			// doc2.createPDF(path , data); //Generowanie dokumentu.
+				}
+		   
+				else if (title.equals(docTable[2]))
+				{
+					Document3 doc =new Document3();  
+					return doc;
+					//doc2.createPDF(path , data);  //Generowanie dokumentu. 
 
-		}
-		return null;
-	}
+				}
+				else if (title.equals(docTable[3]))
+				{
+					Document4 doc =new Document4();  
+					return doc;
+					//doc2.createPDF(path , data);  //Generowanie dokumentu. 
 
+				}
+		   return null;
+	   }
 	public DocumentBasic getDokument() {
 		return getDokument(title);
 	}
@@ -111,7 +127,7 @@ public class SelectGenerateDocumentModel extends Model {
 			@SuppressWarnings("unused")
 
 			ChangeDataDocumentGui zm = new ChangeDataDocumentGui(doc.horizontal, doc.vertical, data, path, firmInfo,
-					new DocumentOne());
+					doc);
 		} else {
 
 			doc.createPDF(path, firmInfo, data);

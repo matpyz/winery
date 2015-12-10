@@ -51,7 +51,10 @@ public class ServerThread extends Thread {
 			JSONObject receivedJSONObject = JSONOperations.parseJSONToObject(data);
 			if (receivedJSONObject != null) {
 				if (receivedJSONObject.getType().equals("Raport")) {
-					// TODO: przekazać obiekt receivedJSONObject modułowi Wojtka
+					Communicator comm = new Communicator(receivedJSONObject);
+					JSONObject returnedJSONObject = comm.getOutput();
+					String toReturn = JSONOperations.parseObjectToJSONString(returnedJSONObject);
+					out.println(toReturn);
 				}
 				// TODO: Ze znakiem zapytania - czy ten typ?...
 				else if (receivedJSONObject.getType().equals("Strona")) {

@@ -33,6 +33,24 @@ public class ServerThread extends Thread {
 			System.out.println("Accept failed: 4444");
 		}
 	}
+	
+	protected String operateWithJSONData (String data) {
+		JSONObject receivedJSONObject = JSONOperations.parseJSONToObject(data);
+		if (receivedJSONObject != null) {
+			if (receivedJSONObject.getType().equals("Raport")) {
+				Communicator comm = new Communicator(receivedJSONObject);
+				JSONObject returnedJSONObject = comm.getOutput();
+				String toReturn = JSONOperations.parseObjectToJSONString(returnedJSONObject);
+				return toReturn;
+			}
+			// TODO: Ze znakiem zapytania - czy ten typ?...
+			else if (receivedJSONObject.getType().equals("Strona")) {
+				//TODO: przekazać obiekt modułowi generowania faktur
+				return null;
+			}
+		}
+		return null;
+	}
 
 	public void run() {
 		String dataIn = "";
@@ -42,25 +60,8 @@ public class ServerThread extends Thread {
 			System.out.println("Odebralem1: " + dataIn);
 			data += dataIn;
 			
-			//while (dataIn != null) {
-			//	data += dataIn;
-			//	dataIn = in.readLine();
-			//	System.out.println("Odebralem2: " + dataIn);
-			//}
-
-			JSONObject receivedJSONObject = JSONOperations.parseJSONToObject(data);
-			if (receivedJSONObject != null) {
-				if (receivedJSONObject.getType().equals("Raport")) {
-					Communicator comm = new Communicator(receivedJSONObject);
-					JSONObject returnedJSONObject = comm.getOutput();
-					String toReturn = JSONOperations.parseObjectToJSONString(returnedJSONObject);
-					out.println(toReturn);
-				}
-				// TODO: Ze znakiem zapytania - czy ten typ?...
-				else if (receivedJSONObject.getType().equals("Strona")) {
-					//TODO: przekazać obiekt modułowi generowania faktur
-				}
-			}
+			String toReturn = operateWithJSONData(data);
+			out.println(toReturn);
 
 			in.close();
 			out.close();

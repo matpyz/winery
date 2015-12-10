@@ -17,10 +17,9 @@ public class JSONOperationsTest {
 			"	\"user_id\": \"user_id_v\"," +
 			"	\"user_pass\": \"user_pass_hash\"," +
 			"	\"code\": \"code_of_event\"," +
-			"	\"place\": [" +
-			"	          \"x\", " +
-			"	          \"y\", " +
-			"	          \"z\"], " +
+			"	\"sector\": \"x\"," +
+			"	\"row\": \"y\", " +
+			"	\"column\": \"z\", " +
 			"	\"other\": \"text\", " +
 			"	\"data\": \"data\" " +
 			"}";
@@ -29,8 +28,8 @@ public class JSONOperationsTest {
 		assertEquals("raport", jsonObject.getType());
 		assertEquals("user_id_v", jsonObject.getUser_id());
 		assertEquals("user_pass_hash", jsonObject.getUser_pass());
-		assertEquals("x", jsonObject.getPlace().get(0));
-		assertEquals("y", jsonObject.getPlace().get(1));
+		assertEquals("x", jsonObject.getSector());
+		assertEquals("y", jsonObject.getRow());
 	}
 	
 	/*

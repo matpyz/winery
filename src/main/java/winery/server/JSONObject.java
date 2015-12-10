@@ -1,6 +1,5 @@
 package winery.server;
 
-import java.util.ArrayList;
 /**
  * Klasa reprezentująca komunikaty JSON, jakie może odbierać serwer
  * @author aleks
@@ -12,14 +11,33 @@ public class JSONObject {
 	private String user_id;
 	private String user_pass;
 	private String code;
-	private ArrayList<String> place;
+	private String sector;
+	private String row;
+	private String column;
 	private String other;
 	private String date;
 	
 	/*
 	 * TODO: Tutaj będą dalsze pola, dla innych komunikatów niż z aplikacji mobilnej
 	 */
-	
+	public String getSector() {
+		return sector;
+	}
+	public void setSector(String sector) {
+		this.sector = sector;
+	}
+	public String getRow() {
+		return row;
+	}
+	public void setRow(String row) {
+		this.row = row;
+	}
+	public String getColumn() {
+		return column;
+	}
+	public void setColumn(String column) {
+		this.column = column;
+	}
 	public String getType() {
 		return type;
 	}
@@ -43,12 +61,6 @@ public class JSONObject {
 	}
 	public void setCode(String code) {
 		this.code = code;
-	}
-	public ArrayList<String> getPlace() {
-		return place;
-	}
-	public void setPlace(ArrayList<String> place) {
-		this.place = place;
 	}
 	public String getOther() {
 		return other;

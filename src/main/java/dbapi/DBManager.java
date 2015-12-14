@@ -14,6 +14,8 @@ public class DBManager {
 	private static HashMap<Integer, User> users = null;
 	private static HashMap<Integer, Document> documents = null;
 	private static HashMap<Integer, Event> events = null;
+	private static HashMap<String, User2Event> users2events = null;
+	private static HashMap<String, Group2Event> groups2events = null;
 	
 	DBManager() {
 		this.polaczenieURL = "jdbc:mysql://db4free.net/testwina?user=testwina&password=testwina";
@@ -535,6 +537,8 @@ public class DBManager {
 							rs.getInt("eventTypeId"), rs.getString("eventTypeName"));
 					DBManager.events.put(id, event);
 				}
+				conn.close();
+				DBManager.initEventsAccess();
 				return DBManager.events;
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
@@ -547,46 +551,297 @@ public class DBManager {
 	}
 	
 	/**
+	 * Metoda, która pobiera z bazy danych uprawnienia użytkowników oraz całych grup do przeglądania oraz zarządzania eventami
+	 */
+	public static void initEventsAccess() {
+		if (DBManager.users2events == null) {
+			DBManager.users2events = new HashMap<String, User2Event>();
+			String query = "SELECT * FROM `user2event`";
+			ResultSet rs = dbManager.selectQuery(query);
+			try {
+				while(rs.next()) {
+					int eventId = rs.getInt("eventId");
+					int userId = rs.getShort("userId");
+					User2Event user2event = new User2Event(userId, eventId, rs.getInt("access"));
+					DBManager.users2events.put(userId+"|"+eventId, user2event);
+				}
+				conn.close();
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		if (DBManager.groups2events == null) {
+			DBManager.groups2events = new HashMap<String, Group2Event>();
+			String query = "SELECT * FROM `group2event`";
+			ResultSet rs = dbManager.selectQuery(query);
+			try {
+				while(rs.next()) {
+					int eventId = rs.getInt("eventId");
+					int groupId = rs.getShort("groupId");
+					Group2Event user2event = new Group2Event(groupId, eventId, rs.getInt("access"));
+					DBManager.groups2events.put(groupId+"|"+eventId, user2event);
+				}
+				conn.close();
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+	
+	/**
+	 * Metoda doająca uprawnienia użytkownikowi o zadanym id odpowienie uprawnienia dla eventu o zadanym id
+	 * @param userId - id użytkownika
+	 * @param eventId - id eventy
+	 * @param access - uprawnienia
+	 */
+	public static void addUserAccessToEvent(int userId, int eventId, int access) {
+		
+		if(DBManager.users2events == null) {
+			DBManager.initEventsAccess();
+		}
+		String query = "INSERT INTO `user2event` (`userId`, `eventId`, `access`) VALUES ('"+userId+"', '"+eventId+"', '"+access+"');";
+		int result = dbManager.otherQuery(query);
+		if (result > 0) {
+			DBManager.users2events.put(userId+"|"+eventId, new User2Event(userId, eventId, access));
+		}
+		
+	}
+	
+	/**
+	 * Metoda nadaje uprawnienia grupie do odpowiednich działań na odpowiednim evencie
+	 * @param groupId - id grupy
+	 * @param eventId - id eventu
+	 * @param access - uprawnienia
+	 */
+	public static void addGroupAccessToEvent(int groupId, int eventId, int access) {
+			
+		if(DBManager.groups2events == null) {
+			DBManager.initEventsAccess();
+		}
+		String query = "INSERT INTO `group2event` (`groupId`, `eventId`, `access`) VALUES ('"+groupId+"', '"+eventId+"', '"+access+"');";
+		int result = dbManager.otherQuery(query);
+		if (result > 0) {
+			DBManager.groups2events.put(groupId+"|"+eventId, new Group2Event(groupId, eventId, access));
+		}
+	}
+	
+	/**
 	 * Metoda zwraca event o podanym id
 	 * @param eventId - id eventu do pobrania
+	 * @param userId - id użytkownika, by sprawdzić czy ma uprawnienia do przeprowadzenia operacji
 	 * @return obiekt eventu
 	 */
-	public static Event getEventById(int eventId) {
-		String query = "SELECT `event`.*, `eventType`.`name` as `eventTypeName` FROM `event`, `eventType` WHERE `event`.`eventTypeId`=`eventType`.`id` AND `event`.`id`='"+eventId+"'";
-		ResultSet rs = dbManager.selectQuery(query);
+	public static Event getEventById(int eventId, int userId) {
+		
 		Event event = null;
+		
+		if ( DBManager.users2events == null || DBManager.groups2events == null ) {
+			DBManager.initEventsAccess();
+		}
+		int userAccess = 0, groupAccess = 0, groupId = 0;
+		if(DBManager.users2events.containsKey(userId+"|"+eventId)) {
+			userAccess = DBManager.users2events.get(userId+"|"+eventId).getAccess();
+		}
+		if(DBManager.users == null) {
+			groupId = DBManager.getUserById(userId).getGroupId();
+		}
+		else {
+			groupId = DBManager.users.get(userId).getGroupId();
+		}
+		if(DBManager.groups2events.containsKey(groupId+"|"+eventId)) {
+			groupAccess = DBManager.groups2events.get(groupId+"|"+eventId).getAccess();
+		}
+		if (userAccess >= 4 || groupAccess >= 4) {
+			String query = "SELECT `event`.*, `eventType`.`name` as `eventTypeName` FROM `event`, `eventType` WHERE `event`.`eventTypeId`=`eventType`.`id` AND `event`.`id`='"+eventId+"'";
+			ResultSet rs = dbManager.selectQuery(query);
+			try {
+				if (rs.next()) {
+					int id = rs.getInt("id");
+					event = new Event(id, rs.getString("name"), rs.getString("description"), rs.getDate("startDate"), rs.getDate("endDate"), rs.getString("location"), rs.getInt("creatorId"),
+							rs.getInt("eventTypeId"), rs.getString("eventTypeName"));
+					if(DBManager.events !=null) {
+						DBManager.events.replace(eventId, event);
+					}
+				}
+				conn.close();
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		else {
+			System.out.println("Użytkownik nie ma uprawnień, by pobrać informacje o evencie!");
+		}
+		
+		return event;
+	}
+	
+	/**
+	 * Metoda dodająca event
+	 * @param creatorId - użytkownik dodający event, który będzie miał nadane prawa do odczytu oraz zapisy dla tego wydarzenia
+	 * @param name - Nazwa wydarzenia
+	 * @param description - OPiS wydarzenia
+	 * @param startDate - data rozpoczęcia wydarzenia
+	 * @param endDate - data zakończenia wydarzenia
+	 * @param location - lokalizacja wydarzenia
+	 * @param eventTypeId - id typu wydarzenia
+	 * @return - jeśli się udało utworzyć event to true, jeśli nie to false
+	 */
+	public static boolean addEvent(int creatorId, String name, String description, Date startDate, Date endDate, String location, int eventTypeId) {
+		String query = "SELECT * FROM `user` WHERE `id`='"+creatorId+"'";
 		try {
+			ResultSet rs = dbManager.selectQuery(query);
 			if (rs.next()) {
-				int id = rs.getInt("id");
-				event = new Event(id, rs.getString("name"), rs.getString("description"), rs.getDate("startDate"), rs.getDate("endDate"), rs.getString("location"), rs.getInt("creatorId"),
-						rs.getInt("eventTypeId"), rs.getString("eventTypeName"));
-				if(DBManager.events !=null) {
-					DBManager.events.replace(eventId, event);
+				if (rs.getInt("id") == creatorId) {
+					query = "INSERT INTO `event` (`creatorId`, `name`, `description`, `startDate`, `endDate`, `location`, `eventTypeId`) VALUES ('"+creatorId+"', '"+name+"', '"+description+"', '"+startDate+"', '"+endDate+"', '"+location+"', '"+eventTypeId+"')";
+					int result = dbManager.otherQuery(query);
+					if (result > 0) {
+						conn.close();
+						query = "SELECT `event`.`id`, `eventType`.`name` as `eventTypeName` FROM `event`, `eventType` WHERE `name`='"+name+"' AND `creatorId`='"+creatorId+"' AND `startDate`='"+startDate+"' AND `event`.`eventTypeId`=`eventType`.`id`";
+						rs = dbManager.selectQuery(query);
+						if (rs.next()) {
+							int id = rs.getInt("id");
+							String eventTypeName = rs.getString("eventTypename");
+							conn.close();
+							if(DBManager.events == null) {
+								DBManager.getDocuments();
+							}
+							else {
+								DBManager.addUserAccessToEvent(creatorId, id, 6);
+								DBManager.events.put(id, new Event(id, name, description, startDate, endDate, location, creatorId, eventTypeId, eventTypeName));
+							}
+							return true;
+						}
+					}
 				}
 			}
 			conn.close();
+			return false;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+			return false;
 		}
-		return event;
+	}
+	
+	/**
+	 * Metoda aktualizująca event, jeśli użytkownik ma uprawnienia.
+	 * @param userId - id użytkownika, by sprawdzić czy ma uprawnienia do przeprowadzenia operacji
+	 * @param id - id eventu, który ma być zaktualizowany
+	 * @param name - nowa nazwa eventu, jeśli pusta, nie zostanie dokonana zmiana
+	 * @param description - nowy opis eventu, jeśli pusty, nie zostanie zaktualizowany
+	 * @param startDate - nowa data początku eventu, jeśli null, nie zostanie zaktualizowana
+	 * @param endDate - nowa data zakończenia eventu, jeśli null, nie zostanie zaktualizowana
+	 * @param location - nowa lokalizacja eventu, jeśli pusta, nie zostanie zaktualizowana
+	 * @param eventTypeId - nowe id typu eventu, jeśli 0 to typ pozostanie bez zmian
+	 * @return true jeśli się udało i false w przeciwnym wypadku
+	 */
+	public static boolean updateEventDataById(int userId, int id, String name, String description, Date startDate, Date endDate, String location, int eventTypeId) {
+		
+		if ( DBManager.users2events == null || DBManager.groups2events == null ) {
+			DBManager.initEventsAccess();
+		}
+		int userAccess = 0, groupAccess = 0, groupId = 0;
+		if(DBManager.users2events.containsKey(userId+"|"+id)) {
+			userAccess = DBManager.users2events.get(userId+"|"+id).getAccess();
+		}
+		if(DBManager.users == null) {
+			groupId = DBManager.getUserById(userId).getGroupId();
+		}
+		else {
+			groupId = DBManager.users.get(userId).getGroupId();
+		}
+		if(DBManager.groups2events.containsKey(groupId+"|"+id)) {
+			groupAccess = DBManager.groups2events.get(groupId+"|"+id).getAccess();
+		}
+		if (userAccess >= 6 || groupAccess >= 6) {
+			
+			String query = "";
+			if(!name.isEmpty()) {
+				query += "`name`='"+name+"' ";
+			}
+			if(!description.isEmpty()) {
+				if(!query.isEmpty()) query += "AND ";
+				query += "`description`='"+description+"' ";
+			}
+			if(startDate == null) {
+				if(!query.isEmpty()) query += "AND ";
+				query += "`startDate`='"+startDate+"' ";
+			}
+			if(endDate != null) {
+				if(!query.isEmpty()) query += "AND ";
+				query += "`endDate`='"+endDate+"' ";
+			}
+			if(!location.isEmpty()) {
+				if(!query.isEmpty()) query += "AND ";
+				query += "`location`='"+location+"' ";
+			}
+			if(eventTypeId != 0) {
+				if(!query.isEmpty()) query += "AND ";
+				query += "`eventTypeId`='"+eventTypeId+"' ";
+			}
+			if(!query.isEmpty()) {
+				query = "UPDATE `event` SET " + query + "WHERE `id`='"+id+"'";
+				try {
+					int result = dbManager.otherQuery(query);
+					conn.close();
+					if(result > 0) {
+						DBManager.getEventById(id, userId);
+						return true;
+					}
+				} catch (SQLException e) {
+					System.out.println(e.getMessage());
+					return false;
+				}
+			}
+		}
+		else {
+			System.out.println("Użytkownik nie ma uprawnień, by dokonać edycji eventu!");
+		}
+		
+		return false;
 	}
 	
 	/**
 	 * Metoda usuwa event o zadanym id
 	 * @param id - id eventu do usunięcia
+	 * @param userId - id użytkownika, by sprawdzić czy ma uprawnienia do przeprowadzenia operacji
 	 * @return Zwraca true jeśli operacja się powiodła lub false w przeciwnym wypadku
 	 */
-	public static boolean removeEventById(int id) {
-		dbManager.otherQuery("DELETE FROM `event` WHERE `id`="+id);
-		if(DBManager.events != null) {
-			DBManager.events.remove(id);
+	public static boolean removeEventById(int id, int userId) {
+		
+		if ( DBManager.users2events == null || DBManager.groups2events == null ) {
+			DBManager.initEventsAccess();
 		}
-		try {
-			conn.close();
-			return true;
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-			return false;
+		int userAccess = 0, groupAccess = 0, groupId = 0;
+		if(DBManager.users2events.containsKey(userId+"|"+id)) {
+			userAccess = DBManager.users2events.get(userId+"|"+id).getAccess();
 		}
+		if(DBManager.users == null) {
+			groupId = DBManager.getUserById(userId).getGroupId();
+		}
+		else {
+			groupId = DBManager.users.get(userId+"|"+id).getGroupId();
+		}
+		if(DBManager.groups2events.containsKey(groupId+"|"+id)) {
+			groupAccess = DBManager.groups2events.get(groupId+"|"+id).getAccess();
+		}
+		if (userAccess == 2 || userAccess >= 6 || groupAccess == 2 || groupAccess >= 6) {
+			
+			dbManager.otherQuery("DELETE FROM `event` WHERE `id`="+id);
+			if(DBManager.events != null) {
+				DBManager.events.remove(id);
+			}
+			try {
+				conn.close();
+				return true;
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				return false;
+			}
+			
+		}
+		else {
+			System.out.println("Użytkownik nie ma uprawnień, by usunąć event!");
+		}
+		return false;
 	}
 }

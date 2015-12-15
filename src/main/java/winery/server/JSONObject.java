@@ -71,8 +71,8 @@ public class JSONObject {
 	public String getDate() {
 		return date;
 	}
-	public void setDate(String data) {
-		this.date = data;
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 

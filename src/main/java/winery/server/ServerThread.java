@@ -37,7 +37,7 @@ public class ServerThread extends Thread {
 	protected String operateWithJSONData (String data) {
 		JSONObject receivedJSONObject = JSONOperations.parseJSONToObject(data);
 		if (receivedJSONObject != null) {
-			if (receivedJSONObject.getType().equals("Raport")) {
+			if (receivedJSONObject.getType().equals("Raport") || receivedJSONObject.getType().equals("raport")) {
 				Communicator comm = new Communicator(receivedJSONObject);
 				JSONObject returnedJSONObject = comm.getOutput();
 				String toReturn = JSONOperations.parseObjectToJSONString(returnedJSONObject);

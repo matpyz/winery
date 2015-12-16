@@ -13,6 +13,8 @@ import javax.swing.border.Border;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import winery.accounts.AccountsController;
 import winery.model.Model;
@@ -24,6 +26,7 @@ public class CalendarView extends View implements ActionListener, Controller {
 	
 	private JButton previousButton;
 	private JButton nextButton;
+	private JButton addButton;
 	
 	private JLabel monthNameLabel;
 	private JPanel dayNamesPanel;
@@ -32,20 +35,34 @@ public class CalendarView extends View implements ActionListener, Controller {
 	private JPanel information;
 	private JPanel days;
 	
-	private String[] months = {"Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzien"};
+	private Calendar gc = GregorianCalendar.getInstance();
+	private String[] months = {"Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"};
+	/*
+	 * Aby wykonać kalendarz warto wykorzystać metody zawarte w klasie "GregorianCalendar",
+	 * dla przykładu przy tworzeniu widoku pobierany jest obecny miesiąc na podstawie danych
+	 * lokalnych maszyny, na której został uruchomiony program.
+	 * 
+	 * Dwa, chyba powinien istnieć model, który przechowywałby dane takie właśnie jak obecny miesiąc itd.
+	 */
+	private int currentMonth = gc.get(Calendar.MONTH);
+	
 	
 	public CalendarView() {
 		createGUI();
 	}
 	
 	private void createGUI() {		
+		//TODO Ogarnąć układ strony
 		previousButton = new JButton("Poprzedni");
 		previousButton.setBounds(50, 40, 120, 35);
 		
 		nextButton = new JButton("Następny");
 		nextButton.setBounds(630, 40, 120, 35);
 		
-		monthNameLabel = new JLabel("Miesiąc");
+		addButton = new JButton("Dodaj");
+		addButton.setBounds(630, 1030, 100, 35);
+		
+		monthNameLabel = new JLabel(months[currentMonth]);
 		monthNameLabel.setBackground(Color.WHITE);
 		monthNameLabel.setBounds(380, 40, 200, 35);
 			
@@ -85,19 +102,32 @@ public class CalendarView extends View implements ActionListener, Controller {
 			MyMouseListener myMouseListener = new MyMouseListener(days, panelHolder, row, column);
 			panelHolder[row][column].addMouseListener(myMouseListener);
 			days.add(panelHolder[row][column]);
+			/*
+			 * Tutaj z kolei powinniśmy wykorzystać podobną sztuczkę, a mianowicie wyszukać czym jest pierwszy dzień miesiąca
+			 * (pon, wt, itp.) i na tej podstawie deaktywować wszystkie zbędne przyciski. Przykładowe użycie GregorianCalendar:
+			 * 
+			 * gc.set(Calendar.DAY_OF_MONTH, 0);
+			 * gc.get(GregorianCalendar.DAY_OF_WEEK);
+			 * UWAGA! Niedziela jest zerem, podobnie jak pierwszy dzień miesiąca!
+			 * 
+			 */
+		
 		}
 		
 		previousButton.setActionCommand("previous");
 		nextButton.setActionCommand("next");
+		addButton.setActionCommand("addevent");
 		
 		previousButton.addActionListener(this);
 		nextButton.addActionListener(this);
+		addButton.addActionListener(this);
 		
 		add(previousButton);
-		add(nextButton);
 		add(monthNameLabel);
+		add(nextButton);
 		add(dayNamesPanel);
 		add(days);
+		add(addButton);
 		//add(windowPanel);
 	}
 	
@@ -116,11 +146,14 @@ public class CalendarView extends View implements ActionListener, Controller {
 		case "next":
 			nextMonth();
 			break;
+		case "addevent":
+			addEvent();
+			break;
 		default:
 			break;
 		}
 	}
-	
+
 	@Override
 	public View getView() {
 		return this;
@@ -132,11 +165,32 @@ public class CalendarView extends View implements ActionListener, Controller {
 	}
 
 	public void previousMonth() {
-		// TODO Auto-generated method stub
+		currentMonth -= 1;
+		if(currentMonth<0) { currentMonth += 12; }
+		monthNameLabel.setName((months[currentMonth]));
+		// TODO Aktualizacja wyświetlenia
 	}
 	
 	private void nextMonth() {
-		// TODO Auto-generated method stub
+		currentMonth = (currentMonth+1)%12;
+		monthNameLabel.setName((months[currentMonth]));
+		// TODO Aktualizacja wyświetlenia
+	}
+	
+	private void addEvent() {
+		/* TODO Wyświetl okienko z danymi, wykonaj dodanie eventu
+		 * User u = DBManager.signIn(login, hasło);
+		 * int u_id = u.getId();
+		 * if(DBManager.addEvent((int)u_id, (String)nazwa_wydarzenia, (String)opis, 
+		 * 					(Date)start, (Date)koniec, (String)lokalizacja, (int)id_wydarzenia) == false)
+		 * 		zwróc błąd
+		 * 
+		 * Po drodze trzeba sprawdzić czy użytkownik ma prawo do tworzenia eventu.
+		 * 
+		 * Aby pobrać id_wydarzenia:
+		 * 		Użyć metody (Event)DBManager.getEventById((int)event_id, (int)u_id) jeżeli znamy id
+		 * 		lub	(HashMap<Integer,Event>)getEvents() i przeszukać
+		 */
 		
 	}
 

@@ -5,11 +5,9 @@ import java.util.concurrent.CountDownLatch;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-
-
-
+import winery.documents.PredictingLitersOfWineViewContoller;
 // Widoki
-import winery.documents.SelectGenerateDocumentGui;
+import winery.documents.SelectGenerateDocumentViewController;
 import winery.guardian.Guardian;
 import winery.accounts.AccountsController;
 import winery.calendar.CalendarView;
@@ -35,7 +33,7 @@ public class Program {
 	 *            argumenty wywołania, ignorowane
 	 */
 	public static void main(String[] args) {
-		new Program(new SelectGenerateDocumentGui(), new AccountsController(), new CalendarView());
+		new Program(new SelectGenerateDocumentViewController(), new AccountsController(), new CalendarView(), new PredictingLitersOfWineViewContoller());
 	}
 
 	private JFrame frame_;

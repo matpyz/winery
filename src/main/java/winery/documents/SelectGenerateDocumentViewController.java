@@ -27,7 +27,7 @@ import winery.view.View;
  * @author Przemysław Iskra
  * @version 2.0
  */
-public class SelectGenerateDocumentGui extends View implements Controller {
+public class SelectGenerateDocumentViewController extends View implements Controller {
 
 	/**
 	 * 
@@ -53,7 +53,7 @@ public class SelectGenerateDocumentGui extends View implements Controller {
 	// "<html>Deklaracja o szacowanej ilości win, winogron lub moszczu<br>
 	// winogronowego, którebędą dostarczone do przedsiębiorcy, oraz o
 	// szacowanej<br> ilości ich wykorzystaniaw danym <br> roku gospodarczym"};
-	public SelectGenerateDocumentGui() {
+	public SelectGenerateDocumentViewController() {
 		setLayout(new GridLayout(1, 1));
 		model = new SelectGenerateDocumentModel();
 		setSize(a, b);
@@ -86,7 +86,7 @@ public class SelectGenerateDocumentGui extends View implements Controller {
 		Linfo2 = new JLabel(
 				"<html> Podaj Imię i nazwisko, miejsce zamieszkania i adres <br> albo firmę, siedzibę i adres oraz numer wpisu<br> do ewidencji producentów i przedsiębiorców<br> wyrabiających wino z winogron pozyskanychz <br> upraw winorośli położonych na terytorium<br> Rzeczypospolitej Polskiej podmiotu<br> składającego deklarację, jeżeli podmiot ten<br> taki numer posiada: ");
 		Pmaks.add(Linfo2); // zwykłe info o tym co trzeba wpisać do textArea.
-		Tdata = new JTextArea(5, 30);
+		Tdata = new JTextArea(3, 30);
 
 		Pmaks.add(Tdata);
 		Bready = new JButton(" Generuj Dokument."); // Przycisk, którego
@@ -212,23 +212,21 @@ public class SelectGenerateDocumentGui extends View implements Controller {
 
 		}
 	}
-    /*
-	public static void main(String args[]) {
-
-		SelectGenerateDocumentViewController b = new SelectGenerateDocumentViewController();
-		JFrame j = new JFrame();
-		j.setSize(600, 600);
-		b.setVisible(true);
-		j.add(b);
-		j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		j.setVisible(true);
-
-	} */
+	/*
+	 * public static void main(String args[]) {
+	 * 
+	 * SelectGenerateDocumentViewController b = new
+	 * SelectGenerateDocumentViewController(); JFrame j = new JFrame();
+	 * j.setSize(600, 600); b.setVisible(true); j.add(b);
+	 * j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); j.setVisible(true);
+	 * 
+	 * }
+	 */
 
 	@Override
 	protected void update(Model model) {
 		// TODO: Być może należy tutaj dopisać obsługę zmian, do rozważenia.
-		
+
 	}
 
 	@Override

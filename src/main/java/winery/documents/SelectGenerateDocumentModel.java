@@ -1,7 +1,11 @@
 package winery.documents;
 
-import javax.swing.JOptionPane;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
+import javax.swing.JOptionPane;
 
 import winery.documents.ChangeDataDocumentGui;
 import winery.model.Model;
@@ -12,16 +16,19 @@ import winery.model.Model;
  * @author Przemysław Iskra
  * @version 1.0
  */
-public class SelectGenerateDocumentModel extends Model {
+public class SelectGenerateDocumentModel extends PredictingLitersOfWineModel {
 
-	String title, path = "";
+	String title;
 	// title to zmienna odpowiadająca za rozpoznanie dokumentu
 	// to zmienna zawierająca scieżka do katalogu i nazwę pliku
-	String[] docTable = new String[] {"<html>Deklaracja o ilości win białych lub czerwonych <br> wprowadzonych do obrotu w poprzednimroku gospodarczym <br>",
+	DateFormat dateFormat = new SimpleDateFormat("dd:MM:yyy");
+	Calendar cal = Calendar.getInstance();
+	String[] docTable = new String[] {
+			"<html>Deklaracja o ilości win białych lub czerwonych <br> wprowadzonych do obrotu w poprzednimroku gospodarczym <br>",
 			"<html>Deklaracja o szacowanej ilości wina, jaka będzie wyrobiona <br>w danym roku gospodarczym ",
 			"<html> Deklaracja o szacowanej ilości win, winogron lub moszczu winogronowego, ktęre  <br>będą dostarczone do przedsiębiorcy, oraz o szacowanej ilości ich wykorzystania w <br>  danym roku gospodarczym",
-			"<html>Deklaracja o zapasach win lub moszczów winogronowych posiadanych w dniu pobrać datę!"};
-    DocumentBasic doc;
+			"<html>Deklaracja o zapasach win lub moszczów winogronowych posiadanych <br> w dniu "+ dateFormat.format(cal.getTime()) };
+	DocumentBasic doc;
 
 	// docTable zawiera dokumenty do wyboru
 	public SelectGenerateDocumentModel() {
@@ -49,46 +56,36 @@ public class SelectGenerateDocumentModel extends Model {
 		return title;
 	}
 
-	public void setVpath(String path) {
-		this.path = path;
+	public DocumentBasic getDokument(String title) { // Jak b�dzie wi�cej
+														// dokument�w to napisa�
+														// lepsza wersje tej
+														// funkcji. We
+		if (title.equals(docTable[0])) {
+			Document1 doc = new Document1();
+
+			return doc;
+			// doc.createPDF(path, data); //Generowanie dokumentu.
+		} else if (title.equals(docTable[1])) {
+			Document2 doc = new Document2();
+			return doc;
+			// doc2.createPDF(path , data); //Generowanie dokumentu.
+
+		}
+
+		else if (title.equals(docTable[2])) {
+			Document3 doc = new Document3();
+			return doc;
+			// doc2.createPDF(path , data); //Generowanie dokumentu.
+
+		} else if (title.equals(docTable[3])) {
+			Document4 doc = new Document4();
+			return doc;
+			// doc2.createPDF(path , data); //Generowanie dokumentu.
+
+		}
+		return null;
 	}
 
-	public String getVpath() {
-		return path;
-	}
-
-	  public DocumentBasic getDokument(String title)
-	   {  //Jak b�dzie wi�cej dokument�w to napisa� lepsza wersje tej funkcji. We
-		   if (title.equals(docTable[0])) 
-				{Document1 doc =new Document1();
-				
-				return doc;
-				//doc.createPDF(path, data);   //Generowanie dokumentu. 
-				} 
-				else if (title.equals(docTable[1]))
-				{
-					Document2 doc =new Document2();  
-					return doc;
-					//doc2.createPDF(path , data);  //Generowanie dokumentu. 
-
-				}
-		   
-				else if (title.equals(docTable[2]))
-				{
-					Document3 doc =new Document3();  
-					return doc;
-					//doc2.createPDF(path , data);  //Generowanie dokumentu. 
-
-				}
-				else if (title.equals(docTable[3]))
-				{
-					Document4 doc =new Document4();  
-					return doc;
-					//doc2.createPDF(path , data);  //Generowanie dokumentu. 
-
-				}
-		   return null;
-	   }
 	public DocumentBasic getDokument() {
 		return getDokument(title);
 	}

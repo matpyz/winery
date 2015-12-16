@@ -17,8 +17,10 @@ public class Document1 extends DocumentBasic {
 
 	public Document1() {
 		needtable = true;
-		horizontal = new String[3]; size=5;
-		vertical = new String[5]; size2=2;
+		horizontal = new String[3];
+		size = 5;
+		vertical = new String[5];
+		size2 = 2;
 		horizontal[0] = " Wina  ";
 		horizontal[1] = "Czerwone albo różowe";
 		horizontal[2] = "Białe";

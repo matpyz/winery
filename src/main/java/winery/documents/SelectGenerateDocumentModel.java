@@ -1,14 +1,10 @@
 package winery.documents;
 
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.swing.JOptionPane;
-
-import winery.documents.ChangeDataDocumentGui;
-import winery.model.Model;
 
 /**
  * Klasa służaca do obsługi gui WybieranieDokumentu.

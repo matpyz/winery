@@ -1,9 +1,17 @@
 package dbapi;
 
-import java.sql.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.Blob;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
 
 public class DBManager {
 
@@ -971,5 +979,17 @@ public class DBManager {
 			System.out.println("Użytkownik nie ma uprawnień, by usunąć event!");
 		}
 		return false;
+	}
+
+	public static Blob loadBlob(String path) throws SQLException, IOException {
+		Blob document = conn.createBlob();
+		int bufferSize = 4096, got;
+		byte[] buffer = new byte[bufferSize];
+		try (OutputStream out = document.setBinaryStream(0); FileInputStream in = new FileInputStream(path)) {
+			while ((got = in.read(buffer)) != -1) {
+				out.write(buffer, 0, got);
+			}
+		}
+		return document;
 	}
 }

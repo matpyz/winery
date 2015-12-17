@@ -1,8 +1,6 @@
 package winery.documents;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -11,13 +9,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
-
 import javax.swing.JFileChooser;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import javax.swing.JTextField;
 
 import winery.model.Model;

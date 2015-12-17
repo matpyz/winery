@@ -1,29 +1,27 @@
 package winery.accounts;
 
-import winery.model.Model;
-import winery.view.View;
-
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
+
+import winery.model.Model;
+import winery.view.View;
 
 public class AccountsView extends View implements ActionListener {
 

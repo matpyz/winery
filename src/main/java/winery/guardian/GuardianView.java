@@ -30,7 +30,8 @@ class GuardianView extends JFrame implements ActionListener {
 	private JButton btn_login;
 
 	public GuardianView(Guardian controller, int height, int width) {
-
+		super("Logowanie");
+		
 		this.controller = controller;
 
 		createGUI(width, height);
@@ -81,6 +82,7 @@ class GuardianView extends JFrame implements ActionListener {
 
 		add(pane, new GridBagConstraints());
 		
+		getRootPane().setDefaultButton(btn_login);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -88,9 +90,12 @@ class GuardianView extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (controller.login(txt_login.getText(), txt_password.getText())) {
 			setVisible(false); 
-			dispose(); // Destroy the JFrame object
-		} else
+			dispose();
+		} else {
 			JOptionPane.showMessageDialog(this, "Nieudane logowanie");
+			txt_login.setText("");
+			txt_password.setText("");
+		}
 	}
 /*	
 	public static void main(String[] args) {

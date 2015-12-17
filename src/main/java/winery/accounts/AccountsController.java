@@ -1,17 +1,21 @@
 package winery.accounts;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import winery.guardian.Guardian;
 import winery.view.Actions;
 import winery.view.Controller;
 import winery.view.View;
+import dbapi.*;
 
 public class AccountsController implements Controller {
 
 	private AccountsModel model;
 	private AccountsView view;
+
+	private HashMap<String, Integer> userMap = new HashMap<>();
 
 	/**
 	 * @param model
@@ -20,6 +24,7 @@ public class AccountsController implements Controller {
 	public AccountsController() {
 		this.model = new AccountsModel();
 		this.view = new AccountsView(this);
+		// this.userMap = new HashMap<>();
 	}
 
 	/**
@@ -45,10 +50,11 @@ public class AccountsController implements Controller {
 	 */
 	public String modifyAccount(List<String> accountData) {
 		if (Guardian.checkPermission(Actions.EDIT_ACCOUNT)) {
-			model.accessDB(null);
+			DBManager.changeUserData(userMap.get(accountData.get(0)), accountData.get(0),
+					accountData.get(3), accountData.get(4), accountData.get(1),
+					accountData.get(2), 0);
 			return "Dane konta zostały zaktualizowane";
-		}
-		else
+		} else
 			return "Brak uprawnień";
 	}
 
@@ -73,9 +79,10 @@ public class AccountsController implements Controller {
 	 *            id wybranego użytkownika
 	 * @return lista stringów z danymi
 	 */
-	List<String> getAccountData(String userId) {
-		model.accessDB(null);
-		return null;
+	List<String> getAccountData(String userData) {
+		User user = DBManager
+				.getUserById(userMap.get(userData.split("[()]")[1]));
+		return user.getData();
 	}
 
 	/**
@@ -84,10 +91,16 @@ public class AccountsController implements Controller {
 	 * @return lista stringów z imionami_nazwiskami
 	 */
 	List<String> getAccountList() {
-		model.accessDB(null);
-		List<String> accounts = new ArrayList<>();
-		accounts.add("Jan Kowalski");
-		return accounts;
+		HashMap<Integer, User> users = DBManager.getUsers();
+		List<User> userList = new ArrayList<>(users.values());
+		System.out.println(userList.toString());
+		List<String> userData = new ArrayList<>();
+		for (User u : userList) {
+			userData.add(u.getName() + " " + u.getSurname() + " ("
+					+ u.getLogin() + ")");
+			userMap.put(u.getLogin(), u.getId());
+		}
+		return userData;
 	}
 
 	@Override
@@ -99,7 +112,7 @@ public class AccountsController implements Controller {
 	public String getTitle() {
 		return "Konta";
 	}
-	
+
 	public static String getID() {
 		return "accounts";
 	}

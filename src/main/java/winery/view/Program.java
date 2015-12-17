@@ -5,6 +5,7 @@ import java.util.concurrent.CountDownLatch;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
+import dbapi.DBManager;
 import winery.documents.PredictingLitersOfWineViewContoller;
 // Widoki
 import winery.documents.SelectGenerateDocumentViewController;
@@ -52,7 +53,7 @@ public class Program {
 		 * wyświetli właściwe okno programu.
 		 */
 		CountDownLatch loginSignal = new CountDownLatch(1);
-		new Guardian(loginSignal);
+		Guardian.initialize(loginSignal);
 		try {
 			loginSignal.await();
 		} catch (InterruptedException e) {

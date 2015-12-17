@@ -12,21 +12,32 @@ import winery.view.Actions;
 import winery.view.Controller;
 import winery.view.View;
 
+import dbapi.*;
+
 public class Guardian {
 
-	private static boolean initialized = false;
+	private static Guardian instance = null;
+	private static volatile boolean initialized = false;
 	private static String userId = null;
 
-	private GuardianView view;
-	private MessageDigest hash;
-	private CountDownLatch loginSignal;
+	private static GuardianView view;
+	private static MessageDigest hash;
+	private static CountDownLatch loginSignal;
 
 	// private SecureRandom random;
-
-	public Guardian(CountDownLatch loginSignal) {
+/*
+	public static synchronized Guardian getInstance() {
+		if(instance == null)
+			return null;
+		
+		return instance;
+	}
+*/
+	public static void initialize(CountDownLatch signal) {
+		instance = new Guardian();
 		initialized = true;
-		this.loginSignal = loginSignal;
-		view = new GuardianView(this, 200, 300);
+		loginSignal = signal;
+		view = new GuardianView(instance, 200, 300);
 		// random = SecureRandom.getInstance("SHA1PRNG","SUN");
 		try {
 			hash = MessageDigest.getInstance("SHA-256");
@@ -35,12 +46,16 @@ public class Guardian {
 		}
 	}
 
+	private Guardian() {
+		/* Celowo pusty prywatny konstruktor */
+	}
+
 	/**
 	 * Zwraca listę z uprawnieniami użytkownika.
 	 * 
 	 * @return kolekcja typu ArrayList<String>
 	 */
-	public List<String> getPermissions() {
+	public static List<String> getPermissions() {
 		List<String> permissions = new ArrayList<>();
 		permissions.add("docs");
 		permissions.add("accounts");
@@ -63,13 +78,15 @@ public class Guardian {
 			return true; /* Tu będzie sprawdzanie pozwoleń */
 	}
 
-	public boolean login(String login, String password) {
-		if (initialized /* Tu będzie sprawdzanie loginu i hasła */) {
+	protected boolean login(String login, String password) {
+		User user = DBManager.signIn(login, password);
+		if(user != null) {
 			hash.update(login.getBytes());
 			userId = new String(hash.digest());
 			loginSignal.countDown();
 			return true;
-		} else
+		}
+		else
 			return false;
 	}
 }

@@ -1,5 +1,7 @@
 package dbapi;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class User {
@@ -22,6 +24,10 @@ public class User {
 		this.mail = mail;
 		this.groupId = groupId;
 		this.groupName = groupName;
+	}
+	
+	public ArrayList<String> getData() {
+		return new ArrayList<>(Arrays.asList(name,surname,mail,login,groupName));
 	}
 	
 	public String getName() {

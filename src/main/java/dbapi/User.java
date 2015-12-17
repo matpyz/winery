@@ -23,7 +23,7 @@ public class User {
 		this.groupId = groupId;
 		this.groupName = groupName;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -67,7 +67,7 @@ public class User {
 	public String getGroupName() {
 		return groupName;
 	}
-	
+
 	public HashMap<Integer, Permission> getPermissions() {
 		return permissions;
 	}

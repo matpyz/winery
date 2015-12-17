@@ -27,7 +27,8 @@ public class SelectGenerateDocumentModel extends PredictingLitersOfWineModel {
 			"<html>Deklaracja o ilości win białych lub czerwonych <br> wprowadzonych do obrotu w poprzednimroku gospodarczym <br>",
 			"<html>Deklaracja o szacowanej ilości wina, jaka będzie wyrobiona <br>w danym roku gospodarczym ",
 			"<html> Deklaracja o szacowanej ilości win, winogron lub moszczu winogronowego, ktęre  <br>będą dostarczone do przedsiębiorcy, oraz o szacowanej ilości ich wykorzystania w <br>  danym roku gospodarczym",
-			"<html>Deklaracja o zapasach win lub moszczów winogronowych posiadanych <br> w dniu "+ dateFormat.format(cal.getTime()) };
+			"<html>Deklaracja o zapasach win lub moszczów winogronowych posiadanych <br> w dniu "
+					+ dateFormat.format(cal.getTime()) };
 	DocumentBasic doc;
 
 	// docTable zawiera dokumenty do wyboru

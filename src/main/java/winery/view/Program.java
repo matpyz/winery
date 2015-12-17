@@ -5,12 +5,13 @@ import java.util.concurrent.CountDownLatch;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import winery.documents.PredictingLitersOfWineViewContoller;
-// Widoki
-import winery.documents.SelectGenerateDocumentViewController;
-import winery.guardian.Guardian;
+/* Kontrolery */
+
 import winery.accounts.AccountsController;
 import winery.calendar.CalendarView;
+import winery.documents.PredictingLitersOfWineViewContoller;
+import winery.documents.SelectGenerateDocumentViewController;
+import winery.guardian.Guardian;
 
 /**
  * Zawiera punkt startowy programu. Jako główne okno, prezentuje panele-widoki
@@ -33,7 +34,8 @@ public class Program {
 	 *            argumenty wywołania, ignorowane
 	 */
 	public static void main(String[] args) {
-		new Program(new SelectGenerateDocumentViewController(), new AccountsController(), new CalendarView(), new PredictingLitersOfWineViewContoller());
+		new Program(new AccountsController(), new CalendarView(), new SelectGenerateDocumentViewController(),
+				new PredictingLitersOfWineViewContoller());
 	}
 
 	private JFrame frame_;
@@ -58,7 +60,7 @@ public class Program {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		frame_ = new JFrame("Winery");
 		tabbedPane_ = new JTabbedPane();
 

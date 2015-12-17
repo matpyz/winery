@@ -5,7 +5,7 @@ public class User2Event {
 	private int userId;
 	private int eventId;
 	private int access;
-	
+
 	public User2Event(int userId, int eventId, int access) {
 		super();
 		this.userId = userId;

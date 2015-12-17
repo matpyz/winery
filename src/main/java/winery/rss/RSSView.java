@@ -10,20 +10,20 @@ public class RSSView extends View implements ActionListener {
 
 	protected static final long serialVersionUID = 1L;
 	private RSSController controller;
-	
+
 	public RSSView(RSSController controller) {
 		this.controller = controller;
 		createGUI();
 	}
-	
+
 	private void createGUI() {
 		// Soon.
 	}
-	
+
 	@Override
 	protected void update(Model model) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

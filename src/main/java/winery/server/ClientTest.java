@@ -22,7 +22,7 @@ public class ClientTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
+
 		try {
 			s = new Socket(InetAddress.getLocalHost(), 4444);
 			System.out.println("Connected");
@@ -34,7 +34,7 @@ public class ClientTest {
 			System.out.println("Wpisales: " + textToSend);
 			out.println(textToSend);
 			out.flush();
-			
+
 			String textReceived = in.readLine();
 			System.out.println(textReceived);
 		} catch (UnknownHostException e) {

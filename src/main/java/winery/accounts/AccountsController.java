@@ -47,8 +47,7 @@ public class AccountsController implements Controller {
 		if (Guardian.checkPermission(Actions.EDIT_ACCOUNT)) {
 			model.accessDB(null);
 			return "Dane konta zostały zaktualizowane";
-		}
-		else
+		} else
 			return "Brak uprawnień";
 	}
 
@@ -99,7 +98,7 @@ public class AccountsController implements Controller {
 	public String getTitle() {
 		return "Konta";
 	}
-	
+
 	public static String getID() {
 		return "accounts";
 	}

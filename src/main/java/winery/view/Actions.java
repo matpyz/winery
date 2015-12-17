@@ -3,8 +3,8 @@ package winery.view;
 /**
  * Enum odpowiedzialny za katalogowanie akcji wykonywanych przez użytkownika.
  * Nowe akcje dodajesz poprzez dopisanie ich w tym pliku do już istniejących.
- * Konwencja nakazuje użycie caps locka, przykładowo NEW_ACTION("jpanel_id"). String w
- * nawiasie musi pokrywać się z ID zakładki, w jakiej dana akcja będzie
+ * Konwencja nakazuje użycie caps locka, przykładowo NEW_ACTION("jpanel_id").
+ * String w nawiasie musi pokrywać się z ID zakładki, w jakiej dana akcja będzie
  * wykonywana.
  * 
  * @author Kamil L

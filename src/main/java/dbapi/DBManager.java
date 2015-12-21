@@ -28,6 +28,23 @@ public class DBManager {
 	DBManager() {
 		this.polaczenieURL = "jdbc:mysql://db4free.net/testwina?user=testwina&password=testwina";
 	}
+	
+	private void createConnection() {
+		if (conn == null ) {
+			try {
+
+				conn = DriverManager.getConnection(polaczenieURL);
+				Class.forName("com.mysql.jdbc.Driver");
+				
+			} catch (ClassNotFoundException wyjatek) {
+				System.out.println("Problem ze sterownikiem");
+			} catch (SQLException wyjatek) {
+				System.out.println("SQLException: " + wyjatek.getMessage());
+				System.out.println("SQLState: " + wyjatek.getSQLState());
+				System.out.println("VendorError: " + wyjatek.getErrorCode());
+			}
+		}
+	}
 
 	/**
 	 * @param query
@@ -37,17 +54,12 @@ public class DBManager {
 	 */
 	ResultSet selectQuery(String query) {
 		try {
-
-			conn = DriverManager.getConnection(polaczenieURL);
-			Class.forName("com.mysql.jdbc.Driver");
+			dbManager.createConnection();
 			Statement stmt = conn.createStatement();
 			ResultSet rs = null;
 			rs = stmt.executeQuery(query);
 
 			return rs;
-		} catch (ClassNotFoundException wyjatek) {
-			System.out.println("Problem ze sterownikiem");
-			return null;
 		} catch (SQLException wyjatek) {
 			System.out.println("SQLException: " + wyjatek.getMessage());
 			System.out.println("SQLState: " + wyjatek.getSQLState());
@@ -59,15 +71,11 @@ public class DBManager {
 	int otherQuery(String query) {
 		try {
 
-			conn = DriverManager.getConnection(polaczenieURL);
-			Class.forName("com.mysql.jdbc.Driver");
+			dbManager.createConnection();
 			Statement stmt = conn.createStatement();
 			int rs = stmt.executeUpdate(query);
 
 			return rs;
-		} catch (ClassNotFoundException wyjatek) {
-			System.out.println("Problem ze sterownikiem");
-			return 0;
 		} catch (SQLException wyjatek) {
 			System.out.println("SQLException: " + wyjatek.getMessage());
 			System.out.println("SQLState: " + wyjatek.getSQLState());
@@ -297,22 +305,22 @@ public class DBManager {
 			query += "`login` = '" + login + "'";
 		if (!password.isEmpty()) {
 			if (!query.isEmpty())
-				query += " AND ";
+				query += ", ";
 			query += "`password` = '" + password + "'";
 		}
 		if (!mail.isEmpty()) {
 			if (!query.isEmpty())
-				query += " AND ";
+				query += ", ";
 			query += "`email` = '" + mail + "'";
 		}
 		if (!name.isEmpty()) {
 			if (!query.isEmpty())
-				query += " AND ";
+				query += ", ";
 			query += "`name` = '" + name + "'";
 		}
 		if (!surname.isEmpty()) {
 			if (!query.isEmpty())
-				query += " AND ";
+				query += ", ";
 			query += "`surname` = '" + surname + "'";
 		}
 		if (!query.isEmpty()) {
@@ -547,21 +555,21 @@ public class DBManager {
 	public static boolean updateDocumentDataById(int id, String name, String description, String type, Blob document) {
 		String query = "";
 		if (!name.isEmpty()) {
-			query += "`name`='" + name + "' ";
+			query += "`name`='" + name + "'";
 		}
 		if (!description.isEmpty()) {
 			if (!query.isEmpty())
-				query += "AND ";
-			query += "`description`='" + description + "' ";
+				query += ", ";
+			query += "`description`='" + description + "'";
 		}
 		if (!type.isEmpty()) {
 			if (!query.isEmpty())
-				query += "AND ";
-			query += "`type`='" + type + "' ";
+				query += ", ";
+			query += "`type`='" + type + "'";
 		}
 		if (document != null) {
 			if (!query.isEmpty())
-				query += "AND ";
+				query += ", ";
 			query += "`document`='" + document + "' ";
 		}
 		if (!query.isEmpty()) {
@@ -885,31 +893,31 @@ public class DBManager {
 
 			String query = "";
 			if (!name.isEmpty()) {
-				query += "`name`='" + name + "' ";
+				query += "`name`='" + name + "'";
 			}
 			if (!description.isEmpty()) {
 				if (!query.isEmpty())
-					query += "AND ";
-				query += "`description`='" + description + "' ";
+					query += ", ";
+				query += "`description`='" + description + "'";
 			}
 			if (startDate == null) {
 				if (!query.isEmpty())
-					query += "AND ";
-				query += "`startDate`='" + startDate + "' ";
+					query += ", ";
+				query += "`startDate`='" + startDate + "'";
 			}
 			if (endDate != null) {
 				if (!query.isEmpty())
-					query += "AND ";
-				query += "`endDate`='" + endDate + "' ";
+					query += ", ";
+				query += "`endDate`='" + endDate + "'";
 			}
 			if (!location.isEmpty()) {
 				if (!query.isEmpty())
-					query += "AND ";
-				query += "`location`='" + location + "' ";
+					query += ", ";
+				query += "`location`='" + location + "'";
 			}
 			if (eventTypeId != 0) {
 				if (!query.isEmpty())
-					query += "AND ";
+					query += ", ";
 				query += "`eventTypeId`='" + eventTypeId + "' ";
 			}
 			if (!query.isEmpty()) {
@@ -982,6 +990,8 @@ public class DBManager {
 	}
 
 	public static Blob loadBlob(String path) throws SQLException, IOException {
+		
+		dbManager.createConnection();
 		Blob document = conn.createBlob();
 		int bufferSize = 4096, got;
 		byte[] buffer = new byte[bufferSize];
@@ -992,4 +1002,91 @@ public class DBManager {
 		}
 		return document;
 	}
+	
+	/**
+	 * @param invoiceId
+	 * @return
+	 */
+	public static Invoice getInvoiceById(int invoiceId) {
+		
+		Invoice invoice = null;
+		String query = "SELECT * FROM `invoice` WHERE `id`='"+invoiceId+"'";
+		
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			if (rs.next()) {
+				invoice = new Invoice(rs.getInt("id"), rs.getInt("creatorId"), rs.getString("name"), rs.getString("receiverName"),
+						rs.getString("receiverAddress"), rs.getString("receiverNIP"), rs.getString("receiverDetails"), rs.getString("receiverBankAccount"), rs.getDate("creationDate"));
+				query = "SELECT * FROM `invoiceDetails` WHERE `invoiceId`='"+invoiceId+"'";
+				conn.close();
+				rs = dbManager.selectQuery(query);
+				HashMap<Integer, InvoiceDetails> invoiceDetails = new HashMap<Integer, InvoiceDetails>();
+				while(rs.next()) {
+					invoiceDetails.put(rs.getInt("id"), new InvoiceDetails(rs.getInt("id"), invoiceId, rs.getString("name"), rs.getInt("quantity"), rs.getInt("baseprice")));
+				}
+				invoice.setInvoiceDetails(invoiceDetails);
+			}
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return invoice;
+	}
+	
+	/**
+	 * @param creatorId
+	 * @param name
+	 * @param receiverName
+	 * @param receiverAddress
+	 * @param receiverNIP
+	 * @param receiverDetails
+	 * @param receiverBankAccount
+	 * @return
+	 */
+	public static Invoice addInvoice(int creatorId, String name, String receiverName, String receiverAddress, String receiverNIP, String receiverDetails, String receiverBankAccount) {
+		
+		Invoice invoice = null;
+		
+		Date creationDate = Date.valueOf(LocalDate.now());
+		String query = "INSERT INTO `invoice` (`creatorId`, `name`, `receiverName`, `receiverAddress`, `receiverNIP`, `receiverDetails`, `receiverBankAccount`, `creationDate`) VALUES ('" + creatorId + "', '"
+				+ name + "', '" + receiverName + "', '" + receiverAddress + "', '" + receiverNIP + "', '" + receiverDetails + "', '" + receiverBankAccount + "', '" + creationDate + "');";
+		
+		try {
+			int result = dbManager.otherQuery(query);
+			conn.close();
+			if(result > 0) {
+				query = "SELECT `id` FROM `invoice` WHERE `name`='" + name + "' AND `creationDate`='" + creationDate + "'";
+				ResultSet rs = dbManager.selectQuery(query);
+				if (rs.next()) {
+					int id = rs.getInt("id");
+					invoice = new Invoice(id, creatorId, name, receiverName, receiverAddress, receiverNIP,
+							receiverDetails, receiverBankAccount, creationDate);
+				}
+				conn.close();
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+		return invoice;
+	}
+	
+	/**
+	 * @param id
+	 * @return
+	 */
+	public static boolean removeInvoiceById(int id) {
+		
+		int result = dbManager.otherQuery("DELETE FROM `invoiceDetails` WHERE `invoiceId`=" + id);
+		try {
+			conn.close();
+			if (result > 0) {
+				result = dbManager.otherQuery("DELETE FROM `invoice` WHERE `id`=" + id);
+			}
+			return result > 0;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
+	
 }

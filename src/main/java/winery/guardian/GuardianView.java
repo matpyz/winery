@@ -78,27 +78,17 @@ class GuardianView extends JFrame implements ActionListener {
 		pane.setBorder(BorderFactory.createEmptyBorder(borderWidth, borderWidth, borderWidth, borderWidth));
 
 		add(pane, new GridBagConstraints());
-<<<<<<< HEAD
 		
 		getRootPane().setDefaultButton(btn_login);
-=======
-
->>>>>>> branch 'master' of git@github.com:mpyzik/winery.git
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (controller.login(txt_login.getText(), txt_password.getText())) {
-<<<<<<< HEAD
 			setVisible(false); 
 			dispose();
 		} else {
-=======
-			setVisible(false);
-			dispose(); // Destroy the JFrame object
-		} else
->>>>>>> branch 'master' of git@github.com:mpyzik/winery.git
 			JOptionPane.showMessageDialog(this, "Nieudane logowanie");
 			txt_login.setText("");
 			txt_password.setText("");

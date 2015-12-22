@@ -120,7 +120,7 @@ public class AccountsView extends View implements ActionListener {
 		gbc_panel_accountData.gridx = 0;
 		gbc_panel_accountData.gridy = 1;
 		add(panel_accountData, gbc_panel_accountData);
-<<<<<<< HEAD
+
 		panel_accountData.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				FormSpecs.DEFAULT_COLSPEC,
@@ -137,14 +137,6 @@ public class AccountsView extends View implements ActionListener {
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,}));
-=======
-		panel_accountData.setLayout(new FormLayout(
-				new ColumnSpec[] { FormSpecs.RELATED_GAP_COLSPEC, FormSpecs.DEFAULT_COLSPEC,
-						FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("default:grow"), },
-				new RowSpec[] { FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC,
-						FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
-						FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC, }));
->>>>>>> branch 'master' of git@github.com:mpyzik/winery.git
 
 		lbl_name = new JLabel("Imię");
 		panel_accountData.add(lbl_name, "2, 2, right, default");

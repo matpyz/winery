@@ -57,7 +57,7 @@ public class DBManager {
 			dbManager.createConnection();
 			Statement stmt = conn.createStatement();
 			ResultSet rs = null;
-			rs = stmt.executeQuery(query);
+			rs = stmt.executeQuery(query); /// TODO: TU NIC SIĘ NIE DZIEJE, NULL JEST NULLEM
 
 			return rs;
 		} catch (SQLException wyjatek) {
@@ -356,6 +356,8 @@ public class DBManager {
 		String query = "SELECT * FROM `permission`, `group2permission` WHERE `group2permission`.`groupId` = '" + groupId
 				+ "' AND `group2permission`.`permissionId` = `permission`.`id`";
 		ResultSet rs = dbManager.selectQuery(query);
+		if(rs == null)
+			System.err.println("rs jest nullem");
 		HashMap<Integer, Permission> permissions = new HashMap<Integer, Permission>();
 		try {
 			while (rs.next()) {

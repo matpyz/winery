@@ -12,7 +12,7 @@ public class Document {
 	private Date createdAt;
 	private Blob document;
 	private int creatorId;
-	
+
 	public Document(int id, int creatorId, String name, String description, String type, Date createdAt,
 			Blob document) {
 		super();
@@ -68,6 +68,5 @@ public class Document {
 	public int getCreatorId() {
 		return creatorId;
 	}
-	
-	
+
 }

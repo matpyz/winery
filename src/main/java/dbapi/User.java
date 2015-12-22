@@ -25,7 +25,7 @@ public class User {
 		this.groupId = groupId;
 		this.groupName = groupName;
 	}
-	
+
 	public ArrayList<String> getData() {
 		return new ArrayList<>(Arrays.asList(name,surname,mail,login,groupName));
 	}
@@ -73,7 +73,7 @@ public class User {
 	public String getGroupName() {
 		return groupName;
 	}
-	
+
 	public HashMap<Integer, Permission> getPermissions() {
 		return permissions;
 	}

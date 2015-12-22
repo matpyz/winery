@@ -6,6 +6,12 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import dbapi.DBManager;
+/* Kontrolery */
+
+import winery.accounts.AccountsController;
+import winery.calendar.CalendarView;
+import winery.documents.EnterDocumentViewController;
+import winery.documents.ExciseTaxViewController;
 import winery.documents.PredictingLitersOfWineViewContoller;
 // Widoki
 import winery.documents.SelectGenerateDocumentViewController;
@@ -34,7 +40,8 @@ public class Program {
 	 *            argumenty wywołania, ignorowane
 	 */
 	public static void main(String[] args) {
-		new Program(new SelectGenerateDocumentViewController(), new AccountsController(), new CalendarView(), new PredictingLitersOfWineViewContoller());
+		new Program(new AccountsController(), new CalendarView(), new SelectGenerateDocumentViewController(),
+				new PredictingLitersOfWineViewContoller(), new EnterDocumentViewController(), new ExciseTaxViewController());
 	}
 
 	private JFrame frame_;

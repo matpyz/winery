@@ -20,9 +20,9 @@ public class ServerThread extends Thread {
 	private PrintWriter out = null;
 
 	ServerThread() {
-		
+
 	}
-	
+
 	ServerThread(Socket client) {
 		try {
 			this.client = client;
@@ -33,8 +33,8 @@ public class ServerThread extends Thread {
 			System.out.println("Accept failed: 4444");
 		}
 	}
-	
-	protected String operateWithJSONData (String data) {
+
+	protected String operateWithJSONData(String data) {
 		JSONObject receivedJSONObject = JSONOperations.parseJSONToObject(data);
 		if (receivedJSONObject != null) {
 			if (receivedJSONObject.getType().equals("Raport") || receivedJSONObject.getType().equals("raport")) {
@@ -45,7 +45,7 @@ public class ServerThread extends Thread {
 			}
 			// TODO: Ze znakiem zapytania - czy ten typ?...
 			else if (receivedJSONObject.getType().equals("Strona")) {
-				//TODO: przekazać obiekt modułowi generowania faktur
+				// TODO: przekazać obiekt modułowi generowania faktur
 				return null;
 			}
 		}
@@ -59,7 +59,7 @@ public class ServerThread extends Thread {
 			dataIn = in.readLine();
 			System.out.println("Odebralem1: " + dataIn);
 			data += dataIn;
-			
+
 			String toReturn = operateWithJSONData(data);
 			out.println(toReturn);
 

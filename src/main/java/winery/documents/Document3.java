@@ -1,8 +1,5 @@
 package winery.documents;
 
-import com.itextpdf.text.Element;
-import com.itextpdf.text.pdf.PdfPTable;
-
 /**
  * Klasa umożliwiająca generowanie sprecyzowanego dokumentu, dziedzicząca
  * po @see Dokument.

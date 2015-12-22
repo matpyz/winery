@@ -4,7 +4,7 @@ public class Group2Event {
 	private int groupId;
 	private int eventId;
 	private int access;
-	
+
 	public Group2Event(int groupId, int eventId, int access) {
 		super();
 		this.groupId = groupId;

@@ -2,15 +2,11 @@ package winery.guardian;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import java.util.concurrent.CountDownLatch;
 
 import winery.view.Actions;
-import winery.view.Controller;
-import winery.view.View;
 
 import dbapi.*;
 

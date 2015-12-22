@@ -22,8 +22,8 @@ public abstract class View extends JPanel implements Observer {
 
 	/**
 	 * Procedura wywoływana tylko pośrednio przez {@link winery.model.Model}
-	 * .change(), implementowana inaczej przez każdy widok, odświeża
-	 * prezentację danych po zmianie.
+	 * .change(), implementowana inaczej przez każdy widok, odświeża prezentację
+	 * danych po zmianie.
 	 * 
 	 * @param model
 	 *            model, który uległ zmianie

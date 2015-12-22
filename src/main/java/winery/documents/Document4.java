@@ -46,7 +46,8 @@ public class Document4 extends DocumentBasic {
 		vertical[12] = "Suma zapasów win i moszczów winogronowych  ";
 		DateFormat dateFormat = new SimpleDateFormat("dd:MM:yyy");
 		Calendar cal = Calendar.getInstance();
-		title = "Deklaracja o zapasach win lub moszczów winogronowych posiadanych w dniu "+ dateFormat.format(cal.getTime());
+		title = "Deklaracja o zapasach win lub moszczów winogronowych posiadanych w dniu "
+				+ dateFormat.format(cal.getTime());
 		date = "31 sierpnia";
 		pathFile = "hello.pdf";
 

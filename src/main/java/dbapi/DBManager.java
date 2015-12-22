@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DBManager {
@@ -30,19 +31,18 @@ public class DBManager {
 	}
 	
 	private void createConnection() {
-		if (conn == null ) {
-			try {
-
+		try {
+			if (conn == null || conn.isClosed()) {
 				conn = DriverManager.getConnection(polaczenieURL);
 				Class.forName("com.mysql.jdbc.Driver");
-				
-			} catch (ClassNotFoundException wyjatek) {
-				System.out.println("Problem ze sterownikiem");
-			} catch (SQLException wyjatek) {
-				System.out.println("SQLException: " + wyjatek.getMessage());
-				System.out.println("SQLState: " + wyjatek.getSQLState());
-				System.out.println("VendorError: " + wyjatek.getErrorCode());
 			}
+				
+		} catch (ClassNotFoundException wyjatek) {
+			System.out.println("Problem ze sterownikiem");
+		} catch (SQLException wyjatek) {
+			System.out.println("SQLException: " + wyjatek.getMessage());
+			System.out.println("SQLState: " + wyjatek.getSQLState());
+			System.out.println("VendorError: " + wyjatek.getErrorCode());
 		}
 	}
 
@@ -1006,8 +1006,11 @@ public class DBManager {
 	}
 	
 	/**
+	 * Metoda zwraca dane faktury o zadanym id
 	 * @param invoiceId
+	 *            - id faktury
 	 * @return
+	 *            - faktura o zadanym id
 	 */
 	public static Invoice getInvoiceById(int invoiceId) {
 		
@@ -1036,14 +1039,24 @@ public class DBManager {
 	}
 	
 	/**
+	 * Metoda dodająca do bazy fakturę o następujących parametrach:
+	 * 
 	 * @param creatorId
+	 *            - id użytkownika tworzącego fakturę
 	 * @param name
+	 *            - nazwa faktury
 	 * @param receiverName
+	 *            - nazwa odbiorcy faktury
 	 * @param receiverAddress
+	 *            - adres odbiorcy faktury
 	 * @param receiverNIP
+	 *            - numer identyfikacji podatkowej odbiorcy faktury
 	 * @param receiverDetails
+	 *            - dodatkowe dane na temat odbiorcy, numer buta, itp.
 	 * @param receiverBankAccount
+	 *            - numer konta bankowego odbiorcy faktury
 	 * @return
+	 *            - Objekt z danymi dodanej faktury
 	 */
 	public static Invoice addInvoice(int creatorId, String name, String receiverName, String receiverAddress, String receiverNIP, String receiverDetails, String receiverBankAccount) {
 		
@@ -1073,8 +1086,77 @@ public class DBManager {
 	}
 	
 	/**
+	 * Metoda służąca do edycji danych faktury
+	 * 
 	 * @param id
+	 *            - id faktury, która ma być zmodyfikowana
+	 * @param name
+	 *            - nowa nazwa faktury, jeśli pole puste to nazwa bez zmian
+	 * @param receiverName
+	 *            - nowa nazwa odbiorcy, jeśli pole puste to nazwa bez zmian
+	 * @param receiverAddress
+	 *            - nowy adres odbiorcy, jeśli pole puste to adres bez zmian
+	 * @param receiverNIP
+	 *            - nowy NIP odbiorcy, jeśli pole puste to NIP bez zmian
+	 * @param receiverDetails
+	 *            - nowe szczegóły nt. odbiorcy, jeśli pole puste to bez zmian
+	 * @param receiverBankAccount
+	 *            - nowy numer konta odbiorcy, jeśli pole puste to numer bez zmian
 	 * @return
+	 *            - True jeśli operacja się powiodła i false w przeciwnym wypadku
+	 */
+	public static boolean updateDataForInvoiceById(int id, String name, String receiverName, String receiverAddress, String receiverNIP, String receiverDetails, String receiverBankAccount ) {
+		
+		String query = "";
+		
+		if( !name.isEmpty() ) {
+			query += "`name`='" + name + "'";
+		}
+		if ( !receiverName.isEmpty() ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`receiverName`='" + receiverName + "'";
+		}
+		if ( !receiverAddress.isEmpty() ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`receiverAddress`='" + receiverAddress + "'";
+		}if ( !receiverNIP.isEmpty() ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`receiverNIP`='" + receiverNIP + "'";
+		}if ( !receiverDetails.isEmpty() ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`receiverDetails`='" + receiverDetails + "'";
+		}if ( !receiverBankAccount.isEmpty() ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`receiverBankAccount`='" + receiverBankAccount + "'";
+		}
+		if (!query.isEmpty()) {
+			query = "UPDATE `invoice` SET " + query + "WHERE `id`='" + id + "'";
+			try {
+				int result = dbManager.otherQuery(query);
+				conn.close();
+				if (result > 0) {
+					return true;
+				}
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Motoda do usuwania faktur
+	 * 
+	 * @param id
+	 *            - id faktury do usunięcia
+	 * @return
+	 *            - true jeśli operacja się powiodła, false w przeciwnym wypadku
 	 */
 	public static boolean removeInvoiceById(int id) {
 		
@@ -1083,6 +1165,106 @@ public class DBManager {
 			conn.close();
 			if (result > 0) {
 				result = dbManager.otherQuery("DELETE FROM `invoice` WHERE `id`=" + id);
+			}
+			return result > 0;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
+	
+	/**
+	 * Metoda pozwalająca dodawać do faktury w bazie szczegóły, czyli np. wyszczególnione sprzedane klientowi wina, 
+	 * do przekazania informacji należy użyć ArrayListy uproszczonego obiektu InvoiceDetails
+	 * 
+	 * @param id
+	 *            - id faktury do której mają być dodane szczegóły
+	 * @param invoiceDetails
+	 *            - array lista uproszczonych obiektów InvoiceDetails
+	 * @return
+	 *            - zwracana jest faktura z nowo dodanymi polami
+	 */
+	public static Invoice addInvoiceDetailsArrayForInvoiceById(int id, ArrayList<InvoiceDetails> invoiceDetails) {
+		
+		try {
+			for(int i=0; i<invoiceDetails.size(); i++) {
+				int result = dbManager.otherQuery("INSERT INTO `invoiceDetails` (`invoiceId`, `name`, `quantity`, `baseprice`) VALUES ('" + invoiceDetails.get(i).getInvoiceId() + "', '" + invoiceDetails.get(i).getName() + "', '" + invoiceDetails.get(i).getQuantity() + "','" + invoiceDetails.get(i).getBaseprice() + "'");
+				conn.close();
+				if (result == 0) {
+					System.out.println("Dodawanie nie powiodło się");
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		Invoice invoice = DBManager.getInvoiceById(id);
+		
+		return invoice;
+	}
+	
+	/**
+	 * Metoda do aktualizacji szczegółów faktur (InvoiceDetails) 
+	 * 
+	 * @param id
+	 *            - id pola które ma być zmodyfikowane
+	 * @param name
+	 *            - nowa nazwa pola, jeśli pusta to nazwa nie zostanie zmieniona
+	 * @param quantity
+	 *            - nowa ilość produktów, jeśli 0 to wartość nie zostanie zmieniona
+	 * @param baseprice
+	 *            - nowa cena produktu, jeśli 0 to wartość nie zostanie zmieniona
+	 * @return
+	 *            - true jeśli operacja się powiodła, false jeśli nie
+	 */
+	public static boolean updateInvoiceDetailsById(int id, String name, int quantity, int baseprice) {
+		
+		String query = "";
+		
+		if( !name.isEmpty() ) {
+			query += "`name`='" + name + "'";
+		}
+		if ( quantity != 0 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`quantity`='" + quantity + "'";
+		}
+		if ( baseprice != 0 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`baseprice`='" + baseprice + "'";
+		}
+		if (!query.isEmpty()) {
+			query = "UPDATE `invoiceDetails` SET " + query + "WHERE `id`='" + id + "'";
+			try {
+				int result = dbManager.otherQuery(query);
+				conn.close();
+				if (result > 0) {
+					return true;
+				}
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Metoda do ususwania pola szczegółów faktury o zadanym id
+	 * 
+	 * @param id
+	 *            - id pola do usunięcia
+	 * @return true jeśli się udało oraz false w przeciwnym wypadku
+	 */
+	public static boolean removeInvoiceDetailsById(int id) {
+		
+		int result = dbManager.otherQuery("DELETE FROM `invoiceDetails` WHERE `id`=" + id);
+		try {
+			conn.close();
+			if (result == 0) {
+				System.out.println("Usuwanie nie powiodło się!");
+				return false;
 			}
 			return result > 0;
 		} catch (SQLException e) {

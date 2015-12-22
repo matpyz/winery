@@ -9,8 +9,14 @@ public class InvoiceDetails {
 	private int baseprice;
 	
 	public InvoiceDetails(int id, int invoiceId, String name, int quantity, int baseprice) {
-		super();
 		this.id = id;
+		this.invoiceId = invoiceId;
+		this.name = name;
+		this.quantity = quantity;
+		this.baseprice = baseprice;
+	}
+	
+	public InvoiceDetails(int invoiceId, String name, int quantity, int baseprice) {
 		this.invoiceId = invoiceId;
 		this.name = name;
 		this.quantity = quantity;

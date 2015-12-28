@@ -25,7 +25,7 @@ public class MyMouseListener implements MouseListener {
 	private int y;
 	
 	private Timer timer;
-	private ShowInformation showInformation;
+	//private ShowInformation showInformation;
 	
 	public MyMouseListener(JPanel days, JButton[][] panelHolder, int row, int column) {
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -34,7 +34,7 @@ public class MyMouseListener implements MouseListener {
 		this.row = row;
 		this.column = column;
 		
-		showInformation = new ShowInformation(row, column);
+		//showInformation = new ShowInformation(row, column);
 		timer = new Timer();
 	}
 

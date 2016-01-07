@@ -17,7 +17,7 @@ import winery.view.View;
  */
 public abstract class Model extends Observable {
 	/**
-	 * Każdy setter powinien na koniec wywołać metodę changed().
+	 * Każdy setter powinien na koniec wywołać metodę change().
 	 */
 	protected void change() {
 		setChanged();

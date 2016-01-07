@@ -25,9 +25,10 @@ public class DBManager {
 	private static HashMap<Integer, Event> events = null;
 	private static HashMap<String, User2Event> users2events = null;
 	private static HashMap<String, Group2Event> groups2events = null;
+	private static HashMap<Integer, Invoice> invoices = null;
 
 	DBManager() {
-		this.polaczenieURL = "jdbc:mysql://db4free.net/testwina?user=testwina&password=testwina";
+		this.polaczenieURL = "jdbc:mysql://46.101.252.224/winiery?user=root&password=winieryWPPT";
 	}
 	
 	private void createConnection() {
@@ -91,13 +92,13 @@ public class DBManager {
 		if (DBManager.users == null) {
 			HashMap<Integer, User> users = new HashMap<Integer, User>();
 			DBManager.users = new HashMap<Integer, User>();
-			String query = "SELECT `user`.`id`, `login`, `user`.`name`, `surname`, `email`, `groupId`, `group`.`name` as `groupName` FROM `user`, `user2group`, `group` WHERE `user`.`id`=`user2group`.`userId` AND `user2group`.`groupId`=`group`.`id`";
+			String query = "SELECT `user`.`id`, `login`, `user`.`name`, `surname`, `email`, `groupId`, `payment`, `group`.`name` as `groupName` FROM `user`, `user2group`, `group` WHERE `user`.`id`=`user2group`.`userId` AND `user2group`.`groupId`=`group`.`id`";
 			ResultSet rs = dbManager.selectQuery(query);
 			try {
 				while (rs.next()) {
 					User user = new User(rs.getInt("id"), rs.getString("login"), rs.getString("name"),
 							rs.getString("surname"), rs.getString("email"), rs.getInt("groupId"),
-							rs.getString("groupName"));
+							rs.getString("groupName"), rs.getInt("payment"));
 					users.put(rs.getInt("id"), user);
 				}
 				conn.close();
@@ -121,14 +122,14 @@ public class DBManager {
 	 * @return - obiekt użytkownika
 	 */
 	public static User getUserById(int userId) {
-		String query = "SELECT `user`.`id`, `login`, `user`.`name`, `surname`, `email`, `groupId`, `group`.`name` as `groupName` FROM `user`, `user2group`, `group` WHERE `user`.`id`="
+		String query = "SELECT `user`.`id`, `login`, `user`.`name`, `surname`, `email`, `groupId`, `group`.`name` as `groupName`, `payment` FROM `user`, `user2group`, `group` WHERE `user`.`id`="
 				+ userId + " AND `user`.`id`=`user2group`.`userId` AND `user2group`.`groupId`=`group`.`id`";
 		ResultSet rs = dbManager.selectQuery(query);
 		User user = null;
 		try {
 			if (rs.next()) {
 				user = new User(rs.getInt("id"), rs.getString("login"), rs.getString("name"), rs.getString("surname"),
-						rs.getString("email"), rs.getInt("groupId"), rs.getString("groupName"));
+						rs.getString("email"), rs.getInt("groupId"), rs.getString("groupName"), rs.getInt("payment"));
 			}
 			if (DBManager.users != null) {
 				DBManager.users.replace(userId, user);
@@ -150,14 +151,14 @@ public class DBManager {
 	 * @return Obiekt zalogowanego użytkownika
 	 */
 	public static User signIn(String login, String password) {
-		String query = "SELECT `user`.`id`, `login`, `user`.`name`, `surname`, `email`, `groupId`, `group`.`name` as `groupName` FROM `user`, `user2group`, `group` WHERE `user`.`id`=`user2group`.`userId` AND `user2group`.`groupId`=`group`.`id` AND `login`='"
+		String query = "SELECT `user`.`id`, `login`, `user`.`name`, `surname`, `email`, `groupId`, `group`.`name` as `groupName`, `payment` FROM `user`, `user2group`, `group` WHERE `user`.`id`=`user2group`.`userId` AND `user2group`.`groupId`=`group`.`id` AND `login`='"
 				+ login + "' AND `password`='" + password + "'";
 		ResultSet rs = dbManager.selectQuery(query);
 		User user = null;
 		try {
 			if (rs.next()) {
 				user = new User(rs.getInt("id"), rs.getString("login"), rs.getString("name"), rs.getString("surname"),
-						rs.getString("email"), rs.getInt("groupId"), rs.getString("groupName"));
+						rs.getString("email"), rs.getInt("groupId"), rs.getString("groupName"), rs.getInt("payment"));
 			}
 			conn.close();
 		} catch (SQLException ex) {
@@ -200,10 +201,12 @@ public class DBManager {
 	 *            - Nazwisko użytkownika
 	 * @param groupId
 	 *            - Id grupy do której będzie przypisany
+	 * @param payment
+	 *            - wysokość wypłaty użytkownika
 	 */
-	public static void addUser(String login, String password, String mail, String name, String surname, int groupId) {
-		String query = "INSERT INTO `user` (`name`, `email`, `password`, `login`, `surname`) VALUES ('" + name + "', '"
-				+ mail + "', '" + password + "', '" + login + "', '" + surname + "');";
+	public static void addUser(String login, String password, String mail, String name, String surname, int groupId, int payment) {
+		String query = "INSERT INTO `user` (`name`, `email`, `password`, `login`, `surname`, `payment`) VALUES ('" + name + "', '"
+				+ mail + "', '" + password + "', '" + login + "', '" + surname + "', '" + payment + "');";
 		try {
 			dbManager.otherQuery(query);
 			query = "SELECT `id` FROM `user` WHERE `login`='" + login + "' AND `password`='" + password + "'";
@@ -216,12 +219,12 @@ public class DBManager {
 				if (DBManager.users == null) {
 					DBManager.getUsers();
 				} else {
-					query = "SELECT `user`.`id`, `login`, `user`.`name`, `surname`, `email`, `groupId`, `group`.`name` as `groupName` FROM `user`, `user2group`, `group` WHERE `user`.`id`=`user2group`.`userId` AND `user2group`.`groupId`=`group`.`id` AND `user`.`id`='"
+					query = "SELECT `user`.`id`, `login`, `user`.`name`, `surname`, `email`, `groupId`, `payment`, `group`.`name` as `groupName` FROM `user`, `user2group`, `group` WHERE `user`.`id`=`user2group`.`userId` AND `user2group`.`groupId`=`group`.`id` AND `user`.`id`='"
 							+ id + "'";
 					rs = dbManager.selectQuery(query);
 					User user = new User(rs.getInt("id"), rs.getString("login"), rs.getString("name"),
 							rs.getString("surname"), rs.getString("email"), rs.getInt("groupId"),
-							rs.getString("groupName"));
+							rs.getString("groupName"), rs.getInt("payment"));
 					DBManager.users.put(rs.getInt("id"), user);
 
 				}
@@ -293,11 +296,13 @@ public class DBManager {
 	 *            - nowe Nazwisko
 	 * @param groupId
 	 *            - id grupy do której użytkownik ma być przeniesiony
+	 * @param payment
+	 *            - nowa wysokość wypłaty pracownika
 	 * @return Zwraca true jeśli operacja się udała, a w przeciwnym wypadku
 	 *         domyśl się
 	 */
 	public static boolean changeUserData(int userId, String login, String password, String mail, String name,
-			String surname, int groupId) {
+			String surname, int groupId, int payment) {
 		String query = "";
 		boolean isUpdateAllWithoutGroup = true;
 		boolean isUpdateGroup = true;
@@ -322,6 +327,11 @@ public class DBManager {
 			if (!query.isEmpty())
 				query += ", ";
 			query += "`surname` = '" + surname + "'";
+		}
+		if (payment == 0) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`payment` = '" + payment + "'";
 		}
 		if (!query.isEmpty()) {
 			query = "UPDATE `user` SET " + query + " WHERE `user`.`id`=" + userId + ";";
@@ -1006,6 +1016,46 @@ public class DBManager {
 	}
 	
 	/**
+	 * Metoda zwraca wszystkie faktury za pomocą HashMapy z id faktury jako klucz
+	 * @return 
+	 * 				- HashMapa<Integer, Invoice> faktur.
+	 */
+	public static HashMap<Integer, Invoice> getAllInvoices() {
+		if (DBManager.invoices == null) {
+			HashMap<Integer, Invoice> invoices = new HashMap<Integer, Invoice>();
+			String query = "SELECT * FROM `invoice`";
+			ResultSet rs = dbManager.selectQuery(query);
+			try {
+				while (rs.next()) {
+					Invoice invoice = new Invoice(rs.getInt("id"), rs.getInt("creatorId"), rs.getString("name"), rs.getString("receiverName"),
+							rs.getString("receiverAddress"), rs.getString("receiverNIP"), rs.getString("receiverDetails"), rs.getString("receiverBankAccount"), rs.getDate("creationDate"));
+					invoices.put(rs.getInt("id"), invoice);
+				}
+				conn.close();
+			} catch (SQLException ex) {
+				System.out.println(ex.getMessage());
+			}
+			for (Invoice invoice : invoices.values()) {
+				try {
+					query = "SELECT * FROM `invoiceDetails` WHERE `invoiceId`='"+invoice.getId()+"'";
+					rs = dbManager.selectQuery(query);
+					HashMap<Integer, InvoiceDetails> invoiceDetails = new HashMap<Integer, InvoiceDetails>();
+					while(rs.next()) {
+						invoiceDetails.put(rs.getInt("id"), new InvoiceDetails(rs.getInt("id"), invoice.getId(), rs.getString("name"), rs.getInt("quantity"), rs.getInt("baseprice")));
+					}
+					invoice.setInvoiceDetails(invoiceDetails);
+					conn.close();
+					DBManager.invoices.put(invoice.getId(), invoice);
+				}
+				catch (SQLException ex) {
+					System.out.println(ex.getMessage());
+				}
+			}
+		}
+		return DBManager.invoices;
+	}
+	
+	/**
 	 * Metoda zwraca dane faktury o zadanym id
 	 * @param invoiceId
 	 *            - id faktury
@@ -1266,6 +1316,279 @@ public class DBManager {
 				System.out.println("Usuwanie nie powiodło się!");
 				return false;
 			}
+			DBManager.invoices.remove(id);
+			return result > 0;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
+	
+	public static Wine getWineById(int id) {
+		
+		Wine wine = null;
+		String query = "SELECT * FROM `wine` WHERE `id`='"+id+"'";
+		
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			if (rs.next()) {
+				wine = new Wine(rs.getInt("id"), rs.getString("name"), rs.getString("grapes"), rs.getString("color"),
+						rs.getInt("produced"), rs.getInt("sold"), rs.getInt("baseprice"), rs.getInt("productionCost"));
+				conn.close();
+			}
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return wine;
+	}
+	
+	public static Wine addWine(String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost) {
+		
+		Wine wine = null;
+		
+		String query = "INSERT INTO `wine` (`name`, `grapes`, `color`, `produced`, `sold`, `baseprice`, `productionCost`) VALUES ('" + name + "', '"
+				+ grapes + "', '" + color + "', '" + produced + "', '" + sold + "', '" + baseprice + "', '" + productionCost + "');";
+		
+		try {
+			int result = dbManager.otherQuery(query);
+			conn.close();
+			if(result > 0) {
+				query = "SELECT `id` FROM `wine` ORDER BY `id` DESC LIMIT 1";
+				ResultSet rs = dbManager.selectQuery(query);
+				if (rs.next()) {
+					int id = rs.getInt("id");
+					wine = new Wine(id, name, grapes, color, produced,
+							sold, baseprice, productionCost);
+				}
+				conn.close();
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+		
+		return wine;
+	}
+	
+	public static boolean updateDataForWineById(int id, String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost ) {
+		
+		String query = "";
+		
+		if( !name.isEmpty() ) {
+			query += "`name`='" + name + "'";
+		}
+		if ( !grapes.isEmpty() ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`grapes`='" + grapes + "'";
+		}
+		if ( !color.isEmpty() ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`receiverAddress`='" + color + "'";
+		}
+		if ( produced != 0 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`produced`='" + produced + "'";
+		}
+		if ( sold != 0 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`sold`='" + sold + "'";
+		}
+		if ( baseprice != 0 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`baseprice`='" + baseprice + "'";
+		}
+		if ( productionCost != 0 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`productionCost`='" + productionCost + "'";
+		}
+		if (!query.isEmpty()) {
+			query = "UPDATE `wine` SET " + query + "WHERE `id`='" + id + "'";
+			try {
+				int result = dbManager.otherQuery(query);
+				conn.close();
+				if (result > 0) {
+					return true;
+				}
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				return false;
+			}
+		}
+		return false;
+	}
+
+	public static boolean removeWineById(int id) {
+		
+		int result = dbManager.otherQuery("DELETE FROM `wine` WHERE `id`=" + id);
+		try {
+			conn.close();
+			return result > 0;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
+	
+	
+	public static FieldCell getFieldCellById(int id) {
+		
+		FieldCell fieldCell = null;
+
+		String query = "SELECT * FROM `fieldCell` WHERE `id`='"+id+"'";
+		
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			if (rs.next()) {
+				fieldCell = new FieldCell(rs.getInt("id"), rs.getString("row"), rs.getString("col"), rs.getString("section"),
+						rs.getInt("currentStatusId"), rs.getString("description"));
+				conn.close();
+				fieldCell.setFieldStatus(DBManager.getFieldStatusById(fieldCell.getCurrentStatusId()));
+			}
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return fieldCell;
+	}
+	
+	public static HashMap<Integer, FieldCell> getAllFieldsCells() {
+		
+		HashMap<Integer, FieldCell> fieldsCells = new HashMap<Integer, FieldCell>();
+		
+		String query = "SELECT * FROM `fieldCell`";
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			while (rs.next()) {
+				FieldCell fieldCell = new FieldCell(rs.getInt("id"), rs.getString("row"), rs.getString("col"), rs.getString("section"),
+						rs.getInt("currentStatusId"), rs.getString("description"));
+				fieldsCells.put(rs.getInt("id"), fieldCell);
+			}
+			conn.close();
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+		return fieldsCells;
+	}
+	
+	public static FieldStatus getFieldStatusById(int id) {
+		
+		FieldStatus fieldStatus = null;
+
+		String query = "SELECT * FROM `fieldStatus` WHERE `id`='"+id+"'";
+		
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			if (rs.next()) {
+				fieldStatus = new FieldStatus(rs.getInt("id"), rs.getString("code"), rs.getString("category"), rs.getString("subcategory"));
+				conn.close();
+			}
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return fieldStatus;
+	}
+	
+	public static HashMap<Integer, FieldStatus> getAllFieldsStatuses() {
+		
+		HashMap<Integer, FieldStatus> fieldsStatuses = new HashMap<Integer, FieldStatus>();
+		
+		String query = "SELECT * FROM `fieldStatus`";
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			while (rs.next()) {
+				FieldStatus fieldStatus = new FieldStatus(rs.getInt("id"), rs.getString("code"), rs.getString("category"), rs.getString("subcategory"));
+				fieldsStatuses.put(rs.getInt("id"), fieldStatus);
+			}
+			conn.close();
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+		return fieldsStatuses;
+	}
+	
+	public static FieldCell addFieldCell(String row, String column, String section, int currentStatusId, String description) {
+		
+		FieldCell fieldCell = null;
+		
+		String query = "INSERT INTO `fieldCell` (`row`, `column`, `section`, `currentStatusId`, `description`) VALUES ('" + row + "', '"
+				+ column + "', '" + section + "', '" + currentStatusId + "', '" + description + "');";
+		
+		try {
+			int result = dbManager.otherQuery(query);
+			conn.close();
+			if(result > 0) {
+				query = "SELECT `id` FROM `fieldCell` WHERE `row` = '"+row+"' AND `column` = '"+column+"' AND `section` = '"+section+"' ORDER BY `id` DESC LIMIT 1";
+				ResultSet rs = dbManager.selectQuery(query);
+				if (rs.next()) {
+					int id = rs.getInt("id");
+					fieldCell = new FieldCell(id, row, column, section, currentStatusId, description);
+				}
+				conn.close();
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+		
+		return fieldCell;
+	}
+	
+	public static boolean updateDataForFieldCellById(int id, String row, String column, String section, int currentStatusId, String description) {
+		
+		String query = "";
+		
+		if( !row.isEmpty() ) {
+			query += "`row`='" + row + "'";
+		}
+		if ( !column.isEmpty() ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`column`='" + column + "'";
+		}
+		if ( !section.isEmpty() ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`section`='" + section + "'";
+		}
+		if ( currentStatusId != 0 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`currentStatusId`='" + currentStatusId + "'";
+		}
+		if ( !description.isEmpty() ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`description`='" + description + "'";
+		}
+		if (!query.isEmpty()) {
+			query = "UPDATE `fieldCell` SET " + query + "WHERE `id`='" + id + "'";
+			try {
+				int result = dbManager.otherQuery(query);
+				conn.close();
+				if (result > 0) {
+					return true;
+				}
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean removeFieldCellById(int id) {
+	
+		int result = dbManager.otherQuery("DELETE FROM `fieldCell` WHERE `id`=" + id);
+		try {
+			conn.close();
 			return result > 0;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());

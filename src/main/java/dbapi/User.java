@@ -13,9 +13,10 @@ public class User {
 	private String mail;
 	private int groupId;
 	private String groupName;
+	private int payment;
 	private HashMap<Integer, Permission> permissions;
 
-	public User(int id, String login, String name, String surname, String mail, int groupId, String groupName) {
+	public User(int id, String login, String name, String surname, String mail, int groupId, String groupName, int payment) {
 		super();
 		this.id = id;
 		this.login = login;
@@ -24,6 +25,15 @@ public class User {
 		this.mail = mail;
 		this.groupId = groupId;
 		this.groupName = groupName;
+		this.payment = payment;
+	}
+
+	public int getPayment() {
+		return payment;
+	}
+
+	public void setPayment(int payment) {
+		this.payment = payment;
 	}
 
 	public ArrayList<String> getData() {

@@ -10,10 +10,11 @@ public class Wine {
 	private int sold;
 	private int basePrice;
 	private int productionCost;
-	
-	
+	private int year;
+
+
 	public Wine(int id, String name, String grapes, String color, int produced, int sold, int basePrice,
-			int productionCost) {
+			int productionCost, int year) {
 		
 		this.id = id;
 		this.name = name;
@@ -23,6 +24,7 @@ public class Wine {
 		this.sold = sold;
 		this.basePrice = basePrice;
 		this.productionCost = productionCost;
+		this.year = year;
 	}
 
 
@@ -85,6 +87,14 @@ public class Wine {
 
 	public int getId() {
 		return id;
+	}
+	
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
 	}
 	
 }

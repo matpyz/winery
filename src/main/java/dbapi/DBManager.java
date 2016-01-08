@@ -1324,6 +1324,14 @@ public class DBManager {
 		}
 	}
 	
+	/**
+	 * Metoda zwracający obiekt wina
+	 * 
+	 * @param id
+	 * 				- id wina, którą chcemy pobrać
+	 * @return
+	 * 				- Obiekt wina o zadanym id
+	 */
 	public static Wine getWineById(int id) {
 		
 		Wine wine = null;
@@ -1333,7 +1341,7 @@ public class DBManager {
 		try {
 			if (rs.next()) {
 				wine = new Wine(rs.getInt("id"), rs.getString("name"), rs.getString("grapes"), rs.getString("color"),
-						rs.getInt("produced"), rs.getInt("sold"), rs.getInt("baseprice"), rs.getInt("productionCost"));
+						rs.getInt("produced"), rs.getInt("sold"), rs.getInt("baseprice"), rs.getInt("productionCost"), rs.getInt("year"));
 				conn.close();
 			}
 			conn.close();
@@ -1343,12 +1351,33 @@ public class DBManager {
 		return wine;
 	}
 	
-	public static Wine addWine(String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost) {
+	/**
+	 * Metoda dodające wino do bazy danych
+	 * 
+	 * @param name
+	 * 					- nazwa wina
+	 * @param grapes
+	 * 					- grona
+	 * @param color
+	 * 					- kolor wina
+	 * @param produced
+	 * 					- ilość wybrodukowanych sztuk
+	 * @param sold
+	 * 					- ilość sprzedanych sztuk
+	 * @param baseprice
+	 * 					- cena za sztukę
+	 * @param productionCost
+	 * 					- cena wybrodukowania
+	 * @param year
+	 * 					- rok produkcji
+	 * @return
+	 */
+	public static Wine addWine(String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost, int year) {
 		
 		Wine wine = null;
 		
-		String query = "INSERT INTO `wine` (`name`, `grapes`, `color`, `produced`, `sold`, `baseprice`, `productionCost`) VALUES ('" + name + "', '"
-				+ grapes + "', '" + color + "', '" + produced + "', '" + sold + "', '" + baseprice + "', '" + productionCost + "');";
+		String query = "INSERT INTO `wine` (`name`, `grapes`, `color`, `produced`, `sold`, `baseprice`, `productionCost`, `year`) VALUES ('" + name + "', '"
+				+ grapes + "', '" + color + "', '" + produced + "', '" + sold + "', '" + baseprice + "', '" + productionCost + "', '" + year + "');";
 		
 		try {
 			int result = dbManager.otherQuery(query);
@@ -1359,7 +1388,7 @@ public class DBManager {
 				if (rs.next()) {
 					int id = rs.getInt("id");
 					wine = new Wine(id, name, grapes, color, produced,
-							sold, baseprice, productionCost);
+							sold, baseprice, productionCost, year);
 				}
 				conn.close();
 			}
@@ -1370,7 +1399,31 @@ public class DBManager {
 		return wine;
 	}
 	
-	public static boolean updateDataForWineById(int id, String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost ) {
+	/**
+	 * Metoda do aktualizacji danych na temat wina w bazie danych
+	 * 
+	 * @param id
+	 * 				- id wina dla którego dane mają być zaktualizowane
+	 * @param name
+	 * 				- nowa nazwa wina, jeśli pusta to nie ulegnie zmianie
+	 * @param grapes
+	 * 				- nowe grona, gdy puste nie ulegnie zmianie
+	 * @param color
+	 * 				- nowy kolor wina, gdy puste nie ulegnie zmianie
+	 * @param produced
+	 * 				- nowa ilość wyprodukowanych sztuk, jeśli -1 nie ulegnie zmianie
+	 * @param sold
+	 * 				- nowa ilość sprzedanych sztuk, jeśli -1 nie ulegnie zmianie
+	 * @param baseprice
+	 * 				- nowa cena, jeśli 0 nie ulegnie zmianie
+	 * @param productionCost
+	 * 				- nowy koszt produkcji, jeśli 0 nie ulegnie zmianie
+	 * @param year
+	 * 				- nowy rok produkcji, jeśli 0, nie ulegnie zmianie
+	 * @return
+	 * 				- true jeśli operacja się powiodła, oraz false w przeciwnym wypadku
+	 */
+	public static boolean updateDataForWineById(int id, String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost, int year ) {
 		
 		String query = "";
 		
@@ -1387,12 +1440,12 @@ public class DBManager {
 				query += ", ";
 			query += "`receiverAddress`='" + color + "'";
 		}
-		if ( produced != 0 ) {
+		if ( produced != -1 ) {
 			if (!query.isEmpty())
 				query += ", ";
 			query += "`produced`='" + produced + "'";
 		}
-		if ( sold != 0 ) {
+		if ( sold != -1 ) {
 			if (!query.isEmpty())
 				query += ", ";
 			query += "`sold`='" + sold + "'";
@@ -1406,6 +1459,11 @@ public class DBManager {
 			if (!query.isEmpty())
 				query += ", ";
 			query += "`productionCost`='" + productionCost + "'";
+		}
+		if ( year != 0 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`year`='" + year + "'";
 		}
 		if (!query.isEmpty()) {
 			query = "UPDATE `wine` SET " + query + "WHERE `id`='" + id + "'";
@@ -1423,6 +1481,14 @@ public class DBManager {
 		return false;
 	}
 
+	/**
+	 * Metoda do usuwania wina o zadanym id z bazy danych
+	 * 
+	 * @param id
+	 * 				- id wina do usunięcia
+	 * @return
+	 * 				- true jeśli operacja się powiodła, oraz false w przeciwnym wypadku
+	 */
 	public static boolean removeWineById(int id) {
 		
 		int result = dbManager.otherQuery("DELETE FROM `wine` WHERE `id`=" + id);
@@ -1436,6 +1502,14 @@ public class DBManager {
 	}
 	
 	
+	/**
+	 * Metoda zwracająca pole na plantacji o zadanym id
+	 * 
+	 * @param id
+	 * 				- id pola, które ma być pobrane
+	 * @return
+	 * 				- obiekt pola o zadanym id
+	 */
 	public static FieldCell getFieldCellById(int id) {
 		
 		FieldCell fieldCell = null;
@@ -1445,7 +1519,7 @@ public class DBManager {
 		ResultSet rs = dbManager.selectQuery(query);
 		try {
 			if (rs.next()) {
-				fieldCell = new FieldCell(rs.getInt("id"), rs.getString("row"), rs.getString("col"), rs.getString("section"),
+				fieldCell = new FieldCell(rs.getInt("id"), rs.getInt("row"), rs.getInt("col"), rs.getString("section"),
 						rs.getInt("currentStatusId"), rs.getString("description"));
 				conn.close();
 				fieldCell.setFieldStatus(DBManager.getFieldStatusById(fieldCell.getCurrentStatusId()));
@@ -1458,6 +1532,12 @@ public class DBManager {
 		return fieldCell;
 	}
 	
+	/**
+	 * Metoda zwracająca wszystkie pola plantacji
+	 * 
+	 * @return
+	 * 			- HashMapa plantacji, czyli wszystkie dostępne w bazie pola
+	 */
 	public static HashMap<Integer, FieldCell> getAllFieldsCells() {
 		
 		HashMap<Integer, FieldCell> fieldsCells = new HashMap<Integer, FieldCell>();
@@ -1466,7 +1546,7 @@ public class DBManager {
 		ResultSet rs = dbManager.selectQuery(query);
 		try {
 			while (rs.next()) {
-				FieldCell fieldCell = new FieldCell(rs.getInt("id"), rs.getString("row"), rs.getString("col"), rs.getString("section"),
+				FieldCell fieldCell = new FieldCell(rs.getInt("id"), rs.getInt("row"), rs.getInt("col"), rs.getString("section"),
 						rs.getInt("currentStatusId"), rs.getString("description"));
 				fieldsCells.put(rs.getInt("id"), fieldCell);
 			}
@@ -1477,6 +1557,14 @@ public class DBManager {
 		return fieldsCells;
 	}
 	
+	/**
+	 * Metoda zwracająca status pola o zadanym id
+	 * 
+	 * @param id
+	 * 				- id statusu, który ma być pobrany
+	 * @return
+	 * 				- obiekt statusu pola
+	 */
 	public static FieldStatus getFieldStatusById(int id) {
 		
 		FieldStatus fieldStatus = null;
@@ -1497,6 +1585,12 @@ public class DBManager {
 		return fieldStatus;
 	}
 	
+	/**
+	 * Obiekt zwracające wszystkie możliwe statusy pól na plantacji
+	 * 
+	 * @return
+	 * 			- HashMapa wszystkich możliwych statusów
+	 */
 	public static HashMap<Integer, FieldStatus> getAllFieldsStatuses() {
 		
 		HashMap<Integer, FieldStatus> fieldsStatuses = new HashMap<Integer, FieldStatus>();
@@ -1515,7 +1609,23 @@ public class DBManager {
 		return fieldsStatuses;
 	}
 	
-	public static FieldCell addFieldCell(String row, String column, String section, int currentStatusId, String description) {
+	/**
+	 * Metoda dodająca pole z plantacji do bazy danch
+	 * 
+	 * @param row
+	 * 							- współrzędna Y pola
+	 * @param column
+	 * 							- wszpółrzędna X pola
+	 * @param section
+	 * 							- sekcja plantacji w której znajduje się pole
+	 * @param currentStatusId
+	 * 							- id aktualnego statusu pola
+	 * @param description
+	 * 							- opis pola
+	 * @return
+	 * 							- obiekt pola, które właśnie zostało do bazy danych
+	 */
+	public static FieldCell addFieldCell(int row, int column, String section, int currentStatusId, String description) {
 		
 		FieldCell fieldCell = null;
 		
@@ -1541,14 +1651,29 @@ public class DBManager {
 		return fieldCell;
 	}
 	
-	public static boolean updateDataForFieldCellById(int id, String row, String column, String section, int currentStatusId, String description) {
+	/**
+	 * @param id
+	 * 							- id pola, które ma być zaktualizowane
+	 * @param row
+	 * 							- nowa współrzędna Y pola, jeśli -1 współrzędna pozostaje bez zmian
+	 * @param column
+	 * 							- nowa wszpółrzędna X pola, jeśli -1 współrzędna pozostaje bez zmian
+	 * @param section
+	 * 							- nowa sekcja plantacji w której znajduje się pole, jeśli pusta to bez zmian
+	 * @param currentStatusId
+	 * 							- nowe id aktualnego statusu pola, jeśli 0 to bez zmian
+	 * @param description
+	 * 							- nowy opis pola, jeśli puste to bez zmian
+	 * @return
+	 */
+	public static boolean updateDataForFieldCellById(int id, int row, int column, String section, int currentStatusId, String description) {
 		
 		String query = "";
 		
-		if( !row.isEmpty() ) {
+		if( row != -1 ) {
 			query += "`row`='" + row + "'";
 		}
-		if ( !column.isEmpty() ) {
+		if ( column != -1 ) {
 			if (!query.isEmpty())
 				query += ", ";
 			query += "`column`='" + column + "'";
@@ -1584,9 +1709,150 @@ public class DBManager {
 		return false;
 	}
 	
+	/**
+	 * Metoda usuwająca pole plantacji z bazy danych
+	 * 
+	 * @param id
+	 * 				- id pola które ma być usunięte
+	 * @return
+	 * 				- true jeśli operacja się powiodła, oraz false w przeciwnym wypadku
+	 */
 	public static boolean removeFieldCellById(int id) {
 	
 		int result = dbManager.otherQuery("DELETE FROM `fieldCell` WHERE `id`=" + id);
+		try {
+			conn.close();
+			return result > 0;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
+	
+	/**
+	 * Metoda zwracająca obiekt sadzonki o zadanym id
+	 * 
+	 * @param id
+	 * 				- id sadzonki, która ma być pobrana
+	 * @return
+	 * 				- obiekt sadzonki o zadanym id
+	 */
+	public static Seed getSeedById(int id) {
+		
+		Seed seed = null;
+
+		String query = "SELECT * FROM `seed` WHERE `id`='"+id+"'";
+		
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			if (rs.next()) {
+				seed = new Seed(rs.getInt("id"), rs.getString("name"), rs.getInt("qty"), rs.getString("additional"));
+				conn.close();
+			}
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return seed;
+	}
+	
+	/**
+	 * Metoda służąca do dodawania danych sadzonki do bazy danych
+	 * 
+	 * @param name
+	 * 						- nazwa sadzonki
+	 * @param qty
+	 * 						- ilość sadzonek
+	 * @param additional
+	 * 						- dodatkowe informacje o sadzonce
+	 * @return
+	 * 						- obiekt sadzonki właśnie dodanej do bazy danych sadzonki
+	 */
+	public static Seed addSeed(String name, int qty, String additional) {
+		
+		Seed seed = null;
+		
+		String query = "INSERT INTO `seed` (`name`, `qty`, `additional`) VALUES ('" + name + "', '"
+				+ qty + "', '" + additional + "');";
+		
+		try {
+			int result = dbManager.otherQuery(query);
+			conn.close();
+			if(result > 0) {
+				query = "SELECT `id` FROM `seed` WHERE `name` = '"+name+"' ORDER BY `id` DESC LIMIT 1";
+				ResultSet rs = dbManager.selectQuery(query);
+				if (rs.next()) {
+					int id = rs.getInt("id");
+					seed = new Seed(id, name, qty, additional);
+				}
+				conn.close();
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+		
+		return seed;
+	}
+	
+	/**
+	 * Metoda do aktualizacji danych na temat sadzonki o zadanym id
+	 * 
+	 * @param id
+	 * 						- id sadzonki która ma być zaktualizowana
+	 * @param name
+	 * 						- nowa nazwa sadzonki, jeśli puste to bez zmian
+	 * @param qty
+	 * 						- nowa ilość sadzonek, jeśli -1 to bez zmian
+	 * @param additional
+	 * 						- zaktualizowane dodatkowe informacje, jeśli puste to bez zmian
+	 * @return
+	 * 						- true jeśli operacja się powiodła, oraz false w przeciwnym wypadku
+	 */
+	public static boolean updateDataForSeedById(int id, String name, int qty, String additional ) {
+		
+		String query = "";
+		
+		if( !name.isEmpty() ) {
+			query += "`name`='" + name + "'";
+		}
+		if ( qty != -1 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`qty`='" + qty + "'";
+		}
+		if ( !additional.isEmpty() ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`additional`='" + additional + "'";
+		}
+		if (!query.isEmpty()) {
+			query = "UPDATE `seed` SET " + query + "WHERE `id`='" + id + "'";
+			try {
+				int result = dbManager.otherQuery(query);
+				conn.close();
+				if (result > 0) {
+					return true;
+				}
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Metoda usuwająca sadzonkę o zadanym id z bazy danych
+	 * 
+	 * @param id
+	 * 				- id sadzonki, która ma być usunięta
+	 * @return
+	 * 				- true jeśli operacja się powiodła, oraz false w przeciwnym wypadku
+	 */
+	public static boolean removeSeedById(int id) {
+	
+		int result = dbManager.otherQuery("DELETE FROM `seed` WHERE `id`=" + id);
 		try {
 			conn.close();
 			return result > 0;

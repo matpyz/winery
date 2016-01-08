@@ -50,26 +50,16 @@ public class AccountsView extends View implements ActionListener {
 	private JLabel lbl_login;
 	private JLabel lbl_gmail;
 	private JLabel lbl_result;
-	
+
 	AccountsController controller;
+	AccountsModel model;
 
 	public AccountsView(AccountsController controller) {
-
 		this.controller = controller;
 
 		createGUI();
-
-		updateList();
-
 	}
-
-	private void updateList() {
-		cBox_accountList.removeAllItems();
-		List<String> accountList = controller.getAccountList();
-		for (String account : accountList)
-			cBox_accountList.addItem(account);	
-	}
-
+	
 	/**
 	 * Wielka litania do Pana naszego Swing'a.
 	 */
@@ -77,8 +67,10 @@ public class AccountsView extends View implements ActionListener {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0 };
-		gridBagLayout.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0,
+				Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 0.0, 1.0, 0.0,
+				Double.MIN_VALUE };
 		setLayout(gridBagLayout);
 
 		cBox_accountList = new JComboBox<String>();
@@ -88,7 +80,7 @@ public class AccountsView extends View implements ActionListener {
 		gbc_cBox_accountList.gridx = 0;
 		gbc_cBox_accountList.gridy = 0;
 		add(cBox_accountList, gbc_cBox_accountList);
-		
+
 		cBox_accountList.addActionListener(this);
 
 		btn_edit = new JButton("Edytuj");
@@ -122,21 +114,14 @@ public class AccountsView extends View implements ActionListener {
 		add(panel_accountData, gbc_panel_accountData);
 
 		panel_accountData.setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.RELATED_GAP_COLSPEC, FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC,
-				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
-			new RowSpec[] {
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,}));
+				ColumnSpec.decode("default:grow"), }, new RowSpec[] {
+				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC, }));
 
 		lbl_name = new JLabel("Imię");
 		panel_accountData.add(lbl_name, "2, 2, right, default");
@@ -159,21 +144,20 @@ public class AccountsView extends View implements ActionListener {
 
 		lbl_login = new JLabel("Login");
 		panel_accountData.add(lbl_login, "2, 8, right, default");
-		
+
 		txt_password = new JTextField();
 		txt_password.setEditable(false);
 		panel_accountData.add(txt_password, "4, 6, fill, default");
 		txt_password.setColumns(10);
-				
-		
+
 		txt_login = new JTextField();
 		txt_login.setEditable(false);
 		panel_accountData.add(txt_login, "4, 8, fill, default");
 		txt_login.setColumns(10);
-	
+
 		lbl_gmail = new JLabel("Gmail");
 		panel_accountData.add(lbl_gmail, "2, 10, right, default");
-		
+
 		txt_gmail = new JTextField();
 		txt_gmail.setEditable(false);
 		panel_accountData.add(txt_gmail, "4, 10, fill, default");
@@ -198,14 +182,32 @@ public class AccountsView extends View implements ActionListener {
 	}
 
 	@Override
-	protected void update(Model model) {
-		// TODO Auto-generated method stub
+	public void update(Model model) {
+		AccountsModel accountsModel = (AccountsModel)model;
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+		
+				cBox_accountList.removeAllItems();
+				for (String account : accountsModel.getAccountList())
+					cBox_accountList.addItem(account);
+				
+				txt_name.setText(accountsModel.getAccountData().get(0));
+				txt_surname.setText(accountsModel.getAccountData().get(1));
+				txt_gmail.setText(accountsModel.getAccountData().get(2));
+				txt_login.setText(accountsModel.getAccountData().get(3));
+					
+				lbl_result.setText(++actionNumber + ": " + controller.response);		
+			
+			}
+		});
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == cBox_accountList) {
-			showUserData(controller.getAccountData((String)cBox_accountList.getSelectedItem()));
+		if (e.getSource() == cBox_accountList) {
+				controller.getAccountData(((String) cBox_accountList
+					.getSelectedItem()).split("[()]")[1]);
 		}
 		
 		switch (e.getActionCommand()) {
@@ -227,22 +229,6 @@ public class AccountsView extends View implements ActionListener {
 		default:
 			break;
 		}
-	}
-
-	private void showUserData(List<String> accountData) {
-		txt_name.setText(accountData.get(0));
-		txt_surname.setText(accountData.get(1));
-		txt_gmail.setText(accountData.get(2));
-		txt_login.setText(accountData.get(3));
-		//txt_group.setText(accountData.get(3));
-	}
-
-	private void showResult(String result) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				lbl_result.setText(++actionNumber + ": " + result);
-			}
-		});
 	}
 
 	private void editAccount() {
@@ -279,13 +265,13 @@ public class AccountsView extends View implements ActionListener {
 		accountData.add(txt_password.getText());
 		accountData.add(txt_gmail.getText());
 
-		showResult(controller.modifyAccount(accountData));
+		controller.modifyAccount(accountData);
 	}
 
 	private void rmvAccount() {
 		String accountId = txt_name.getText() + txt_surname.getText();
 
-		showResult(controller.deleteAccount(accountId));
+		controller.deleteAccount(accountId);
 	}
 
 	private void addAccount() {
@@ -326,7 +312,7 @@ public class AccountsView extends View implements ActionListener {
 		accountData.add(txt_password.getText());
 		accountData.add(txt_gmail.getText());
 
-		showResult(controller.newAccount(accountData));
+		controller.newAccount(accountData);
 	}
 
 }

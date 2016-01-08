@@ -23,16 +23,12 @@ class GuardianView extends JFrame implements ActionListener {
 	 */
 	protected static final long serialVersionUID = 1L;
 
-	Guardian controller;
-
 	private JTextField txt_login;
 	private JTextField txt_password;
 	private JButton btn_login;
 
 	public GuardianView(Guardian controller, int height, int width) {
 		super("Logowanie");
-		
-		this.controller = controller;
 
 		createGUI(width, height);
 		pack();
@@ -85,7 +81,7 @@ class GuardianView extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (controller.login(txt_login.getText(), txt_password.getText())) {
+		if (Guardian.login(txt_login.getText(), txt_password.getText())) {
 			setVisible(false); 
 			dispose();
 		} else {

@@ -1862,4 +1862,131 @@ public class DBManager {
 		}
 	}
 	
+	
+	/**
+	 * Metoda służąca do pobrania danych na temat pasków akcyzowych o zadanym id
+	 * 
+	 * @param id
+	 * 				- id pasków akcyzowych, króre mają być pobrane
+	 * @return
+	 * 				- obiekt pasków akcyzowych o zadanym id
+	 */
+	public static Excise getExciseById(int id) {
+		
+		Excise excise = null;
+
+		String query = "SELECT * FROM `excise` WHERE `id`='"+id+"'";
+		
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			if (rs.next()) {
+				excise = new Excise(rs.getInt("id"), rs.getString("name"), rs.getInt("amount"));
+				conn.close();
+			}
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return excise;
+	}
+	
+
+	/**
+	 * Metoda dodająca dane o paskach akcyzowych do bazy danych
+	 * 
+	 * @param name
+	 * 					- nazwa pasków akcyzowych
+	 * @param amount
+	 * 					- liczba pasków akcyzowych
+	 * @return
+	 * 					- obiekt dodanych właśnie pasków akcyzowych
+	 */
+	public static Excise addExcise(String name, int amount) {
+		
+		Excise excise = null;
+		
+		String query = "INSERT INTO `excise` (`name`, `amount`) VALUES ('" + name + "', '"
+				+ amount + "');";
+		
+		try {
+			int result = dbManager.otherQuery(query);
+			conn.close();
+			if(result > 0) {
+				query = "SELECT `id` FROM `excise` WHERE `name` = '"+name+"' ORDER BY `id` DESC LIMIT 1";
+				ResultSet rs = dbManager.selectQuery(query);
+				if (rs.next()) {
+					int id = rs.getInt("id");
+					excise = new Excise(id, name, amount);
+				}
+				conn.close();
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+		
+		return excise;
+	}
+	
+	
+	/**
+	 * Metoda służąca do aktualizacji pasków akcyzowych o zadanym id
+	 * 
+	 * @param id
+	 * 					- id pasków akcyzowych, które mają być zaktualizowane
+	 * @param name
+	 * 					- nowa nazwa pasków akcyzowych, jeśli pusta to bez zmian
+	 * @param amount
+	 * 					- nowa liczba pasków akcyzowych, jeśli -1 to bez zmian
+	 * @return
+	 * 					- true jeśli operacja się powiodła, false w przeciwnym wypadku
+	 */
+	public static boolean updateDataForExciseById(int id, String name, int amount ) {
+		
+		String query = "";
+		
+		if( !name.isEmpty() ) {
+			query += "`name`='" + name + "'";
+		}
+		if ( amount != -1 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`amount`='" + amount + "'";
+		}
+		if (!query.isEmpty()) {
+			query = "UPDATE `excise` SET " + query + "WHERE `id`='" + id + "'";
+			try {
+				int result = dbManager.otherQuery(query);
+				conn.close();
+				if (result > 0) {
+					return true;
+				}
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Metoda usuwająca z bazy danych etykietki o zadanym id
+	 * 
+	 * @param id
+	 * 				- id pasków akcyzowych, które mają być usunięte
+	 * @return
+	 * 				- true jeśli operacja się powiodła, false w przeciwnym wypadku
+	 */
+	public static boolean removeExciseById(int id) {
+	
+		int result = dbManager.otherQuery("DELETE FROM `excise` WHERE `id`=" + id);
+		try {
+			conn.close();
+			return result > 0;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
+	
 }

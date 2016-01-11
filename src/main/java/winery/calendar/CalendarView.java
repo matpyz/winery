@@ -155,9 +155,9 @@ public class CalendarView extends View implements ActionListener, Controller {
 		case "next":
 			nextMonth();
 			break;
-		case "addevent":
+		/*case "addevent":
 			addEvent();
-			break;
+			break;*/
 		default:
 			break;
 		}
@@ -186,24 +186,6 @@ public class CalendarView extends View implements ActionListener, Controller {
 		currentMonth = (currentMonth + 1) % 12;
 		monthNameLabel.setName((months[currentMonth]));
 		// TODO Aktualizacja wyświetlenia
-	}
-
-	private void addEvent() {
-		/*
-		 * TODO Wyświetl okienko z danymi, wykonaj dodanie eventu User u =
-		 * DBManager.signIn(login, hasło); int u_id = u.getId();
-		 * if(DBManager.addEvent((int)u_id, (String)nazwa_wydarzenia,
-		 * (String)opis, (Date)start, (Date)koniec, (String)lokalizacja,
-		 * (int)id_wydarzenia) == false) zwróc błąd
-		 * 
-		 * Po drodze trzeba sprawdzić czy użytkownik ma prawo do tworzenia
-		 * eventu.
-		 * 
-		 * Aby pobrać id_wydarzenia: Użyć metody
-		 * (Event)DBManager.getEventById((int)event_id, (int)u_id) jeżeli znamy
-		 * id lub (HashMap<Integer,Event>)getEvents() i przeszukać
-		 */
-
 	}
 
 }

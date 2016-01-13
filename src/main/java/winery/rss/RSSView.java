@@ -1,24 +1,24 @@
 package winery.rss;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import winery.model.Model;
 import winery.view.View;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
 
-public class RSSView extends View implements ActionListener {
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+
+public class RSSView extends View {
 
 	protected static final long serialVersionUID = 1L;
 	private RSSController controller;
 	
-	private JButton updateButton;
-	private JScrollPane panel;
+	private JScrollPane scrollPane;
+	private JPanel panel;
 
 	public RSSView(RSSController controller) {
 		this.controller = controller;
@@ -28,15 +28,11 @@ public class RSSView extends View implements ActionListener {
 	private void createGUI() {
 		
 		setLayout(null);
-		
-		panel = new JScrollPane();
-		panel.setBounds(10, 10, 520, 460);
-		//panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		add(panel);
-		updateButton = new JButton("Odśwież");
-		updateButton.setBounds(180, 480, 200, 30);
-		add(updateButton);
-		updateButton.addActionListener(this);
+		panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		scrollPane = new JScrollPane(panel);
+		scrollPane.setBounds(10, 10, 520, 460);
+		add(scrollPane);
 	}
 
 	@Override
@@ -46,24 +42,20 @@ public class RSSView extends View implements ActionListener {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				panel.removeAll();
-				int x = 0;
-				for(String record : rssmodel.getList()) {
-					//panel.add(new JLabel(record));
-					panel.add(new MyJList(record, x));
-					x+=60;
-					System.out.println(x);
-				}
-				System.out.println(panel.getComponentCount());
-				panel.repaint();
+				new Timer(10000, new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						controller.getLatestEvents();
+						panel.removeAll();
+						panel.setVisible(false);
+						for(String record : rssmodel.getList()) {
+							panel.add(new MyJList(record));
+						}
+						panel.repaint();
+						panel.setVisible(true);
+					}
+				}).start();
 			}
 		});
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == updateButton) {
-			controller.getLatestEvents();
-		}
 	}
 }

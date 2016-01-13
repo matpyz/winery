@@ -19,7 +19,7 @@ public class RSSController implements Controller {
 		this.view = new RSSView(this);
 		
 		model.register(view);
-		//getLatestEvents();
+		getLatestEvents();
 	}
 
 	/**
@@ -27,7 +27,7 @@ public class RSSController implements Controller {
 	 */
 	public void getLatestEvents() {
 		ArrayList<String> list = new ArrayList<String>();
-		/*HashMap<Integer, FieldCell> fields = DBManager.getAllFieldsCells();
+		HashMap<Integer, FieldCell> fields = DBManager.getAllFieldsCells();
 		for(int x : fields.keySet()) {
 			FieldCell f = fields.get(x);
 			if(f.getFieldStatus() != null){
@@ -50,61 +50,7 @@ public class RSSController implements Controller {
 				sb.append(f.getDescription());
 				list.add(sb.toString());
 			}
-		}	*/	
-		StringBuilder sb = new StringBuilder();
-		sb.append(" W sektorze ");
-		sb.append("A");
-		sb.append("|");
-		sb.append("32");
-		sb.append("|");
-		sb.append("10");
-		sb.append(" zaszły następujące zdarzenia:\n");
-		sb.append("Kod: ");
-		sb.append("PZP2");
-		sb.append(" ");
-		sb.append("Uszkodzenia krzaczka");
-		sb.append(" ");
-		sb.append("Choroba");
-		sb.append("\nOpis: ");
-		sb.append("pojawiło się psze pana coś białego >.<");
-		list.add(sb.toString());
-		
-		sb = new StringBuilder();
-		sb.append(" W sektorze ");
-		sb.append("B");
-		sb.append("|");
-		sb.append("22");
-		sb.append("|");
-		sb.append("19");
-		sb.append(" zaszły następujące zdarzenia:\n");
-		sb.append("Kod: ");
-		sb.append("PZP9");
-		sb.append(" ");
-		sb.append("Ogrodzenie");
-		sb.append(" ");
-		sb.append("Zniszczenie");
-		sb.append("\nOpis: ");
-		sb.append("ktos sie chyba wypierdolil");
-		list.add(sb.toString());
-		
-		sb = new StringBuilder();
-		sb.append(" W sektorze ");
-		sb.append("B");
-		sb.append("|");
-		sb.append("22");
-		sb.append("|");
-		sb.append("19");
-		sb.append(" zaszły następujące zdarzenia:\n");
-		sb.append("Kod: ");
-		sb.append("PZP9");
-		sb.append(" ");
-		sb.append("Ogrodzenie");
-		sb.append(" ");
-		sb.append("Zniszczenie");
-		sb.append("\nOpis: ");
-		sb.append("ktos sie chyba wypierdolil");
-		list.add(sb.toString());
-		model.setList(list);
+		}
 	}
 
 	@Override

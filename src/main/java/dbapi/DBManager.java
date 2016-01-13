@@ -449,6 +449,7 @@ public class DBManager {
 		if (DBManager.documents == null) {
 			String query = "SELECT * FROM `documents`";
 			ResultSet rs = dbManager.selectQuery(query);
+			documents = new HashMap<Integer, Document>();
 			try {
 				while (rs.next()) {
 					Document document = new Document(rs.getInt("id"), rs.getInt("creatorId"), rs.getString("name"),
@@ -1002,12 +1003,11 @@ public class DBManager {
 	}
 
 	public static Blob loadBlob(String path) throws SQLException, IOException {
-		
 		dbManager.createConnection();
 		Blob document = conn.createBlob();
-		int bufferSize = 4096, got;
+		int got, bufferSize = 4096;
 		byte[] buffer = new byte[bufferSize];
-		try (OutputStream out = document.setBinaryStream(0); FileInputStream in = new FileInputStream(path)) {
+		try (OutputStream out = document.setBinaryStream(1); FileInputStream in = new FileInputStream(path)) {
 			while ((got = in.read(buffer)) != -1) {
 				out.write(buffer, 0, got);
 			}

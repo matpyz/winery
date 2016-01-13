@@ -41,6 +41,7 @@ public class Program {
 	 *            argumenty wywołania, ignorowane
 	 */
 	public static void main(String[] args) {
+		ConfigFrame.loadConfig();
 		new Program(new AccountsController(), new CalendarView(), new SelectGenerateDocumentViewController(),
 				new PredictingLitersOfWineViewContoller(), new EnterDocumentViewController(), new ExciseTaxViewController(), new RSSController());
 	}

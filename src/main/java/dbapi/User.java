@@ -37,7 +37,7 @@ public class User {
 	}
 
 	public ArrayList<String> getData() {
-		return new ArrayList<>(Arrays.asList(name,surname,mail,login,groupName));
+		return new ArrayList<>(Arrays.asList(name,surname,login,mail,Integer.toString(payment),groupName));
 	}
 	
 	public String getName() {

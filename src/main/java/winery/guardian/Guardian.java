@@ -14,6 +14,7 @@ public class Guardian {
 
 	private static Guardian instance = null;
 	private static String userId = null;
+	private static int userDbId = -1;
 
 	private static GuardianView view;
 	private static MessageDigest hash;
@@ -62,9 +63,14 @@ public class Guardian {
 			hash.update(login.getBytes());
 			userId = new String(hash.digest());
 			loginSignal.countDown();
+			userDbId = user.getId();
 			return true;
 		}
 		else
 			return false;
+	}
+	
+	public static int getUserDbId() {
+		return userDbId;
 	}
 }

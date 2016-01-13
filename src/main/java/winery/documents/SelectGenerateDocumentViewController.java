@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -32,6 +33,7 @@ public class SelectGenerateDocumentViewController extends View implements Contro
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static String OS = System.getProperty("os.name").toLowerCase();
 	JPanel Pmaks, Pmin;
 	JFileChooser Ffilechose;
 	JLabel Linfo1, Linfo2, Lfile;
@@ -83,7 +85,7 @@ public class SelectGenerateDocumentViewController extends View implements Contro
 		Pmaks.add(CBdocuments);
 
 		Linfo2 = new JLabel(
-				"<html> Podaj Imię i nazwisko, miejsce zamieszkania i adres <br> albo firmę, siedzibę i adres oraz numer wpisu<br> do ewidencji producentów i przedsiębiorców<br> wyrabiających wino z winogron pozyskanychz <br> upraw winorośli położonych na terytorium<br> Rzeczypospolitej Polskiej podmiotu<br> składającego deklarację, jeżeli podmiot ten<br> taki numer posiada: ");
+				"<html> Dane Firmy.");
 		Pmaks.add(Linfo2); // zwykłe info o tym co trzeba wpisać do textArea.
 		Tdata = new JTextArea(3, 30);
 
@@ -176,7 +178,18 @@ public class SelectGenerateDocumentViewController extends View implements Contro
 				File f = new File(model.getVpath());
 				if (f.isDirectory()) // Sprawdzenie czy jest to katalog
 				{
-					model.setVpath(path + "\\document.pdf"); // dodanie nazwy
+					
+				
+				     if (OS.indexOf("win") >= 0) {
+				    		model.setVpath(path + "\\document.pdf"); 
+				      
+				      } else if (OS.indexOf("nux") >= 0) { 	model.setVpath(path + "/document.pdf"); 
+				     
+				      } else { model.setVpath(path + "\\document.pdf"); 
+				       
+				      } 
+					
+					// dodanie nazwy
 																// pdfa
 																// tworzonego
 				} else {
@@ -211,16 +224,16 @@ public class SelectGenerateDocumentViewController extends View implements Contro
 
 		}
 	}
-	/*
-	 * public static void main(String args[]) {
-	 * 
-	 * SelectGenerateDocumentViewController b = new
-	 * SelectGenerateDocumentViewController(); JFrame j = new JFrame();
-	 * j.setSize(600, 600); b.setVisible(true); j.add(b);
-	 * j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); j.setVisible(true);
-	 * 
-	 * }
-	 */
+	
+	 /* public static void main(String args[]) {
+	 
+	  SelectGenerateDocumentViewController b = new
+	 SelectGenerateDocumentViewController(); JFrame j = new JFrame();
+	 j.setSize(600, 600); b.setVisible(true); j.add(b);
+	  j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); j.setVisible(true);
+	
+	 }
+	*/
 
 	@Override
 	protected void update(Model model) {

@@ -3,14 +3,14 @@ package dbapi;
 public class FieldCell {
 
 	private int id;
-	private String row;
-	private String column;
+	private int row;
+	private int column;
 	private String section;
 	private int currentStatusId;
 	private String description;
 	private FieldStatus fieldStatus;
 	
-	public FieldCell(int id, String row, String column, String section, int currentStatusId, String description) {
+	public FieldCell(int id, int row, int column, String section, int currentStatusId, String description) {
 		this.id = id;
 		this.row = row;
 		this.column = column;
@@ -20,19 +20,19 @@ public class FieldCell {
 		this.fieldStatus = null;
 	}
 
-	public String getRow() {
+	public int getRow() {
 		return row;
 	}
 
-	public void setRow(String row) {
+	public void setRow(int row) {
 		this.row = row;
 	}
 
-	public String getColumn() {
+	public int getColumn() {
 		return column;
 	}
 
-	public void setColumn(String column) {
+	public void setColumn(int column) {
 		this.column = column;
 	}
 

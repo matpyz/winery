@@ -20,10 +20,10 @@ public class SelectGenerateDocumentModel extends PredictingLitersOfWineModel {
 	DateFormat dateFormat = new SimpleDateFormat("dd:MM:yyy");
 	Calendar cal = Calendar.getInstance();
 	String[] docTable = new String[] {
-			"<html>Deklaracja o ilości win białych lub czerwonych <br> wprowadzonych do obrotu w poprzednimroku gospodarczym <br>",
-			"<html>Deklaracja o szacowanej ilości wina, jaka będzie wyrobiona <br>w danym roku gospodarczym ",
-			"<html> Deklaracja o szacowanej ilości win, winogron lub moszczu winogronowego, ktęre  <br>będą dostarczone do przedsiębiorcy, oraz o szacowanej ilości ich wykorzystania w <br>  danym roku gospodarczym",
-			"<html>Deklaracja o zapasach win lub moszczów winogronowych posiadanych <br> w dniu "
+			"<html>Deklaracja o ilości win białych lub czerwonych <br> wprowadzonych do obrotu w poprzednimroku   <br>gospodarczym",
+			"<html>Deklaracja o szacowanej ilości wina, jaka będzie <br>wyrobiona w danym roku gospodarczym ",
+			"<html> Deklaracja o szacowanej ilości win, winogron lub <br> moszczu winogronowego, ktęre  będą  <br>dostarczone do  przedsiębiorcy, oraz o szacowanej ilości  <br> ich wykorzystania w  danym roku gospodarczym",
+			"<html>Deklaracja o zapasach win lub moszczów winogronowych<br> posiadanych w dniu " 
 					+ dateFormat.format(cal.getTime()) };
 	DocumentBasic doc;
 

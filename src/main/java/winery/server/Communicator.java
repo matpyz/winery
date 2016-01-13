@@ -3,7 +3,11 @@
  */
 package winery.server;
 
+import java.util.HashMap;
+
 import dbapi.DBManager;
+import dbapi.FieldCell;
+import dbapi.FieldStatus;
 import dbapi.User;
 
 /**
@@ -110,20 +114,34 @@ public class Communicator {
 	 */
 	private void updateRequest(String user_id, String user_pass, String sector, String row, String column,
 			String other) {
-		if (other.equals("date")) {
-			// ask for date of last report for given place
-			// temp
-			returnObj.setOther("01/01/1970");
-		} else if (other.equals("code")) {
-			// ask for code of last report for given place
-			// temp
-			returnObj.setOther("CLEAR");
-		} else if (other.equals("all")) {
-			// ask for last report for given place
-			// temp
-			returnObj.setOther("A/15/9/PZK1|B/12/9/PNPU");
+		if(login(user_id, user_pass) != null){
+			FieldCell field = searchForFieldCellId(sector, Integer.parseInt(column), Integer.parseInt(row));
+			if(field == null) {
+				returnObj.setOther("ERROR");
+				System.err.println("ERROR: Given field do not exists. "
+						+ "Sector " + sector + ", column " + column + ", row " + row + ".");
+				return;
+			}
+			if (other.equals("date")) {
+				// ask for date of last report for given place
+				// temp
+				returnObj.setOther("01/01/1970");
+				
+			} else if (other.equals("code")) {
+				// ask for code of last report for given place
+				// temp
+				FieldStatus stat = DBManager.getFieldStatusById(field.getCurrentStatusId());
+				returnObj.setOther(stat.getCode());
+				
+				
+			} else if (other.equals("all")) {
+				// ask for last report for given place
+				// temp
+				
+				String send = createBlob();
+				returnObj.setOther(send);
+			}
 		}
-
 	}
 
 	/**
@@ -141,5 +159,51 @@ public class Communicator {
 			String date) {
 		// TODO Connect with DB for setting additional status
 		returnObj.setOther("OK");
+	}
+	
+	/**
+	 * Tworzy potężnego Stringa przechowującego wszystkie pola, na których
+	 * coś się działo.
+	 * @return
+	 */
+	private String createBlob() {
+		HashMap<Integer, FieldCell> fields = DBManager.getAllFieldsCells();
+		StringBuilder sb = new StringBuilder();
+		for(int i : fields.keySet()) {
+			FieldCell field = fields.get(i);
+			if(field.getFieldStatus() != null) {
+				if(sb.length()>0){
+					sb.append("|");
+				}
+				sb.append(field.getSection());
+				sb.append("/");
+				sb.append(field.getRow());
+				sb.append("/");
+				sb.append(field.getColumn());
+				sb.append("/");
+				FieldStatus stat = DBManager.getFieldStatusById(field.getCurrentStatusId());
+				sb.append(stat.getCode());
+			}
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * Wyszukuje porządany kawałek pola.
+	 * @param sector
+	 * @param column
+	 * @param row
+	 * @return
+	 */
+	private FieldCell searchForFieldCellId(String sector, int column, int row) {
+		int id = -1;
+		HashMap<Integer, FieldCell> fields = DBManager.getAllFieldsCells();
+		for(int i : fields.keySet()) {
+			FieldCell field = fields.get(i);
+			if(field.getSection() == sector && field.getColumn() == column && field.getRow() == row) {
+				return field;
+			}
+		}
+		return null;
 	}
 }

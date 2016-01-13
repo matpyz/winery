@@ -227,7 +227,7 @@ public class WineAddViewController extends View implements Controller, ItemListe
 			int yearInt = Integer.parseInt(yearCont);
 			int costInt = Integer.parseInt(costCont);
 			int botInt = Integer.parseInt(botCont);
-			Wine wine = DBManager.addWine(nameCont, kindCont, colorCont, botInt, 0, 0, costInt, yearInt);
+			Wine wine = DBManager.addWine(nameCont, kindCont, colorCont, botInt, 0, 0, costInt, yearInt, 0);
 			if (wine == null) {
 				printError("Nie udało się dodać wina.");
 				return;

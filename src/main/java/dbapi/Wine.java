@@ -11,10 +11,21 @@ public class Wine {
 	private int basePrice;
 	private int productionCost;
 	private int year;
+	private int protectedOrigin;
+
+
+	public int getProtectedOrigin() {
+		return protectedOrigin;
+	}
+
+
+	public void setProtectedOrigin(int protectedOrigin) {
+		this.protectedOrigin = protectedOrigin;
+	}
 
 
 	public Wine(int id, String name, String grapes, String color, int produced, int sold, int basePrice,
-			int productionCost, int year) {
+			int productionCost, int year, int protectedOrigin) {
 		
 		this.id = id;
 		this.name = name;

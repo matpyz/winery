@@ -6,8 +6,10 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -30,19 +32,25 @@ public class AccountsView extends View implements ActionListener {
 	 */
 	protected static final long serialVersionUID = 1L;
 
-	private static int actionNumber = 0;
+	private static int actionNumber = -2; // 2 pierwsze akcje to pobranie listy
+											// kont i wyświetlenie pierwszego z
+											// nich
 
-	JComboBox<String> cBox_accountList;
+	private JComboBox<String> cBox_accountList;
 
 	private JTextField txt_name;
 	private JTextField txt_surname;
 	private JTextField txt_password;
 	private JTextField txt_login;
 	private JTextField txt_gmail;
-
+	
+	private LinkedList<JTextField> txtList;
+	
 	private JButton btn_add;
 	private JButton btn_rmv;
 	private JButton btn_edit;
+	
+	private LinkedList<JButton> btnList;
 
 	private JLabel lbl_name;
 	private JLabel lbl_surname;
@@ -53,13 +61,17 @@ public class AccountsView extends View implements ActionListener {
 
 	AccountsController controller;
 	AccountsModel model;
+	private JLabel lbl_Payment;
+	private JTextField txt_payment;
+	private JLabel lblGroup;
+	private JTextField txt_group;
 
 	public AccountsView(AccountsController controller) {
 		this.controller = controller;
 
 		createGUI();
 	}
-	
+
 	/**
 	 * Wielka litania do Pana naszego Swing'a.
 	 */
@@ -82,6 +94,7 @@ public class AccountsView extends View implements ActionListener {
 		add(cBox_accountList, gbc_cBox_accountList);
 
 		cBox_accountList.addActionListener(this);
+		cBox_accountList.setActionCommand("select");
 
 		btn_edit = new JButton("Edytuj");
 		GridBagConstraints gbc_btn_edit = new GridBagConstraints();
@@ -114,14 +127,27 @@ public class AccountsView extends View implements ActionListener {
 		add(panel_accountData, gbc_panel_accountData);
 
 		panel_accountData.setLayout(new FormLayout(new ColumnSpec[] {
-				FormSpecs.RELATED_GAP_COLSPEC, FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"), }, new RowSpec[] {
-				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC, }));
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),},
+			new RowSpec[] {
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 
 		lbl_name = new JLabel("Imię");
 		panel_accountData.add(lbl_name, "2, 2, right, default");
@@ -138,22 +164,24 @@ public class AccountsView extends View implements ActionListener {
 		txt_surname.setEditable(false);
 		panel_accountData.add(txt_surname, "4, 4, fill, default");
 		txt_surname.setColumns(10);
-
-		lbl_password = new JLabel("Hasło");
-		panel_accountData.add(lbl_password, "2, 6, right, default");
-
+		
 		lbl_login = new JLabel("Login");
-		panel_accountData.add(lbl_login, "2, 8, right, default");
-
-		txt_password = new JTextField();
-		txt_password.setEditable(false);
-		panel_accountData.add(txt_password, "4, 6, fill, default");
-		txt_password.setColumns(10);
+		panel_accountData.add(lbl_login, "2, 6, right, default");
 
 		txt_login = new JTextField();
 		txt_login.setEditable(false);
-		panel_accountData.add(txt_login, "4, 8, fill, default");
+		panel_accountData.add(txt_login, "4, 6, fill, default");
 		txt_login.setColumns(10);
+		
+
+		lbl_password = new JLabel("Hasło");
+		panel_accountData.add(lbl_password, "2, 8, right, default");
+
+		txt_password = new JTextField();
+		txt_password.setEditable(false);
+		panel_accountData.add(txt_password, "4, 8, fill, default");
+		txt_password.setColumns(10);
+				
 
 		lbl_gmail = new JLabel("Gmail");
 		panel_accountData.add(lbl_gmail, "2, 10, right, default");
@@ -162,7 +190,23 @@ public class AccountsView extends View implements ActionListener {
 		txt_gmail.setEditable(false);
 		panel_accountData.add(txt_gmail, "4, 10, fill, default");
 		txt_gmail.setColumns(10);
-
+		
+		lbl_Payment = new JLabel("Payment");
+		panel_accountData.add(lbl_Payment, "2, 12, right, default");
+		
+		txt_payment = new JTextField();
+		txt_payment.setEditable(false);
+		txt_payment.setColumns(10);
+		panel_accountData.add(txt_payment, "4, 12, fill, default");
+		
+		lblGroup = new JLabel("Group");
+		panel_accountData.add(lblGroup, "2, 14, right, default");
+		
+		txt_group = new JTextField();
+		txt_group.setEditable(false);
+		txt_group.setColumns(10);
+		panel_accountData.add(txt_group, "4, 14, fill, default");
+		
 		btn_add.setActionCommand("add");
 		btn_rmv.setActionCommand("rmv");
 		btn_edit.setActionCommand("edit");
@@ -179,38 +223,58 @@ public class AccountsView extends View implements ActionListener {
 		gbc_lbl_result.gridx = 0;
 		gbc_lbl_result.gridy = 2;
 		add(lbl_result, gbc_lbl_result);
+		
+		txtList = new LinkedList<>();
+		txtList.add(txt_name);
+		txtList.add(txt_surname);
+		txtList.add(txt_login);
+		txtList.add(txt_password);
+		txtList.add(txt_gmail);
+		txtList.add(txt_payment);
+		txtList.add(txt_group);
+		
+		btnList = new LinkedList<>();	
+		btnList.add(btn_edit);
+		btnList.add(btn_rmv);
+		btnList.add(btn_add);
 	}
 
 	@Override
-	public void update(Model model) {
-		AccountsModel accountsModel = (AccountsModel)model;
+	public synchronized void update(Model model) {
+		AccountsModel accountsModel = (AccountsModel) model;
+
+		cBox_accountList.setActionCommand("removing");
+		cBox_accountList.removeAllItems();
+		cBox_accountList.setActionCommand("select");
 		
+		for (String account : accountsModel.getAccountList()) 
+			// Tak wiem, ale cóż
+			if(((DefaultComboBoxModel<String>)cBox_accountList.getModel()).getIndexOf(account) == -1 )
+				cBox_accountList.addItem(account);
+		
+
+		int j;
+		for(int i = 0; i < accountsModel.getAccountData().size(); i++) {
+			j = (i >= 3) ? 1 : 0;
+			txtList.get(i+j).setText(accountsModel.getAccountData().get(i));
+		}
+
 		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-		
-				cBox_accountList.removeAllItems();
-				for (String account : accountsModel.getAccountList())
-					cBox_accountList.addItem(account);
-				
-				txt_name.setText(accountsModel.getAccountData().get(0));
-				txt_surname.setText(accountsModel.getAccountData().get(1));
-				txt_gmail.setText(accountsModel.getAccountData().get(2));
-				txt_login.setText(accountsModel.getAccountData().get(3));
-					
-				lbl_result.setText(++actionNumber + ": " + controller.response);		
-			
-			}
+		    public void run() {	
+		    	lbl_result.setText(++actionNumber + ": " + controller.response);	
+		    }
 		});
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == cBox_accountList) {
-				controller.getAccountData(((String) cBox_accountList
-					.getSelectedItem()).split("[()]")[1]);
-		}
-		
 		switch (e.getActionCommand()) {
+		case "select":
+			// Wyciąga login (z nawiasu) i podaje funkcji
+			controller.getAccountData(((String) cBox_accountList
+				.getSelectedItem()).split("[()]")[1]);
+			break;
 		case "add":
 			addAccount();
 			break;
@@ -239,10 +303,9 @@ public class AccountsView extends View implements ActionListener {
 		btn_rmv.setEnabled(false);
 		cBox_accountList.setEnabled(false);
 
-		txt_name.setEditable(true);
-		txt_surname.setEditable(true);
-		txt_password.setEditable(true);
-		txt_gmail.setEditable(true);
+		for(JTextField txt : txtList) {
+			txt.setEditable(true);
+		}
 	}
 
 	private void endEdit() {
@@ -253,25 +316,25 @@ public class AccountsView extends View implements ActionListener {
 		btn_rmv.setEnabled(true);
 		cBox_accountList.setEnabled(true);
 
-		txt_name.setEditable(false);
-		txt_surname.setEditable(false);
-		txt_password.setEditable(false);
-		txt_gmail.setEditable(false);
+		for(JTextField txt : txtList) {
+			txt.setEditable(false);
+		}
+		
+		String name = txt_name.getText();
+		String surname = txt_surname.getText();
+		String login = txt_login.getText();
+		String password = txt_password.getText();
+		String mail = txt_gmail.getText();
+		String payment = txt_payment.getText();
+		String group = txt_group.getText();
 
-		List<String> accountData = new ArrayList<>();
-		accountData.add(txt_login.getText());
-		accountData.add(txt_name.getText());
-		accountData.add(txt_surname.getText());
-		accountData.add(txt_password.getText());
-		accountData.add(txt_gmail.getText());
-
-		controller.modifyAccount(accountData);
+		controller.modifyAccount(name,surname,login,password,mail,payment,group);
 	}
 
 	private void rmvAccount() {
-		String accountId = txt_name.getText() + txt_surname.getText();
+		String login = txt_login.getText();
 
-		controller.deleteAccount(accountId);
+		controller.deleteAccount(login);
 	}
 
 	private void addAccount() {
@@ -282,15 +345,14 @@ public class AccountsView extends View implements ActionListener {
 		btn_rmv.setEnabled(false);
 		cBox_accountList.setEnabled(false);
 
-		txt_name.setText("");
-		txt_surname.setText("");
-		txt_password.setText("");
-		txt_gmail.setText("");
+		for(JTextField txt : txtList) {
+			txt.setText("");
+		}
 
-		txt_name.setEditable(true);
-		txt_surname.setEditable(true);
-		txt_password.setEditable(true);
-		txt_gmail.setEditable(true);
+		for(JTextField txt : txtList) {
+			txt.setEditable(true);
+		}
+		
 	}
 
 	private void endAdd() {
@@ -301,18 +363,19 @@ public class AccountsView extends View implements ActionListener {
 		btn_rmv.setEnabled(true);
 		cBox_accountList.setEnabled(true);
 
-		txt_name.setEditable(false);
-		txt_surname.setEditable(false);
-		txt_password.setEditable(false);
-		txt_gmail.setEditable(false);
+		for(JTextField txt : txtList) {
+			txt.setEditable(false);
+		}
 
-		List<String> accountData = new ArrayList<>();
-		accountData.add(txt_name.getText());
-		accountData.add(txt_surname.getText());
-		accountData.add(txt_password.getText());
-		accountData.add(txt_gmail.getText());
+		String name = txt_name.getText();
+		String surname = txt_surname.getText();
+		String login = txt_login.getText();
+		String password = txt_password.getText();
+		String mail = txt_gmail.getText();
+		String payment = txt_group.getText();
+		String group = txt_group.getText();
 
-		controller.newAccount(accountData);
+		controller.newAccount(name,surname,login,password,mail,payment,group);
 	}
 
 }

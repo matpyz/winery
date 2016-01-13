@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -31,8 +32,8 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	int a = 600;// długość
-	int b = 600;
+	int a = 500;// długość
+	int b = 500;
 	private JPanel Pmaks;
 	private JButton Bupdate;
 	private JPanel[] PpanelTable;
@@ -50,7 +51,7 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 	private JPanel Pmin;
 	private JButton Bdirectory;
 	private JLabel Lfile;
-
+	private JLabel[] Lhekto, Ldata;
 	PredictingLitersOfWineModel model;
 	private JButton BgenerateDoc;
 	private String[] numWine;
@@ -61,19 +62,19 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 		model = new PredictingLitersOfWineModel();
 		nameTab = new String[5]; // Tabela nazw określonych rodzajów wina,
 									// którego będziemy przewidywać ilość
-		nameTab[0] = "  z Chronioną Nazwą Pochodzenia (ChNP) ";
-		nameTab[1] = "   z Chronionym Oznaczeniem Geograficznym (ChOG) ";
-		nameTab[2] = "bez ChNP/ ChOG  z określonej odmiany winorośli ";
-		nameTab[3] = " bez ChNP/ ChOG inne niż z określonej odmiany winorośli ";
-		nameTab[4] = "  Pozostałe";
+		nameTab[0] = "Wino z Chronioną Nazwą Pochodzenia (ChNP) ";
+		nameTab[1] = " Wino  z Chronionym Oznaczeniem Geograficznym (ChOG) ";
+		nameTab[2] = "Wino bez ChNP/ ChOG  z określonej odmiany winorośli ";
+		nameTab[3] = " Wino bez ChNP/ ChOG inne niż z określonej odmiany winorośli ";
+		nameTab[4] = " Wino  Pozostałe";
 
 		numWine = new String[5]; // Tabela ilości krzewów winogron, póżniej te
 									// danę bedą pobierane z bazy danych
-		numWine[0] = "13423";
-		numWine[1] = "2133";
-		numWine[2] = "342423";
-		numWine[3] = "3423";
-		numWine[4] = "4323423";
+		numWine[0] = "0";
+		numWine[1] = "0";
+		numWine[2] = "0";
+		numWine[3] = "0";
+		numWine[4] = "0";
 
 		setSize(a, b);
 		Pmaks = new JPanel(); // Panel główny, do którego wszystko wkładamy.
@@ -87,7 +88,7 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 		Pmaks.add(Pdown, BorderLayout.SOUTH);
 		Pmaks.add(Ptop, BorderLayout.NORTH);
 
-		Linfo = new JLabel(" Przewidywana ilość litrów wina na podaną ilość krzaków.  ");
+		Linfo = new JLabel(" Prognozowanie Zbiorów.");
 		Ptop.add(Linfo); // Opis.
 
 		PpanelTable = new JPanel[5]; // Panel powalający pogrupować podane
@@ -97,30 +98,35 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 		TchangeData = new JTextField[5]; // zmienne dane ilości krzewów
 		Lresult = new JLabel[5]; // ilość wina z danej ilości krzewów
 		Pcenter.setLayout(new GridLayout(13, 1));
-
+		Lhekto = new JLabel[5];
+		Ldata = new JLabel[5];
 		for (int i = 0; i < 5; i++) { // Organizacja danych do okienka
 			PpanelTable[i] = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
+			Lhekto[i] = new JLabel("Ilość Sadzonek");
 			Lname[i] = new JLabel(nameTab[i]);
 			Lname[i].setMinimumSize(new Dimension(100, 30));
 
 			TchangeData[i] = new JTextField(15);
 			TchangeData[i].setText(numWine[i]);
+			Ldata[i] = new JLabel("Ilość Hektolitrów");
 			Lresult[i] = new JLabel(model.changeNum(TchangeData[i].getText()));
 			Lresult[i].setSize(new Dimension(200, 30));
 			Pcenter.add(Lname[i]);
 			Pcenter.add(PpanelTable[i]);
+			PpanelTable[i].add(Lhekto[i]);
 			PpanelTable[i].add(TchangeData[i]);
+			PpanelTable[i].add(Ldata[i]);
 			PpanelTable[i].add(Lresult[i]);
+			
 
 		}
-		Linfo2 = new JLabel(" Podaj dane wystawcy dokumentu.  ");
-		Pcenter.add(Linfo2); // zwykłe info o tym co trzeba wpisać do Jtext.
-		Tdata = new JTextField();
-		Pcenter.add(Tdata); // wpisywanie potrzebnych danych
+		//Linfo2 = new JLabel(" Podaj dane wystawcy dokumentu.  ");
+		//Pcenter.add(Linfo2); // zwykłe info o tym co trzeba wpisać do Jtext.
+		//Tdata = new JTextField();
+		//Pcenter.add(Tdata); // wpisywanie potrzebnych danych
 
 		Pmin = new JPanel(); // Panel z wyborek katalogu
-		Bdirectory = new JButton("Wybierz Katalog oraz podaj nazwę!");
+		Bdirectory = new JButton("Wybierz Katalog !");
 		Lfile = new JLabel(" Brak wybranego Karalogu. ");
 		Bdirectory.addActionListener(new PathSelectListener());
 		Pmin.add(Bdirectory);
@@ -129,11 +135,11 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 
 		Bupdate = new JButton(" Aktualizuj. ");
 		Bupdate.addActionListener(new UpdateData());
-		Pdown.add(Bupdate);
+		Pcenter.add(Bupdate);
 
 		BgenerateDoc = new JButton(" Generuj. ");
 		BgenerateDoc.addActionListener(new GenerateDocListener());
-		Pdown.add(BgenerateDoc);
+		Pcenter.add(BgenerateDoc);
 
 	}
 
@@ -169,9 +175,15 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 				File f = new File(model.getVpath());
 				if (f.isDirectory()) // Sprawdzenie czy jest to katalog
 				{
-					model.setVpath(path + "\\document.pdf"); // dodanie nazwy
-																// pdfa
-																// tworzonego
+					 String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
+				     if (OS.indexOf("win") >= 0) {
+				    		model.setVpath(path + "\\document.pdf"); 
+				      
+				      } else if (OS.indexOf("nux") >= 0) { 	model.setVpath(path + "/document.pdf"); 
+				     
+				      } else { model.setVpath(path + "\\document.pdf"); 
+				       
+				      } 
 				} else {
 					String endpdf = path.substring(path.length() - 4, path.length());
 
@@ -203,8 +215,8 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 
 		public void actionPerformed(ActionEvent event) {
 
-			String data = Tdata.getText().trim();
-			if (!data.equals("") && !model.getVpath().trim().equals("")) // Sprawdzanie,
+			String data = "Dane Wystawczy";
+			if ( !model.getVpath().trim().equals("")) // Sprawdzanie,
 																			// czy
 																			// możemy
 																			// generować,

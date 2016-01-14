@@ -12,20 +12,10 @@ public class Wine {
 	private int productionCost;
 	private int year;
 	private int protectedOrigin;
-
-
-	public int getProtectedOrigin() {
-		return protectedOrigin;
-	}
-
-
-	public void setProtectedOrigin(int protectedOrigin) {
-		this.protectedOrigin = protectedOrigin;
-	}
-
+	private int forSale;
 
 	public Wine(int id, String name, String grapes, String color, int produced, int sold, int basePrice,
-			int productionCost, int year, int protectedOrigin) {
+			int productionCost, int year, int protectedOrigin, int forSale) {
 		
 		this.id = id;
 		this.name = name;
@@ -36,6 +26,8 @@ public class Wine {
 		this.basePrice = basePrice;
 		this.productionCost = productionCost;
 		this.year = year;
+		this.protectedOrigin = protectedOrigin;
+		this.forSale = forSale;
 	}
 
 
@@ -106,6 +98,25 @@ public class Wine {
 
 	public void setYear(int year) {
 		this.year = year;
+	}
+	
+	public int getForSale() {
+		return forSale;
+	}
+
+
+	public void setForSale(int forSale) {
+		this.forSale = forSale;
+	}
+
+
+	public int getProtectedOrigin() {
+		return protectedOrigin;
+	}
+
+
+	public void setProtectedOrigin(int protectedOrigin) {
+		this.protectedOrigin = protectedOrigin;
 	}
 	
 }

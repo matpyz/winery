@@ -1,5 +1,7 @@
 package dbapi;
 
+import java.util.Date;
+
 public class FieldCell {
 
 	private int id;
@@ -9,8 +11,9 @@ public class FieldCell {
 	private int currentStatusId;
 	private String description;
 	private FieldStatus fieldStatus;
+	private Date date;
 	
-	public FieldCell(int id, int row, int column, String section, int currentStatusId, String description) {
+	public FieldCell(int id, int row, int column, String section, int currentStatusId, String description, Date date) {
 		this.id = id;
 		this.row = row;
 		this.column = column;
@@ -18,7 +21,8 @@ public class FieldCell {
 		this.currentStatusId = currentStatusId;
 		this.description = description;
 		this.fieldStatus = null;
-	}
+		this.date = date;
+		}
 
 	public int getRow() {
 		return row;
@@ -70,6 +74,14 @@ public class FieldCell {
 
 	public void setFieldStatus(FieldStatus fieldStatus) {
 		this.fieldStatus = fieldStatus;
+	}
+	
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 	
 }

@@ -58,7 +58,7 @@ public class DBManager {
 			dbManager.createConnection();
 			Statement stmt = conn.createStatement();
 			ResultSet rs = null;
-			rs = stmt.executeQuery(query); /// TODO: TU NIC SIĘ NIE DZIEJE, NULL JEST NULLEM
+			rs = stmt.executeQuery(query);
 
 			return rs;
 		} catch (SQLException wyjatek) {
@@ -1384,7 +1384,7 @@ public class DBManager {
 		try {
 			if (rs.next()) {
 				wine = new Wine(rs.getInt("id"), rs.getString("name"), rs.getString("grapes"), rs.getString("color"),
-						rs.getInt("produced"), rs.getInt("sold"), rs.getInt("baseprice"), rs.getInt("productionCost"), rs.getInt("year"), rs.getInt("protectedOrigin"));
+						rs.getInt("produced"), rs.getInt("sold"), rs.getInt("baseprice"), rs.getInt("productionCost"), rs.getInt("year"), rs.getInt("protectedOrigin"), rs.getInt("forSale"));
 				conn.close();
 			}
 			conn.close();
@@ -1403,7 +1403,7 @@ public class DBManager {
 		try {
 			while (rs.next()) {
 				Wine wine = new Wine(rs.getInt("id"), rs.getString("name"), rs.getString("grapes"), rs.getString("color"),
-						rs.getInt("produced"), rs.getInt("sold"), rs.getInt("baseprice"), rs.getInt("productionCost"), rs.getInt("year"), rs.getInt("protectedOrigin"));
+						rs.getInt("produced"), rs.getInt("sold"), rs.getInt("baseprice"), rs.getInt("productionCost"), rs.getInt("year"), rs.getInt("protectedOrigin"), rs.getInt("forSale"));
 				wines.put(rs.getInt("id"), wine);
 				conn.close();
 			}
@@ -1435,12 +1435,12 @@ public class DBManager {
 	 * 					- rok produkcji
 	 * @return
 	 */
-	public static Wine addWine(String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost, int year, int protectedOrigin) {
+	public static Wine addWine(String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost, int year, int protectedOrigin, int forSale) {
 		
 		Wine wine = null;
 		
-		String query = "INSERT INTO `wine` (`name`, `grapes`, `color`, `produced`, `sold`, `baseprice`, `productionCost`, `year`, `protectedOrigin`) VALUES ('" + name + "', '"
-				+ grapes + "', '" + color + "', '" + produced + "', '" + sold + "', '" + baseprice + "', '" + productionCost + "', '" + year + "', '"+ protectedOrigin +"');";
+		String query = "INSERT INTO `wine` (`name`, `grapes`, `color`, `produced`, `sold`, `baseprice`, `productionCost`, `year`, `protectedOrigin`, `forSale`) VALUES ('" + name + "', '"
+				+ grapes + "', '" + color + "', '" + produced + "', '" + sold + "', '" + baseprice + "', '" + productionCost + "', '" + year + "', '"+ protectedOrigin +"', '"+ forSale +"');";
 		
 		try {
 			int result = dbManager.otherQuery(query);
@@ -1451,7 +1451,7 @@ public class DBManager {
 				if (rs.next()) {
 					int id = rs.getInt("id");
 					wine = new Wine(id, name, grapes, color, produced,
-							sold, baseprice, productionCost, year, protectedOrigin);
+							sold, baseprice, productionCost, year, protectedOrigin, forSale);
 				}
 				conn.close();
 			}
@@ -1486,7 +1486,7 @@ public class DBManager {
 	 * @return
 	 * 				- true jeśli operacja się powiodła, oraz false w przeciwnym wypadku
 	 */
-	public static boolean updateDataForWineById(int id, String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost, int year, int protectedOrigin ) {
+	public static boolean updateDataForWineById(int id, String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost, int year, int protectedOrigin, int forSale ) {
 		
 		String query = "";
 		
@@ -1527,6 +1527,11 @@ public class DBManager {
 			if (!query.isEmpty())
 				query += ", ";
 			query += "`year`='" + year + "'";
+		}
+		if ( forSale != 0 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`forSale`='" + forSale + "'";
 		}
 		if ( protectedOrigin != 0 ) {
 			if (!query.isEmpty())
@@ -1569,6 +1574,35 @@ public class DBManager {
 		}
 	}
 	
+	/**
+	 * Metoda inicjalizująca dane na temat pól na plantacji dla zadanego sektora
+	 * 
+	 * @param sectorName
+	 * 						- nazwa sektora, który ma być zainicjalizowany w bazie
+	 * @param quantRows
+	 * 						- ilość wierszy w tym sektorze
+	 * @param quantColumns
+	 * 						- liczba kolumn w sektorze
+	 * @return
+	 */
+	public static boolean initFieldsCell(String sectorName, int quantRows, int quantColumns) {
+		
+		String query = "INSERT INTO `fieldCell` (`row`, `col`, `section`, `currentSatusId`) VALUES ";
+		for(int i = 0; i<quantRows; i++) {
+			for( int j = 0; j<quantColumns; j++ ) {
+				if(j != 0) query += ", ";
+				query += "('" + i + "', '" + j + "', '" + sectorName + "', '" + 1 + "')";
+			}
+		}
+		int result = dbManager.otherQuery(query);
+		try {
+			conn.close();
+			return result > 0;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
 	
 	/**
 	 * Metoda zwracająca pole na plantacji o zadanym id
@@ -1588,7 +1622,7 @@ public class DBManager {
 		try {
 			if (rs.next()) {
 				fieldCell = new FieldCell(rs.getInt("id"), rs.getInt("row"), rs.getInt("col"), rs.getString("section"),
-						rs.getInt("currentStatusId"), rs.getString("description"));
+						rs.getInt("currentStatusId"), rs.getString("description"), new Date(rs.getDate("date").getTime()));
 				conn.close();
 				fieldCell.setFieldStatus(DBManager.getFieldStatusById(fieldCell.getCurrentStatusId()));
 			}
@@ -1615,7 +1649,7 @@ public class DBManager {
 		try {
 			while (rs.next()) {
 				FieldCell fieldCell = new FieldCell(rs.getInt("id"), rs.getInt("row"), rs.getInt("col"), rs.getString("section"),
-						rs.getInt("currentStatusId"), rs.getString("description"));
+						rs.getInt("currentStatusId"), rs.getString("description"), new Date(rs.getDate("date").getTime()));
 				fieldsCells.put(rs.getInt("id"), fieldCell);
 			}
 			conn.close();
@@ -1693,12 +1727,12 @@ public class DBManager {
 	 * @return
 	 * 							- obiekt pola, które właśnie zostało do bazy danych
 	 */
-	public static FieldCell addFieldCell(int row, int column, String section, int currentStatusId, String description) {
+	public static FieldCell addFieldCell(int row, int column, String section, int currentStatusId, String description, Date date) {
 		
 		FieldCell fieldCell = null;
 		
-		String query = "INSERT INTO `fieldCell` (`row`, `column`, `section`, `currentStatusId`, `description`) VALUES ('" + row + "', '"
-				+ column + "', '" + section + "', '" + currentStatusId + "', '" + description + "');";
+		String query = "INSERT INTO `fieldCell` (`row`, `column`, `section`, `currentStatusId`, `description`, `date`) VALUES ('" + row + "', '"
+				+ column + "', '" + section + "', '" + currentStatusId + "', '" + description + "', '" + new java.sql.Date(date.getTime()) + "');";
 		
 		try {
 			int result = dbManager.otherQuery(query);
@@ -1708,7 +1742,7 @@ public class DBManager {
 				ResultSet rs = dbManager.selectQuery(query);
 				if (rs.next()) {
 					int id = rs.getInt("id");
-					fieldCell = new FieldCell(id, row, column, section, currentStatusId, description);
+					fieldCell = new FieldCell(id, row, column, section, currentStatusId, description, date);
 				}
 				conn.close();
 			}
@@ -1734,9 +1768,10 @@ public class DBManager {
 	 * 							- nowy opis pola, jeśli puste to bez zmian
 	 * @return
 	 */
-	public static boolean updateDataForFieldCellById(int id, int row, int column, String section, int currentStatusId, String description) {
+	public static boolean updateDataForFieldCellById(int id, int row, int column, String section, int currentStatusId, String description, Date date) {
 		
 		String query = "";
+		java.sql.Date sqlDate = new Date(date.getTime());
 		
 		if( row != -1 ) {
 			query += "`row`='" + row + "'";
@@ -1760,6 +1795,11 @@ public class DBManager {
 			if (!query.isEmpty())
 				query += ", ";
 			query += "`description`='" + description + "'";
+		}
+		if ( date != null ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`date`='" + sqlDate + "'";
 		}
 		if (!query.isEmpty()) {
 			query = "UPDATE `fieldCell` SET " + query + "WHERE `id`='" + id + "'";
@@ -1814,7 +1854,7 @@ public class DBManager {
 		ResultSet rs = dbManager.selectQuery(query);
 		try {
 			if (rs.next()) {
-				seed = new Seed(rs.getInt("id"), rs.getString("name"), rs.getInt("qty"), rs.getString("additional"));
+				seed = new Seed(rs.getInt("id"), rs.getString("name"), rs.getInt("qty"), rs.getInt("protectedOrigin"), rs.getInt("year"), rs.getString("additional"), rs.getString("additional2"));
 				conn.close();
 			}
 			conn.close();
@@ -1823,6 +1863,27 @@ public class DBManager {
 		}
 		
 		return seed;
+	}
+	
+public static HashMap<Integer, Seed> getSeedsByType(int type) {
+		
+		HashMap<Integer, Seed> seeds = new HashMap<Integer, Seed>();
+
+		String query = "SELECT * FROM `seed` WHERE `protectedOrigin`='"+type+"'";
+		
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			while (rs.next()) {
+				Seed seed = new Seed(rs.getInt("id"), rs.getString("name"), rs.getInt("qty"), rs.getInt("protectedOrigin"), rs.getInt("year"), rs.getString("additional"), rs.getString("additional2"));
+				seeds.put(rs.getInt("id"), seed);
+				conn.close();
+			}
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return seeds;
 	}
 	
 	/**
@@ -1837,11 +1898,11 @@ public class DBManager {
 	 * @return
 	 * 						- obiekt sadzonki właśnie dodanej do bazy danych sadzonki
 	 */
-	public static Seed addSeed(String name, int qty, String additional) {
+	public static Seed addSeed(String name, int qty, int protectedOrigin, int year, String additional, String additional2) {
 		
 		Seed seed = null;
 		
-		String query = "INSERT INTO `seed` (`name`, `qty`, `additional`) VALUES ('" + name + "', '"
+		String query = "INSERT INTO `seed` (`name`, `qty`, `protectedOrigin`, `year`, `additional`, `additional2`) VALUES ('" + name + "', '"
 				+ qty + "', '" + additional + "');";
 		
 		try {
@@ -1852,7 +1913,7 @@ public class DBManager {
 				ResultSet rs = dbManager.selectQuery(query);
 				if (rs.next()) {
 					int id = rs.getInt("id");
-					seed = new Seed(id, name, qty, additional);
+					seed = new Seed(id, name, qty, protectedOrigin, year, additional, additional2);
 				}
 				conn.close();
 			}
@@ -1872,12 +1933,18 @@ public class DBManager {
 	 * 						- nowa nazwa sadzonki, jeśli puste to bez zmian
 	 * @param qty
 	 * 						- nowa ilość sadzonek, jeśli -1 to bez zmian
+	 * @param protectedOrigin
+	 * 						- nowe id rodzaju chronienia nazwy pochodzenia, jeśli -1 to bez zmian
+	 * @param year
+	 * 						- nowy rok sadzenia, jeśli -1 to bez zmian
 	 * @param additional
 	 * 						- zaktualizowane dodatkowe informacje, jeśli puste to bez zmian
+	 * @param additional2
+	 * 						- zaktualizowane dodatkowe 2 informacje, jeśli puste to bez zmian
 	 * @return
 	 * 						- true jeśli operacja się powiodła, oraz false w przeciwnym wypadku
 	 */
-	public static boolean updateDataForSeedById(int id, String name, int qty, String additional ) {
+	public static boolean updateDataForSeedById(int id, String name, int qty, int protectedOrigin, int year, String additional, String additional2 ) {
 		
 		String query = "";
 		
@@ -1889,10 +1956,25 @@ public class DBManager {
 				query += ", ";
 			query += "`qty`='" + qty + "'";
 		}
+		if ( protectedOrigin != -1 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`protectedOrigin`='" + protectedOrigin + "'";
+		}
+		if ( year != -1 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`year`='" + year + "'";
+		}
 		if ( !additional.isEmpty() ) {
 			if (!query.isEmpty())
 				query += ", ";
 			query += "`additional`='" + additional + "'";
+		}
+		if ( !additional2.isEmpty() ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`additional2`='" + additional2 + "'";
 		}
 		if (!query.isEmpty()) {
 			query = "UPDATE `seed` SET " + query + "WHERE `id`='" + id + "'";

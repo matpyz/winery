@@ -1082,6 +1082,22 @@ public class DBManager {
 		return DBManager.invoices;
 	}
 	
+	public static int getLastInvoiceId() {
+		String query = "SELECT id FROM `invoice` ORDER BY id DESC LIMIT 1";
+		int id = 0;
+		
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			if (rs.next()) {
+				id = rs.getInt("id");
+			}
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return id;
+	}
+	
 	/**
 	 * Metoda zwraca dane faktury o zadanym id
 	 * @param invoiceId

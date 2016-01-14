@@ -160,6 +160,21 @@ public class ConfigFieldPanel extends JPanel{
 		add(scrollPane);
 	}
 	
+	public String getFieldData() {
+		StringBuilder sb = null;
+		for(int i = 0; i<sectors.size(); i++) {
+			 sb = new StringBuilder();
+			 sb.append(sectors.get(i));
+			 sb.append(" ");
+			 sb.append(columns.get(i));
+			 sb.append(" ");
+			 sb.append(rows.get(i));
+			 sb.append("\n");
+		}
+		
+		return sb.toString();
+	}
+	
 	private boolean check(String sect, int column, int row) {
 		for(String s : sectors) {
 			if(sect.equals(s)) {

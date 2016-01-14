@@ -12,6 +12,11 @@ class Test {
 		for (User user : DBManager.getUsers().values()) {
 			System.out.println(user.getId()+" "+user.getLogin());
 		}
+		DBManager.changeUserData(22, "error", "", "", "", "", 0, 1234);
+		System.out.println(DBManager.getUserById(1).getLogin());
+		for (User user : DBManager.getUsers().values()) {
+			System.out.println(user.getId()+" "+user.getLogin());
+		}
 		return;
 	}
 }

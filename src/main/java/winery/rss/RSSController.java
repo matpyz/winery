@@ -39,24 +39,22 @@ public class RSSController implements Controller {
 				sb.append("|");
 				sb.append(f.getColumn());
 				sb.append(" zaszły następujące zdarzenia:\n");
-				sb.append("\tKod: ");
+				sb.append("Kod: ");
 				FieldStatus fs = DBManager.getFieldStatusById(f.getCurrentStatusId());
 				sb.append(fs.getCode());
 				sb.append(" ");
 				sb.append(fs.getCategory());
 				sb.append(" ");
 				sb.append(fs.getSubcategory());
-				sb.append("\n\tOpis: ");
+				sb.append("\nOpis: ");
 				sb.append(f.getDescription());
 				list.add(sb.toString());
 			}
-		}		
-		model.setList(list);
+		}
 	}
 
 	@Override
 	public View getView() {
-		// TODO Auto-generated method stub
 		return view;
 	}
 

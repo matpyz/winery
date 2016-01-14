@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
@@ -26,41 +29,40 @@ public class CalendarView extends View implements ActionListener, Controller {
 	private JLabel monthNameLabel;
 	private JPanel dayNamesPanel;
 
-	private JButton[][] panelHolder;
-	//private JPanel information;
+	private ColorButton[][] panelHolder;
 	private JPanel days;
 
-	private Calendar gc = GregorianCalendar.getInstance();
 	private String[] months = { "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień",
 			"Wrzesień", "Październik", "Listopad", "Grudzień" };
-	/*
-	 * Aby wykonać kalendarz warto wykorzystać metody zawarte w klasie
-	 * "GregorianCalendar", dla przykładu przy tworzeniu widoku pobierany jest
-	 * obecny miesiąc na podstawie danych lokalnych maszyny, na której został
-	 * uruchomiony program.
-	 * 
-	 * Dwa, chyba powinien istnieć model, który przechowywałby dane takie
-	 * właśnie jak obecny miesiąc itd.
-	 */
-	private int currentMonth = gc.get(Calendar.MONTH);
+	
+	private Calendar calendar;
+	private int currentMonth;
 
+	@SuppressWarnings("deprecation")
 	public CalendarView() {
+		this.removeAll();
 		this.setBounds(0, 25, 600, 550);
 		this.setLayout(null);
+		
+		calendar = new GregorianCalendar().getInstance();
+			
+		
+		
 		createGUI();
 	}
 
 	private void createGUI() {
-		// TODO Ogarnąć układ strony
+		this.removeAll();
+		this.repaint();
+		this.revalidate();
+
 		previousButton = new JButton("Poprzedni");
 		previousButton.setBounds(25, 25, 120, 35);
 
 		nextButton = new JButton("Następny");
 		nextButton.setBounds(455, 25, 120, 35);
 
-		//addButton = new JButton("Dodaj");
-		//addButton.setBounds(630, 1030, 100, 35);
-
+		currentMonth = calendar.get(Calendar.MONTH);
 		monthNameLabel = new JLabel(months[currentMonth]);
 		monthNameLabel.setBackground(Color.WHITE);
 		monthNameLabel.setBounds(275, 25, 200, 35);
@@ -78,66 +80,74 @@ public class CalendarView extends View implements ActionListener, Controller {
 		dayNamesPanel.add(new JLabel("Sob", SwingConstants.CENTER));
 		dayNamesPanel.add(new JLabel("Ndz", SwingConstants.CENTER));
 
-		panelHolder = new JButton[6][7];		
+		panelHolder = new ColorButton[6][7];		
 
 		days = new JPanel();
 		days.setLayout(new GridLayout(6, 7));
 		days.setBounds(25, 115, 550, 340);
 		days.setBackground(Color.lightGray);
 		
-		// Sprawdzenie jakim dniem tygodnia jest pierwszy i ostatni dzień miesiąca
-		gc.set(Calendar.DAY_OF_MONTH, 0);
-		int firstDay = gc.get(GregorianCalendar.DAY_OF_WEEK);
-		if (firstDay == 0) firstDay = 7;
-		int lastDay = firstDay + gc.getActualMaximum(Calendar.DAY_OF_MONTH);
-		//**************************************************************
+		//*****GregorianCalendar***************
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		int firstDay = calendar.get(Calendar.DAY_OF_WEEK);
+		firstDay = firstDay - 2;
+		if(firstDay == -1) firstDay = 6;
+		int lastDay = firstDay + calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		//*************************************
 		
 		int k = 1; // Licznik aktualnie wypisanych dni w miesiacu
 		
 		for (int i = 0; i < 42; i++) {
 			int row = i / 7;
 			int column = i % 7;
-			if (i < firstDay-1 || i > lastDay-1) {
-				panelHolder[row][column] = new JButton(" ");
-				panelHolder[row][column].setVisible(true);
+			if (i < firstDay || i >= lastDay) {
+				panelHolder[row][column] = new ColorButton(" ");
+				panelHolder[row][column].setVisible(false);
 				panelHolder[row][column].setEnabled(false);
 			}
 			else {
-				panelHolder[row][column] = new JButton(Integer.toString(k));
+				Utilities u = new Utilities();
+				panelHolder[row][column] = new ColorButton(Integer.toString(k));
+				calendar.set(Calendar.DAY_OF_MONTH, k);
+				calendar.set(Calendar.HOUR_OF_DAY, calendar.getActualMinimum(Calendar.HOUR_OF_DAY));
+				calendar.set(Calendar.MINUTE, calendar.getActualMinimum(Calendar.MINUTE));
+				calendar.set(Calendar.SECOND, calendar.getActualMinimum(Calendar.SECOND));
+				Date startDate = calendar.getTime();
+				System.out.println(startDate);
+				
+				calendar.set(Calendar.HOUR_OF_DAY, calendar.getActualMaximum(Calendar.HOUR_OF_DAY));
+				calendar.set(Calendar.MINUTE, calendar.getActualMaximum(Calendar.MINUTE));
+				calendar.set(Calendar.SECOND, calendar.getActualMaximum(Calendar.SECOND));
+				Date endDate = calendar.getTime();
+				
+				
+				/*ArrayList<Event> events = u.getAllDayEvents(startDate, endDate);
+				for (Event event: events) {
+					panelHolder[row][column].addEvent();
+				}*/
 				k++;
 			}
-			MyMouseListener myMouseListener = new MyMouseListener(days, panelHolder, row, column);
+			MyMouseListener myMouseListener = new MyMouseListener(days, panelHolder, row, column, calendar);
 			panelHolder[row][column].addMouseListener(myMouseListener);
 			days.add(panelHolder[row][column]);
-			/*
-			 * Tutaj z kolei powinniśmy wykorzystać podobną sztuczkę, a
-			 * mianowicie wyszukać czym jest pierwszy dzień miesiąca (pon, wt,
-			 * itp.) i na tej podstawie deaktywować wszystkie zbędne przyciski.
-			 * Przykładowe użycie GregorianCalendar:
-			 * 
-			 * gc.set(Calendar.DAY_OF_MONTH, 0);
-			 * gc.get(GregorianCalendar.DAY_OF_WEEK); UWAGA! Niedziela jest
-			 * zerem, podobnie jak pierwszy dzień miesiąca!
-			 * 
-			 */
 
 		}
 
+		
 		previousButton.setActionCommand("previous");
 		nextButton.setActionCommand("next");
-		//addButton.setActionCommand("addevent");
 
-		//previousButton.addActionListener(this);
-		//nextButton.addActionListener(this);
-		//addButton.addActionListener(this);
+		previousButton.addActionListener(this);
+		nextButton.addActionListener(this);
 
 		add(previousButton);
 		add(monthNameLabel);
 		add(nextButton);
 		add(dayNamesPanel);
 		add(days);
-		//add(addButton);
-		// add(windowPanel);
+		
+		panelHolder[0][5].addEvent(); // <---- Dodałem, żeby pokazywało, że koloruje
+
 	}
 
 	@Override
@@ -155,9 +165,6 @@ public class CalendarView extends View implements ActionListener, Controller {
 		case "next":
 			nextMonth();
 			break;
-		/*case "addevent":
-			addEvent();
-			break;*/
 		default:
 			break;
 		}
@@ -178,15 +185,16 @@ public class CalendarView extends View implements ActionListener, Controller {
 		if (currentMonth < 0) {
 			currentMonth += 12;
 		}
-		monthNameLabel.setName((months[currentMonth]));
-		// TODO Aktualizacja wyświetlenia
+		calendar.set(Calendar.MONTH, currentMonth);
+		if (currentMonth == 11) calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) - 1);
+		createGUI();
 	}
 
 	private void nextMonth() {
 		currentMonth = (currentMonth + 1) % 12;
-		monthNameLabel.setName((months[currentMonth]));
-		// TODO Aktualizacja wyświetlenia
+		calendar.set(Calendar.MONTH, currentMonth);
+		if (currentMonth == 0) calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
+		createGUI();
 	}
 
 }
-

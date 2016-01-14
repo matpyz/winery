@@ -15,7 +15,9 @@ import winery.documents.ExciseTaxViewController;
 import winery.documents.PredictingLitersOfWineViewContoller;
 // Widoki
 import winery.documents.SelectGenerateDocumentViewController;
+import winery.documents.WineAddViewController;
 import winery.guardian.Guardian;
+import winery.rss.RSSController;
 import winery.accounts.AccountsController;
 import winery.calendar.CalendarView;
 
@@ -40,8 +42,10 @@ public class Program {
 	 *            argumenty wywołania, ignorowane
 	 */
 	public static void main(String[] args) {
+		ConfigFrame.loadConfig();
 		new Program(new AccountsController(), new CalendarView(), new SelectGenerateDocumentViewController(),
-				new PredictingLitersOfWineViewContoller(), new EnterDocumentViewController(), new ExciseTaxViewController());
+				new PredictingLitersOfWineViewContoller(), new EnterDocumentViewController(), new ExciseTaxViewController(), 
+				new RSSController(), new WineAddViewController() );
 	}
 
 	private JFrame frame_;

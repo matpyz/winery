@@ -15,7 +15,6 @@ public class ExciseTaxModel extends Model {
 	
 	public void firstUse() {
 		Excise exc = DBManager.getExciseById(id);
-		System.out.println("Konstruktor");
 		/*
 		 * będę używał tylko id = 1
 		 * Jeśli exc = DBManager.getExciseById(0) == null, to znaczy, że pierwszy raz 
@@ -44,7 +43,6 @@ public class ExciseTaxModel extends Model {
 	}
 
 	public void setAmount(int a) {
-		System.out.println("setter: " + a);
 		this.amount = a;
 		change();
 	}

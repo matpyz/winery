@@ -1,8 +1,6 @@
 package winery.accounts;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import winery.model.Model;
 
@@ -12,18 +10,8 @@ import winery.model.Model;
  */
 public class AccountsModel extends Model {
 
-	private HashMap<String, Integer> userMap = new HashMap<>();
 	private ArrayList<String> accountList;
 	private ArrayList<String> userData;
-
-	public AccountsModel() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public ResultSet accessDB(String query) {
-		// TODO DB access
-		return null;
-	}
 
 	public ArrayList<String> getAccountList() {
 		return accountList;

@@ -89,11 +89,24 @@ public class DBManager {
 	 * @return Zwraca obiekty wszystkich użytkowników w bazie
 	 */
 	public static HashMap<Integer, User> getUsers() {
-		if (DBManager.users == null) {
+		
+		String query = "SELECT COUNT(*) as `n` FROM `user`";
+		ResultSet rs = dbManager.selectQuery(query);
+		int usersQuant = -1;
+		try {
+			if (rs.next()) {
+				usersQuant = rs.getInt("n");
+			}
+			conn.close();
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+		
+		if (DBManager.users == null || usersQuant != DBManager.users.size()) {
 			HashMap<Integer, User> users = new HashMap<Integer, User>();
 			DBManager.users = new HashMap<Integer, User>();
-			String query = "SELECT `user`.`id`, `login`, `user`.`name`, `surname`, `email`, `groupId`, `payment`, `group`.`name` as `groupName` FROM `user`, `user2group`, `group` WHERE `user`.`id`=`user2group`.`userId` AND `user2group`.`groupId`=`group`.`id`";
-			ResultSet rs = dbManager.selectQuery(query);
+			query = "SELECT `user`.`id`, `login`, `user`.`name`, `surname`, `email`, `groupId`, `payment`, `group`.`name` as `groupName` FROM `user`, `user2group`, `group` WHERE `user`.`id`=`user2group`.`userId` AND `user2group`.`groupId`=`group`.`id`";
+			rs = dbManager.selectQuery(query);
 			try {
 				while (rs.next()) {
 					User user = new User(rs.getInt("id"), rs.getString("login"), rs.getString("name"),
@@ -132,7 +145,12 @@ public class DBManager {
 						rs.getString("email"), rs.getInt("groupId"), rs.getString("groupName"), rs.getInt("payment"));
 			}
 			if (DBManager.users != null) {
-				DBManager.users.replace(userId, user);
+				if ( DBManager.users.containsKey(userId) ) {
+					DBManager.users.replace(userId, user);
+				}
+				else {
+					DBManager.users.put(userId, user);
+				}
 			}
 			conn.close();
 		} catch (SQLException e) {
@@ -205,6 +223,8 @@ public class DBManager {
 	 *            - wysokość wypłaty użytkownika
 	 */
 	public static void addUser(String login, String password, String mail, String name, String surname, int groupId, int payment) {
+		
+		int userId = 1;
 		String query = "INSERT INTO `user` (`name`, `email`, `password`, `login`, `surname`, `payment`) VALUES ('" + name + "', '"
 				+ mail + "', '" + password + "', '" + login + "', '" + surname + "', '" + payment + "');";
 		try {
@@ -225,7 +245,8 @@ public class DBManager {
 					User user = new User(rs.getInt("id"), rs.getString("login"), rs.getString("name"),
 							rs.getString("surname"), rs.getString("email"), rs.getInt("groupId"),
 							rs.getString("groupName"), rs.getInt("payment"));
-					DBManager.users.put(rs.getInt("id"), user);
+					userId = rs.getInt("id");
+					DBManager.users.put(userId, user);
 
 				}
 			}
@@ -233,6 +254,7 @@ public class DBManager {
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
+		DBManager.getUserById(userId);
 	}
 
 	/**
@@ -257,8 +279,10 @@ public class DBManager {
 					rs = dbManager.selectQuery(query);
 					int id = rs.getInt("id");
 					conn.close();
-					if (userId == id)
+					if (userId == id) {
+						DBManager.getUserById(userId);
 						return true;
+					}
 					else
 						return false;
 				} else {
@@ -328,7 +352,7 @@ public class DBManager {
 				query += ", ";
 			query += "`surname` = '" + surname + "'";
 		}
-		if (payment == 0) {
+		if (payment > 0) {
 			if (!query.isEmpty())
 				query += ", ";
 			query += "`payment` = '" + payment + "'";
@@ -351,8 +375,11 @@ public class DBManager {
 				return false;
 			}
 		}
-		if (isUpdateAllWithoutGroup && isUpdateGroup)
+		if (isUpdateAllWithoutGroup && isUpdateGroup) {
+			
+			DBManager.getUserById(userId);
 			return true;
+		}
 		else
 			return false;
 	}
@@ -449,6 +476,7 @@ public class DBManager {
 		if (DBManager.documents == null) {
 			String query = "SELECT * FROM `documents`";
 			ResultSet rs = dbManager.selectQuery(query);
+			documents = new HashMap<Integer, Document>();
 			try {
 				while (rs.next()) {
 					Document document = new Document(rs.getInt("id"), rs.getInt("creatorId"), rs.getString("name"),
@@ -1002,12 +1030,11 @@ public class DBManager {
 	}
 
 	public static Blob loadBlob(String path) throws SQLException, IOException {
-		
 		dbManager.createConnection();
 		Blob document = conn.createBlob();
-		int bufferSize = 4096, got;
+		int got, bufferSize = 4096;
 		byte[] buffer = new byte[bufferSize];
-		try (OutputStream out = document.setBinaryStream(0); FileInputStream in = new FileInputStream(path)) {
+		try (OutputStream out = document.setBinaryStream(1); FileInputStream in = new FileInputStream(path)) {
 			while ((got = in.read(buffer)) != -1) {
 				out.write(buffer, 0, got);
 			}
@@ -1053,6 +1080,22 @@ public class DBManager {
 			}
 		}
 		return DBManager.invoices;
+	}
+	
+	public static int getLastInvoiceId() {
+		String query = "SELECT id FROM `invoice` ORDER BY id DESC LIMIT 1";
+		int id = 0;
+		
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			if (rs.next()) {
+				id = rs.getInt("id");
+			}
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return id;
 	}
 	
 	/**
@@ -1341,7 +1384,7 @@ public class DBManager {
 		try {
 			if (rs.next()) {
 				wine = new Wine(rs.getInt("id"), rs.getString("name"), rs.getString("grapes"), rs.getString("color"),
-						rs.getInt("produced"), rs.getInt("sold"), rs.getInt("baseprice"), rs.getInt("productionCost"), rs.getInt("year"));
+						rs.getInt("produced"), rs.getInt("sold"), rs.getInt("baseprice"), rs.getInt("productionCost"), rs.getInt("year"), rs.getInt("protectedOrigin"));
 				conn.close();
 			}
 			conn.close();
@@ -1349,6 +1392,26 @@ public class DBManager {
 			System.out.println(e.getMessage());
 		}
 		return wine;
+	}
+	
+	public static HashMap<Integer, Wine> getWineByCororAndType(String color, int type) {
+		
+		HashMap<Integer, Wine> wines = new HashMap<Integer, Wine>();
+		String query = "SELECT * FROM `wine` WHERE `color`='"+color+"' AND `protectedOrigin`='"+type+"'";
+		
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			while (rs.next()) {
+				Wine wine = new Wine(rs.getInt("id"), rs.getString("name"), rs.getString("grapes"), rs.getString("color"),
+						rs.getInt("produced"), rs.getInt("sold"), rs.getInt("baseprice"), rs.getInt("productionCost"), rs.getInt("year"), rs.getInt("protectedOrigin"));
+				wines.put(rs.getInt("id"), wine);
+				conn.close();
+			}
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return wines;
 	}
 	
 	/**
@@ -1372,12 +1435,12 @@ public class DBManager {
 	 * 					- rok produkcji
 	 * @return
 	 */
-	public static Wine addWine(String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost, int year) {
+	public static Wine addWine(String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost, int year, int protectedOrigin) {
 		
 		Wine wine = null;
 		
-		String query = "INSERT INTO `wine` (`name`, `grapes`, `color`, `produced`, `sold`, `baseprice`, `productionCost`, `year`) VALUES ('" + name + "', '"
-				+ grapes + "', '" + color + "', '" + produced + "', '" + sold + "', '" + baseprice + "', '" + productionCost + "', '" + year + "');";
+		String query = "INSERT INTO `wine` (`name`, `grapes`, `color`, `produced`, `sold`, `baseprice`, `productionCost`, `year`, `protectedOrigin`) VALUES ('" + name + "', '"
+				+ grapes + "', '" + color + "', '" + produced + "', '" + sold + "', '" + baseprice + "', '" + productionCost + "', '" + year + "', '"+ protectedOrigin +"');";
 		
 		try {
 			int result = dbManager.otherQuery(query);
@@ -1388,7 +1451,7 @@ public class DBManager {
 				if (rs.next()) {
 					int id = rs.getInt("id");
 					wine = new Wine(id, name, grapes, color, produced,
-							sold, baseprice, productionCost, year);
+							sold, baseprice, productionCost, year, protectedOrigin);
 				}
 				conn.close();
 			}
@@ -1423,7 +1486,7 @@ public class DBManager {
 	 * @return
 	 * 				- true jeśli operacja się powiodła, oraz false w przeciwnym wypadku
 	 */
-	public static boolean updateDataForWineById(int id, String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost, int year ) {
+	public static boolean updateDataForWineById(int id, String name, String grapes, String color, int produced, int sold, int baseprice, int productionCost, int year, int protectedOrigin ) {
 		
 		String query = "";
 		
@@ -1464,6 +1527,11 @@ public class DBManager {
 			if (!query.isEmpty())
 				query += ", ";
 			query += "`year`='" + year + "'";
+		}
+		if ( protectedOrigin != 0 ) {
+			if (!query.isEmpty())
+				query += ", ";
+			query += "`protectedOrigin`='" + protectedOrigin + "'";
 		}
 		if (!query.isEmpty()) {
 			query = "UPDATE `wine` SET " + query + "WHERE `id`='" + id + "'";

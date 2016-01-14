@@ -29,7 +29,7 @@ public class ConfigCompanyInfoPanel extends JPanel {
 	private String getCompanyName() {
 		return tfCompanyName.getText();
 	}
-
+	
 	public String getPersonalData() {
 		String companyName = tfCompanyName.getText();
 		String cityName = tfCity.getText();
@@ -192,4 +192,41 @@ public class ConfigCompanyInfoPanel extends JPanel {
 		setLayout(groupLayout);
 
 	}
+	
+	String getTfCompanyName() {
+		return tfCompanyName.getText();
+	}
+
+	String getTfCity() {
+		return tfCity.getText();
+	}
+
+	String getTfPostalCode() {
+		return tfPostalCode.getText();
+	}
+
+	String getTfStreet() {
+		return tfStreet.getText();
+	}
+
+	String getTfBuildingNo() {
+		return tfBuildingNo.getText();
+	}
+
+	String getTfPhoneNo() {
+		return tfPhoneNo.getText();
+	}
+
+	String getTfNip() {
+		return tfNip.getText();
+	}
+
+	String getTfRegon() {
+		return tfRegon.getText();
+	}
+
+	String getTfEvidenceNo() {
+		return tfEvidenceNo.getText();
+	}
+
 }

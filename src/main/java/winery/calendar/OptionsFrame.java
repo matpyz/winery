@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
+
+import dbapi.Event;
 
 
 public class OptionsFrame extends JFrame implements ActionListener {
@@ -58,13 +60,13 @@ public class OptionsFrame extends JFrame implements ActionListener {
 				calendar.set(Calendar.HOUR_OF_DAY, i);
 				calendar.set(Calendar.MINUTE, calendar.getActualMinimum(Calendar.MINUTE));
 				calendar.set(Calendar.SECOND, calendar.getActualMinimum(Calendar.SECOND));
-				Date startDate = calendar.getTime();
+				Date startDate = new java.sql.Date(calendar.getTime().getTime());
 				System.out.println(startDate);
 				
 				calendar.set(Calendar.HOUR_OF_DAY, i+1);
 				calendar.set(Calendar.MINUTE, calendar.getActualMinimum(Calendar.MINUTE));
 				calendar.set(Calendar.SECOND, calendar.getActualMinimum(Calendar.SECOND));
-				Date endDate = calendar.getTime();
+				Date endDate =  new java.sql.Date(calendar.getTime().getTime());
 				
 				Utilities u = new Utilities();
 				ArrayList<Event> events = u.getAllDayEvents(startDate, endDate);

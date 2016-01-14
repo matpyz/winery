@@ -43,7 +43,9 @@ public class ConfigFrame extends JFrame implements ActionListener {
 	public ConfigFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 550, 350);
-		setContentPane(pane[i]);
+		JPanel contentPane = new JPanel();
+		contentPane.add(pane[i]);
+		setContentPane(contentPane);
 	}
 
 	@Override
@@ -54,10 +56,14 @@ public class ConfigFrame extends JFrame implements ActionListener {
 			//String personal = ((ConfigCompanyInfoPanel)pane[0]).getPersonalData();
 			//
 			//writeToFile(personal, "aaaa");
-			setContentPane(pane[++i]);
+			//setContentPane(pane[++i]);
+			getContentPane().remove(pane[i]);
+			getContentPane().add(pane[++i]);
+			repaint();
 			break;
 		case "Wstecz":
 			setContentPane(pane[--i]);
+			repaint();
 			break;
 		case "Koniec":
 			// FIXME Przepisać dane do pliku

@@ -44,14 +44,14 @@ public class ConfigFieldPanel extends JPanel{
 		lblSektor.setBounds(40, 20, 100, 20);
 		add(lblSektor);
 		
-		JLabel lblIloKolumn = new JLabel("Ilo�� kolumn");
+		JLabel lblIloKolumn = new JLabel("Liczba kolumn");
 		lblIloKolumn.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblIloKolumn.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIloKolumn.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblIloKolumn.setBounds(150, 20, 100, 20);
 		add(lblIloKolumn);
 		
-		JLabel lblIlo = new JLabel("Ilo�� rz�d�w");
+		JLabel lblIlo = new JLabel("Liczba rzędów");
 		lblIlo.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblIlo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIlo.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -60,10 +60,12 @@ public class ConfigFieldPanel extends JPanel{
 		
 		btnWstecz = new JButton("Wstecz");
 		btnWstecz.setBounds(40, 335, 89, 23);
+		btnWstecz.addActionListener(actionListener);
 		add(btnWstecz);
 		
 		btnKoniec = new JButton("Koniec");
 		btnKoniec.setBounds(386, 335, 89, 23);
+		btnKoniec.addActionListener(actionListener);
 		add(btnKoniec);
 		
 		panel = new JPanel();

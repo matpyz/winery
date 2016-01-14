@@ -375,8 +375,11 @@ public class DBManager {
 				return false;
 			}
 		}
-		if (isUpdateAllWithoutGroup && isUpdateGroup)
+		if (isUpdateAllWithoutGroup && isUpdateGroup) {
+			
+			DBManager.getUserById(userId);
 			return true;
+		}
 		else
 			return false;
 	}

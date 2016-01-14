@@ -1,43 +1,46 @@
-package winery.calendar;
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Calendar;
 import java.util.Timer;
 
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 
 public class MyMouseListener implements MouseListener {
-
+	
 	private OptionsFrame options;
 	private Dimension screenSize;
 
 	private JPanel days;
-	private JButton[][] panelHolder;
+	private ColorButton[][] panelHolder;
 	private int row;
 	private int column;
 	private int x;
 	private int y;
 	
-	private Timer timer;
-	//private ShowInformation showInformation;
+	public Calendar calendar;
 	
-	public MyMouseListener(JPanel days, JButton[][] panelHolder, int row, int column) {
+	private Timer timer;
+	private ShowInformation showInformation;
+	
+	public MyMouseListener(JPanel days, ColorButton[][] panelHolder, int row, int column, Calendar calendar) {
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.days = days;
 		this.panelHolder = panelHolder;
 		this.row = row;
 		this.column = column;
 		
-		//showInformation = new ShowInformation(row, column);
+		this.calendar = calendar;
+		
+		
+		showInformation = new ShowInformation(row, column);
 		timer = new Timer();
 	}
-
+	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		System.out.println("Wciśnięto przycisk: " + row + " x " + column);
@@ -49,22 +52,19 @@ public class MyMouseListener implements MouseListener {
 		y = days.getLocationOnScreen().y + (row*58);
 		if (y + 300 >= screenSize.getHeight()) y = (int) (screenSize.getHeight() - 330);
 		System.out.println(x + " - " + y);
-		options = new OptionsFrame(x, y);		
+		
+		int numberOfTheDay = Integer.parseInt(panelHolder[row][column].getText());
+		options = new OptionsFrame(x, y, numberOfTheDay, calendar);		
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		//Timer timer = new Timer();
-		//timer.schedule(showInformation, 700);
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		//showInformation.cancel();
-		//timer.cancel();
-		//timer.purge();
 	}
 
 	@Override
@@ -75,7 +75,6 @@ public class MyMouseListener implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		//timer.cancel();
 	}
 
 }

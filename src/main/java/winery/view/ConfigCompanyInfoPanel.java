@@ -2,6 +2,7 @@ package winery.view;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -47,11 +48,12 @@ public class ConfigCompanyInfoPanel extends JPanel {
 				 nip.equals("") || regon.equals("") || evidenceNo.equals("");
 		if (incorrectData) {
 			System.out.println("Niepoprawne dane");
-			//TODO: wyskakujące okienko
+			JOptionPane.showMessageDialog((Component) null, "Wprowadzono błędne dane!.", "Błąd",
+			JOptionPane.ERROR_MESSAGE);
 		}
 		else {
 			String s = "CompanyName " + companyName + "\nCity " + cityName +
-					"\nPostalCode " + postalCode + "\nStreet: " + streetName + 
+					"\nPostalCode " + postalCode + "\nStreet " + streetName + 
 					"\nBuildingNo " + buildingNo + "\nPhoneNo " + phoneNo + 
 					"\nNip " + nip + "\nRegon " + regon + 
 					"\nEvidenceNo " + evidenceNo;

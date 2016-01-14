@@ -25,7 +25,40 @@ public class ConfigCompanyInfoPanel extends JPanel {
 	private JTextField tfNip;
 	private JTextField tfRegon;
 	private JTextField tfEvidenceNo;
+	
+	private String getCompanyName() {
+		return tfCompanyName.getText();
+	}
 
+	public String getPersonalData() {
+		String companyName = tfCompanyName.getText();
+		String cityName = tfCity.getText();
+		String postalCode = tfPostalCode.getText();
+		String streetName = tfStreet.getText();
+		String buildingNo = tfBuildingNo.getText();
+		String phoneNo = tfPhoneNo.getText();
+		String nip = tfNip.getText();
+		String regon = tfRegon.getText();
+		String evidenceNo = tfEvidenceNo.getText();
+		
+		boolean incorrectData = companyName.equals("") || cityName.equals("") ||
+				 postalCode.equals("") || streetName.equals("") || 
+				 buildingNo.equals("") || phoneNo.equals("") ||
+				 nip.equals("") || regon.equals("") || evidenceNo.equals("");
+		if (incorrectData) {
+			System.out.println("Niepoprawne dane");
+			//TODO: wyskakujące okienko
+		}
+		else {
+			String s = "CompanyName " + companyName + "\nCity " + cityName +
+					"\nPostalCode " + postalCode + "\nStreet: " + streetName + 
+					"\nBuildingNo " + buildingNo + "\nPhoneNo " + phoneNo + 
+					"\nNip " + nip + "\nRegon " + regon + 
+					"\nEvidenceNo " + evidenceNo;
+			return s;
+		}
+		return null;
+	}
 	/**
 	 * Create the panel.
 	 * @param listener 

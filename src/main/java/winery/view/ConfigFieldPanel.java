@@ -25,7 +25,6 @@ public class ConfigFieldPanel extends JPanel{
 	private JPanel panel;
 	private JScrollPane scrollPane;
 	private JButton btnDodaj;
-	private ActionListener actListener;
 	
 	JButton btnWstecz;
 	JButton btnKoniec;
@@ -35,7 +34,6 @@ public class ConfigFieldPanel extends JPanel{
 	ArrayList<Integer> rows = new ArrayList<Integer>();
 	
 	public ConfigFieldPanel(ActionListener actionListener) {
-		this.actListener = actionListener;
 		
 		setLayout(null);
 		

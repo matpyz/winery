@@ -39,7 +39,6 @@ public class ExciseTaxViewController extends View implements Controller, ItemLis
 	private static final long serialVersionUID = 1L;
 
 	public ExciseTaxViewController() {
-		System.out.println("Tworze gui");
 		createGui();
 
 		/*
@@ -64,7 +63,6 @@ public class ExciseTaxViewController extends View implements Controller, ItemLis
 
 	@Override
 	protected void update(Model model) {
-		System.out.println("Update");
 		ExciseTaxModel model1 = (ExciseTaxModel) model;
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

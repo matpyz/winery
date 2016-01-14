@@ -1,4 +1,4 @@
-//package winery.calendar;
+package winery.calendar;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -20,7 +20,7 @@ import winery.model.Model;
 import winery.view.Controller;
 import winery.view.View;
 
-public class CalendarView extends JPanel implements ActionListener/*, Controller*/ {
+public class CalendarView extends View implements ActionListener, Controller {
 
 	private JButton previousButton;
 	private JButton nextButton;

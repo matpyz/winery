@@ -1,7 +1,15 @@
 package winery.documents;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import com.itextpdf.text.Element;
 import com.itextpdf.text.pdf.PdfPTable;
+
+import dbapi.DBManager;
+import dbapi.Seed;
+import dbapi.Wine;
+import winery.documents.DocumentBasic.Color;
 
 /**
  * Klasa umożliwiająca generowanie sprecyzowanego dokumentu, dziedzicząca
@@ -67,4 +75,30 @@ public class Document2 extends DocumentBasic {
 		return table;
 	}
 
+	public String[][] getSpecifyTable() {
+		String[][] data = new String[size][size2];
+		
+		data=this.getTable();
+		for (int i = 0; i < size; i++) {
+		
+				data[i][0] = Integer.toString(addValueFromHashMap( i));
+		}
+		return data;
+		
+		
+	}
+	
+	public int addValueFromHashMap( int type) {
+		int sum=0;
+		HashMap<Integer, Seed>  hash = DBManager.getSeedsByType(type);
+		for ( Entry<Integer, Seed> entry : hash.entrySet()) {
+		  
+		    Seed seed= entry.getValue();
+		    sum=sum+ seed.getQuantity();
+		    // do something with key and/or tab
+		}
+		
+		return (int) (sum*  (3.5 / 2.0) * 0.001);
+	}
+	
 }

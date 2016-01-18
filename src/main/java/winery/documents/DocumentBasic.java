@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -17,6 +19,9 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import dbapi.DBManager;
+import dbapi.Wine;
 
 /**
  * Klasa umożliwiająca generowanie szkieletu treści dowolnego dokumentu
@@ -316,4 +321,72 @@ public class DocumentBasic {
 		table.addCell(cell);
 
 	}
+	
+	
+	public String[][] getSpecifyTable() {
+		String[][] data = new String[size][size2];
+		for (int i = 0; i < size; i++) {
+			for (int k = 0; k < size2; k++)
+				data[i][k] = "";
+		}
+		return data;
+	
+		
+	}
+	
+	
+	public String[][] getTable() {
+	
+		
+		String[][] data = new String[size][size2];
+		for (int i = 0; i < size; i++) {
+			for (int k = 0; k < size2; k++)
+				data[i][k] = "0";
+		}	
+		
+		
+		return data;
+		
+	}
+	
+	
+	
+	
+	
+	public int addValueFromHashMap(String color, int type) {
+		int sum=0;
+		HashMap<Integer, Wine>  hash = DBManager.getWineByCororAndType(color, type);
+		for ( Entry<Integer, Wine> entry : hash.entrySet()) {
+		  
+		    Wine Wine= entry.getValue();
+		    sum=sum+ Wine.getProduced();
+		    // do something with key and/or tab
+		}
+		
+		return (int) (sum*0.75);
+	}
+	
+	public enum Color {
+	    CZERWONE("czerwone"), BIAŁE("białe"), RÓŻOWE("różowe")
+	    ;
+	    private final String value;
+
+	    private Color(final String value) {
+	        this.value = value;
+	    }
+
+	    public String getValue() {
+	        return value;
+	    }
+
+	    @Override
+	    public String toString() {
+	        // TODO Auto-generated method stub
+	        return getValue();
+	    }
+	}
+	
+	
+	
+	
 }

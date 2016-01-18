@@ -1,5 +1,7 @@
 package winery.documents;
 
+import winery.documents.DocumentBasic.Color;
+
 /**
  * Klasa umożliwiająca generowanie sprecyzowanego dokumentu, dziedzicząca
  * po @see Dokument.
@@ -30,6 +32,19 @@ public class Document3 extends Document1 {
 		date = "31 sierpnia";
 		pathFile = "hello.pdf";
 
+	}
+	
+	
+	public String[][] getSpecifyTable() {
+		String[][] data = new String[size][size2];
+		data=this.getTable();
+		for (int i = 0; i < size; i++) {
+		
+				data[i][0] = Integer.toString(addValueFromHashMap(Color.RÓŻOWE.toString(), i)) + Integer.toString(addValueFromHashMap(Color.BIAŁE.toString(), i)) + Integer.toString(addValueFromHashMap(Color.CZERWONE.toString(), i));
+		}
+		return data;
+		
+		
 	}
 
 }

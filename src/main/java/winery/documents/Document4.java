@@ -25,10 +25,10 @@ public class Document4 extends DocumentBasic {
 		size = 13;
 		vertical = new String[13];
 		size2 = 5;
-		horizontal[0] = " Kategorie produktów ";
-		horizontal[1] = "Czerwone albo różowee";
+		horizontal[0] = " Kategorie produktów: ";
+		horizontal[1] = "Czerw-one albo różowe";
 		horizontal[2] = "Białe";
-		horizontal[3] = "Zapasy ogłem (2+3) ";
+		horizontal[3] = "Zapasy ogółem ";
 		horizontal[4] = " Pochodzace z Rzeczypospolitej Polskiej";
 		horizontal[5] = "Pochodzące z poza Rzeczypospolitej Polskiej";
 		vertical[0] = " Wina pochodzące z Unii Europejskiej z Chronionę Nazwą Pochodzenia (ChNP)   ";
@@ -64,105 +64,150 @@ public class Document4 extends DocumentBasic {
 	 */
 
 	public PdfPTable addtoTableNew(PdfPTable table, String[][] inData) {
-		insertCell(table, horizontal[0], Element.ALIGN_CENTER, 5, f);
+		insertCell(table, horizontal[0], Element.ALIGN_CENTER, 3, f);
 		insertCell(table, horizontal[1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, horizontal[2], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, horizontal[3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, horizontal[4], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, horizontal[5], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, horizontal[4], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, horizontal[5], Element.ALIGN_CENTER, 2, f);
 
-		insertCell(table, vertical[0], Element.ALIGN_LEFT, 5, f);
+		insertCell(table, vertical[0], Element.ALIGN_LEFT, 3, f);
 		insertCell(table, inData[0][0], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[0][1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[0][2], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[0][3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[0][4], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, inData[0][3], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, inData[0][4], Element.ALIGN_CENTER, 2, f);
 
-		insertCell(table, vertical[1], Element.ALIGN_LEFT, 5, f);
+		insertCell(table, vertical[1], Element.ALIGN_LEFT, 3, f);
 		insertCell(table, inData[1][0], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[1][1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[1][2], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[1][3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[1][4], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, inData[1][3], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, inData[1][4], Element.ALIGN_CENTER, 2, f);
 
-		insertCell(table, vertical[2], Element.ALIGN_LEFT, 5, f);
+		insertCell(table, vertical[2], Element.ALIGN_LEFT, 3, f);
 		insertCell(table, inData[2][0], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[2][1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[2][2], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[2][3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[2][4], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, inData[2][3], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, inData[2][4], Element.ALIGN_CENTER, 2, f);
 
-		insertCell(table, vertical[3], Element.ALIGN_LEFT, 5, f);
+		insertCell(table, vertical[3], Element.ALIGN_LEFT, 3, f);
 		insertCell(table, inData[3][0], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[3][1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[3][2], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[3][3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[3][4], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, inData[3][3], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, inData[3][4], Element.ALIGN_CENTER, 2, f);
 
-		insertCell(table, vertical[4], Element.ALIGN_LEFT, 5, f);
+		insertCell(table, vertical[4], Element.ALIGN_LEFT, 3, f);
 		insertCell(table, inData[4][0], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[4][1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[4][2], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[4][3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[4][4], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, inData[4][3], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, inData[4][4], Element.ALIGN_CENTER, 2, f);
 
-		insertCell(table, vertical[5], Element.ALIGN_LEFT, 5, f);
+		insertCell(table, vertical[5], Element.ALIGN_LEFT, 3, f);
 		insertCell(table, inData[5][0], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[5][1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[5][2], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[5][3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[5][4], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, inData[5][3], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, inData[5][4], Element.ALIGN_CENTER, 2, f);
 
-		insertCell(table, vertical[6], Element.ALIGN_LEFT, 5, f);
+		insertCell(table, vertical[6], Element.ALIGN_LEFT, 3, f);
 		insertCell(table, inData[6][0], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[6][1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[6][2], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[6][3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[6][4], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, inData[6][3], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, inData[6][4], Element.ALIGN_CENTER, 2, f);
 
-		insertCell(table, vertical[7], Element.ALIGN_LEFT, 5, f);
+		insertCell(table, vertical[7], Element.ALIGN_LEFT, 3, f);
 		insertCell(table, inData[7][0], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[7][1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[7][2], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[7][3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[7][4], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, inData[7][3], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, inData[7][4], Element.ALIGN_CENTER, 2, f);
 
-		insertCell(table, vertical[8], Element.ALIGN_LEFT, 5, f);
+		insertCell(table, vertical[8], Element.ALIGN_LEFT, 3, f);
 		insertCell(table, inData[8][0], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[8][1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[8][2], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[8][3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[8][4], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, inData[8][3], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, inData[8][4], Element.ALIGN_CENTER, 2, f);
 
-		insertCell(table, vertical[9], Element.ALIGN_LEFT, 5, f);
+		insertCell(table, vertical[9], Element.ALIGN_LEFT, 3, f);
 		insertCell(table, inData[9][0], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[9][1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[9][2], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[9][3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[9][4], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, inData[9][3], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, inData[9][4], Element.ALIGN_CENTER, 2, f);
 
-		insertCell(table, vertical[10], Element.ALIGN_LEFT, 5, f);
+		insertCell(table, vertical[10], Element.ALIGN_LEFT, 3, f);
 		insertCell(table, inData[10][0], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[10][1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[10][2], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[10][3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[10][4], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, inData[10][3], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, inData[10][4], Element.ALIGN_CENTER, 2, f);
 
-		insertCell(table, vertical[11], Element.ALIGN_LEFT, 5, f);
+		insertCell(table, vertical[11], Element.ALIGN_LEFT, 3, f);
 		insertCell(table, inData[11][0], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[11][1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[11][2], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[11][3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[11][4], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, inData[11][3], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, inData[11][4], Element.ALIGN_CENTER, 2, f);
 
-		insertCell(table, vertical[12], Element.ALIGN_LEFT, 5, f);
+		insertCell(table, vertical[12], Element.ALIGN_LEFT, 3, f);
 		insertCell(table, inData[12][0], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[12][1], Element.ALIGN_CENTER, 1, f);
 		insertCell(table, inData[12][2], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[12][3], Element.ALIGN_CENTER, 1, f);
-		insertCell(table, inData[12][4], Element.ALIGN_CENTER, 1, f);
+		insertCell(table, inData[12][3], Element.ALIGN_CENTER, 2, f);
+		insertCell(table, inData[12][4], Element.ALIGN_CENTER, 2, f);
 
 		return table;
+	}
+	
+	
+	public String[][] getSpecifyTable() {
+		String[][] data = new String[size][size2];
+		data=this.getTable();
+		int s1=0,s2=0,s3=0,s4=0;
+		for (int i = 0; i < 5; i++) {
+		        int c,r,b;
+		        c=addValueFromHashMap(Color.CZERWONE.toString(), i);
+		        r=addValueFromHashMap(Color.RÓŻOWE.toString(), i);
+		        b=addValueFromHashMap(Color.BIAŁE.toString(), i);
+				data[i][1] = Integer.toString(b) ;
+				s1=s1+b;
+				data[i][0] = Integer.toString(r+ c);
+				s2=s1+r+c;
+				data[i][2] =Integer.toString(r+b+c);
+				s3=s1+r+c+b;
+				data[i][3] = Integer.toString(r+b+c);
+				s4=s1+r+c+b;
+				
+		
+		}
+		
+		data[6][1] =Integer.toString(s1) ;
+		
+		data[6][0] = Integer.toString(s2) ;
+		
+		data[6][2] =Integer.toString(s3) ;
+		
+		data[6][3] =Integer.toString(s4) ;
+		
+		
+      data[12][1] =Integer.toString(s1) ;
+
+		data[12][0] = Integer.toString(s2) ;
+		
+		data[12][2] =Integer.toString(s3) ;
+		
+		data[12][3] =Integer.toString(s4) ;
+	
+		
+		return data;
+		
+		
 	}
 
 }

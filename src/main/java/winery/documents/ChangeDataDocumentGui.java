@@ -99,7 +99,7 @@ public class ChangeDataDocumentGui extends JFrame {
 		// Linfo, Ltext Informacje.
 		Linfo = new JLabel(horizontal[0] + " " + vertical[itt], SwingConstants.CENTER);
 		Ltext = new JLabel(
-				"<html>Sprawdź poprawność poniższych danych,  jeśli trzeba popraw: <br> Uwaga wersje nie pobiera jeszcze z bazy danych",
+				"<html>Sprawdź poprawność poniższych danych,  jeśli trzeba popraw: ",
 				SwingConstants.CENTER);
 
 		Ppom = new JPanel();

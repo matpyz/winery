@@ -3,6 +3,8 @@ package winery.documents;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.pdf.PdfPTable;
 
+import winery.documents.DocumentBasic.Color;
+
 /**
  * Klasa umożliwiająca generowanie sprecyzowanego dokumentu, dziedzicząca
  * po @see Dokument.
@@ -73,6 +75,21 @@ public class Document1 extends DocumentBasic {
 		insertCell(table, inData[4][1], Element.ALIGN_CENTER, 3, f);
 
 		return table;
+	}
+	
+	
+	public String[][] getSpecifyTable() {
+		String[][] data = new String[size][size2];
+		data=this.getTable();
+		String [] colortable= {Color.BIAŁE.toString(),Color.CZERWONE.toString(), Color.RÓŻOWE.toString()};
+		for (int i = 0; i < size; i++) {
+			
+				data[i][0] = Integer.toString(addValueFromHashMap(colortable[1], i)+addValueFromHashMap(colortable[2], i));
+				data[i][1] = Integer.toString(addValueFromHashMap(colortable[0], i));
+		}
+		return data;
+		
+		
 	}
 
 }

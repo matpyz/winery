@@ -112,10 +112,7 @@ public class SelectGenerateDocumentModel extends PredictingLitersOfWineModel {
 
 	public void createTableData(String path, String firmInfo) {
 		String[][] data = new String[doc.size][doc.size2];
-		for (int i = 0; i < doc.size; i++) {
-			for (int k = 0; k < doc.size2; k++)
-				data[i][k] = "";
-		}
+		data=doc.getSpecifyTable();
 		if (doc.needtable == true) {
 
 			@SuppressWarnings("unused")

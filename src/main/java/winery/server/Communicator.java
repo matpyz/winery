@@ -3,6 +3,9 @@
  */
 package winery.server;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import dbapi.DBManager;
@@ -48,7 +51,7 @@ public class Communicator {
 		if (code.startsWith("PZK") || code.startsWith("PNP") || code.startsWith("PZS")) {
 			// report
 			updateDB(json.getUser_id(), json.getUser_pass(), json.getSector(), json.getRow(), json.getColumn(),
-					json.getOther(), json.getDate());
+					json.getCode(), json.getOther(), json.getDate());
 		} else if (code.equals("OTH0")) {
 			// update request
 			updateRequest(json.getUser_id(), json.getUser_pass(), json.getSector(), json.getRow(), json.getColumn(),
@@ -115,7 +118,8 @@ public class Communicator {
 	private void updateRequest(String user_id, String user_pass, String sector, String row, String column,
 			String other) {
 		if(login(user_id, user_pass) != null){
-			FieldCell field = searchForFieldCellId(sector, Integer.parseInt(column), Integer.parseInt(row));
+			FieldCell field = searchForFieldCell(sector, Integer.parseInt(column), Integer.parseInt(row));
+			FieldStatus stat = DBManager.getFieldStatusById(field.getCurrentStatusId());
 			if(field == null) {
 				returnObj.setOther("ERROR");
 				System.err.println("ERROR: Given field do not exists. "
@@ -124,20 +128,17 @@ public class Communicator {
 			}
 			if (other.equals("date")) {
 				// ask for date of last report for given place
-				// temp
-				returnObj.setOther("01/01/1970");
+				if(field.getFieldStatus() != null) {
+					returnObj.setOther(new SimpleDateFormat("dd-MM-yyyy").format(field.getDate()));
+				}
 				
 			} else if (other.equals("code")) {
 				// ask for code of last report for given place
-				// temp
-				FieldStatus stat = DBManager.getFieldStatusById(field.getCurrentStatusId());
 				returnObj.setOther(stat.getCode());
 				
 				
 			} else if (other.equals("all")) {
 				// ask for last report for given place
-				// temp
-				
 				String send = createBlob();
 				returnObj.setOther(send);
 			}
@@ -154,11 +155,31 @@ public class Communicator {
 	 * @param column
 	 * @param other
 	 * @param date
+	 * @param string 
 	 */
-	private void updateDB(String user_id, String user_pass, String sector, String row, String column, String other,
-			String date) {
-		// TODO Connect with DB for setting additional status
-		returnObj.setOther("OK");
+	private void updateDB(String user_id, String user_pass, String sector, String row, String column, String code,
+			String other, String date) {
+		if(login(user_id, user_pass) != null){
+			HashMap<Integer, FieldStatus> stats = DBManager.getAllFieldsStatuses();
+			int currentStatusId = 0;
+			for(int i : stats.keySet()) {
+				if(stats.get(i).getCode().equals(code)) {
+					currentStatusId = stats.get(i).getId();
+				}
+			}
+			try {
+				Date d = new SimpleDateFormat("dd-MM-yyyy").parse(date);
+				DBManager.addFieldCell(Integer.parseInt(row), Integer.parseInt(column), sector, currentStatusId, 
+						other, new java.sql.Date(d.getTime()));
+			} catch (ParseException e) {
+				e.printStackTrace();
+				returnObj.setOther("ERROR");
+				return;
+			}
+			
+			returnObj.setOther("OK");
+		}
+		returnObj.setOther("ERROR");
 	}
 	
 	/**
@@ -195,8 +216,7 @@ public class Communicator {
 	 * @param row
 	 * @return
 	 */
-	private FieldCell searchForFieldCellId(String sector, int column, int row) {
-		int id = -1;
+	private FieldCell searchForFieldCell(String sector, int column, int row) {
 		HashMap<Integer, FieldCell> fields = DBManager.getAllFieldsCells();
 		for(int i : fields.keySet()) {
 			FieldCell field = fields.get(i);

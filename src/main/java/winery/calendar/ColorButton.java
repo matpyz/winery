@@ -3,9 +3,12 @@ package winery.calendar;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JButton;
+
+import dbapi.Event;
 
 public class ColorButton extends JButton {
 
@@ -13,6 +16,7 @@ public class ColorButton extends JButton {
     private Color firstEvent;
     private Color secondEvent;
     private Color thirdEvent;
+    private ArrayList<Event> dayEvents;
 
     public ColorButton(String text) {
         setText(text);
@@ -45,7 +49,9 @@ public class ColorButton extends JButton {
         
     }
 
-    public void addEvent() {
+    public void addEvent(ArrayList<Event> dayEvents) {
+    	this.dayEvents = dayEvents;
+    	numberOfEvents = dayEvents.size();
     	if (numberOfEvents == 0) {
     		numberOfEvents++;
     		firstEvent = Color.BLUE;

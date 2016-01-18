@@ -4,24 +4,24 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import dbapi.Event;
 import winery.model.Model;
 import winery.view.Controller;
 import winery.view.View;
 
 public class CalendarView extends View implements ActionListener, Controller {
 
+	private static final long serialVersionUID = 1L;
 	private JButton previousButton;
 	private JButton nextButton;
 	private JButton addButton;
@@ -106,25 +106,22 @@ public class CalendarView extends View implements ActionListener, Controller {
 				panelHolder[row][column].setEnabled(false);
 			}
 			else {
-				Utilities u = new Utilities();
 				panelHolder[row][column] = new ColorButton(Integer.toString(k));
 				calendar.set(Calendar.DAY_OF_MONTH, k);
 				calendar.set(Calendar.HOUR_OF_DAY, calendar.getActualMinimum(Calendar.HOUR_OF_DAY));
 				calendar.set(Calendar.MINUTE, calendar.getActualMinimum(Calendar.MINUTE));
 				calendar.set(Calendar.SECOND, calendar.getActualMinimum(Calendar.SECOND));
-				Date startDate = calendar.getTime();
+				Date startDate = new java.sql.Date(calendar.getTime().getTime());
 				System.out.println(startDate);
 				
 				calendar.set(Calendar.HOUR_OF_DAY, calendar.getActualMaximum(Calendar.HOUR_OF_DAY));
 				calendar.set(Calendar.MINUTE, calendar.getActualMaximum(Calendar.MINUTE));
 				calendar.set(Calendar.SECOND, calendar.getActualMaximum(Calendar.SECOND));
-				Date endDate = calendar.getTime();
+				Date endDate = new java.sql.Date(calendar.getTime().getTime());
 				
 				
-				/*ArrayList<Event> events = u.getAllDayEvents(startDate, endDate);
-				for (Event event: events) {
-					panelHolder[row][column].addEvent();
-				}*/
+				ArrayList<Event> events = Utilities.getAllDayEvents(startDate, endDate);
+				panelHolder[row][column].addEvent(events);
 				k++;
 			}
 			MyMouseListener myMouseListener = new MyMouseListener(days, panelHolder, row, column, calendar);
@@ -146,7 +143,7 @@ public class CalendarView extends View implements ActionListener, Controller {
 		add(dayNamesPanel);
 		add(days);
 		
-		panelHolder[0][5].addEvent(); // <---- Dodałem, żeby pokazywało, że koloruje
+		//panelHolder[0][5].addEvent(); // <---- Dodałem, żeby pokazywało, że koloruje
 
 	}
 

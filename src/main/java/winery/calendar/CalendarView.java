@@ -129,7 +129,6 @@ public class CalendarView extends View implements ActionListener, Controller {
 			days.add(panelHolder[row][column]);
 
 		}
-
 		
 		previousButton.setActionCommand("previous");
 		nextButton.setActionCommand("next");
@@ -142,9 +141,6 @@ public class CalendarView extends View implements ActionListener, Controller {
 		add(nextButton);
 		add(dayNamesPanel);
 		add(days);
-		
-		//panelHolder[0][5].addEvent(); // <---- Dodałem, żeby pokazywało, że koloruje
-
 	}
 
 	@Override

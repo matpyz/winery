@@ -1367,6 +1367,26 @@ public class DBManager {
 		}
 	}
 	
+	public static HashMap<Integer, Wine> getAllWines() {
+		
+		HashMap<Integer, Wine> wines = new HashMap<Integer, Wine>();
+		String query = "SELECT * FROM `wine`";
+		
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			while (rs.next()) {
+				Wine wine = new Wine(rs.getInt("id"), rs.getString("name"), rs.getString("grapes"), rs.getString("color"),
+						rs.getInt("produced"), rs.getInt("sold"), rs.getInt("baseprice"), rs.getInt("productionCost"), rs.getInt("year"), rs.getInt("protectedOrigin"), rs.getInt("forSale"));
+				wines.put(rs.getInt("id"), wine);
+				conn.close();
+			}
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return wines;
+	}
+	
 	/**
 	 * Metoda zwracający obiekt wina
 	 * 

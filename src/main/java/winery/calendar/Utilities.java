@@ -14,11 +14,13 @@ public class Utilities {
 	
 	private HashMap<Integer, Event> allEvents;
 	private HashMap<Integer, Permission> permissions;
+	private HashMap<String, Integer> eventTypes;
 	private User user;
 	
 	public Utilities() {
 		allEvents = DBManager.getEvents();
 		user = DBManager.getUserById(Guardian.getUserId());
+		setEventTypes(DBManager.getEventType());
 		//permissions = user.getPermissions();
 	}
 	
@@ -63,6 +65,14 @@ public class Utilities {
 			}
 		}
 		return events;
+	}
+
+	public HashMap<String, Integer> getEventTypes() {
+		return eventTypes;
+	}
+
+	public void setEventTypes(HashMap<String, Integer> eventTypes) {
+		this.eventTypes = eventTypes;
 	}
 	
 }

@@ -1,8 +1,9 @@
 package winery.calendar;
 
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -10,120 +11,244 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.SwingConstants;
+import javax.swing.text.MaskFormatter;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import javax.swing.JFormattedTextField;
 
 //import winery.calendar.String;
 
 
 public class AddFrame extends JFrame implements ActionListener {
-	String name;
-	String description;
-	Date startDate;
-	Date endDate;
-	String location;
+
+	private Utilities util;
 	int eventTypeId;
 	
 	public Calendar calendar;
 	
-	private TextField nameTF;
-	private TextField descriptionTF;
-	private TextField locationTF;
-	private TextField eventTypeIdTF;
-	private TextField dateHour;
-	private TextField dateHour2;
+	private String nameString;
+	private String locationString;
+	private String startDateString;
+	private String endDateString;
+	private String startHourString;
+	private String endHourString;
+	private String descriptionString;
 	
 	private JButton save;
+	private JTextField nameText;
+	private JTextField locationText;
+	private JFormattedTextField startDateText;
+	private JFormattedTextField endDateText;
+	private JFormattedTextField startHourText;
+	private JFormattedTextField endHourText;
+	private JTextArea descriptionText;
 	
-	public AddFrame(Calendar calendar) {
+	public AddFrame(Calendar calendar, Utilities util) {
 		this.calendar = calendar;
-		
+		this.util = util;
 		this.setTitle("Dodaj nowe wydarzenie");
-		this.getContentPane().setLayout(null);
-		this.setBounds(800, 200, 400, 515);
 		
-		JLabel label1 = new JLabel("Nazwa:");
-		label1.setBounds(10,-1,120,35);
-		nameTF = new TextField();
-		nameTF.setBounds(10, 40, 120, 35);
-		
-		JLabel label2 = new JLabel("Opis:");
-		label2.setBounds(10,81,120,35);
-		descriptionTF = new TextField();
-		descriptionTF.setBounds(10, 122, 200, 35);
-		
-		JLabel label3 = new JLabel("Data początkowa:");
-		label3.setBounds(10,154,200,35);
-		
-		/*JComboBox<Integer> days = new JComboBox<Integer>();
-		for (int i = 1; i <= 31; i++) {
-			days.addItem(i);
+		try {
+			createGUI();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		days.setBounds(0,  200,  120,  35);*/
-		JLabel label4 = new JLabel("Dzień:");
-		label4.setBounds(10,200,50,35);
-		TextField dateDay = new TextField();
-		dateDay.setBounds(60, 200, 70, 35);
-		JLabel label5 = new JLabel("Godzina:");
-		label5.setBounds(134,200,60,35);
-		TextField dateHour = new TextField();
-		dateHour.setBounds(200, 200, 50, 35);
 		
 		
-		JLabel label6 = new JLabel("Data końcowa:");
-		label6.setBounds(10,234,200,35);
-		JLabel label7 = new JLabel("Dzień:");
-		label7.setBounds(10,280,50,35);
-		TextField dateDay2 = new TextField();
-		dateDay2.setBounds(60, 280, 70, 35);
-		JLabel label8 = new JLabel("Godzina:");
-		label8.setBounds(134,280,60,35);
-		TextField dateHour2 = new TextField();
-		dateHour2.setBounds(200, 280, 50, 35);
+	}
+	
+	private void createGUI() throws ParseException {
+		//	this.getContentPane().setLayout(null);
+			this.setBounds(800, 400, 550, 560);
+
 		
-		JLabel label9 = new JLabel("Miejsce:");
-		label9.setBounds(10,319,100,35);
-		TextField locationTF = new TextField();
-		locationTF.setBounds(10, 359, 120, 35);
+		JLabel lblDodawanieNowegoZdarzenia = new JLabel("Dodawanie nowego zdarzenia");
+		lblDodawanieNowegoZdarzenia.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel label10 = new JLabel("Typ:");
-		label10.setBounds(10,394,100,35);
-		TextField eventTypeIdTF = new TextField();
-		eventTypeIdTF.setBounds(10, 435, 120, 35);
+		JLabel lblNaz = new JLabel("Nazwa:");
+		
+		JLabel lblNewLabel = new JLabel("Opis:");
+		
+		nameText = new JTextField();
+		nameText.setColumns(10);
+		
+		descriptionText = new JTextArea();
+		
+		MaskFormatter formatter = new MaskFormatter("##-##-####");
+		formatter.setPlaceholderCharacter('_');
+		MaskFormatter formatter2 = new MaskFormatter("##:##");
+		formatter.setPlaceholderCharacter('_');
+
+		startDateText = new JFormattedTextField(formatter);
+		
+		JLabel lblPocztekWydarzenia = new JLabel("Początek wydarzenia");
+		lblPocztekWydarzenia.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		JLabel lblNewLabel_1 = new JLabel("Data:");
+		
+		JLabel lblGodzina = new JLabel("Godzina:");
+		
+		endDateText = new JFormattedTextField(formatter);
+		
+		startHourText = new JFormattedTextField(formatter2);
+		
+		JLabel lblKoniecWydarzenia = new JLabel("Koniec wydarzenia");
+		lblKoniecWydarzenia.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		JLabel lblMiejsce = new JLabel("Miejsce:");
+		
+		locationText = new JTextField();
+		locationText.setColumns(10);
+		
+		JLabel lblTyp = new JLabel("Typ:");
+		
+		JLabel lblData = new JLabel("Data:");
+		
+		JLabel lblGodzina_1 = new JLabel("Godzina:");
+		
+		endHourText = new JFormattedTextField(formatter2);
 		
 		save = new JButton("Zapisz");
-		save.setBounds(250, 435, 120, 35);
+		
 		save.addActionListener(this);
 		
-		getContentPane().add(label1);
-		getContentPane().add(nameTF);
-		getContentPane().add(label2);
-		getContentPane().add(descriptionTF);
-		getContentPane().add(label3);
-		getContentPane().add(label4);
-		getContentPane().add(dateDay);
-		getContentPane().add(label5);
-		getContentPane().add(dateHour);
-		getContentPane().add(label6);
-		getContentPane().add(label7);
-		getContentPane().add(dateDay2);
-		getContentPane().add(label8);
-		getContentPane().add(dateHour2);
-		getContentPane().add(label9);
-		getContentPane().add(locationTF);
-		getContentPane().add(label10);
-		getContentPane().add(eventTypeIdTF);
-		getContentPane().add(save);
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblDodawanieNowegoZdarzenia, GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblNaz)
+								.addComponent(lblNewLabel))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(descriptionText, GroupLayout.PREFERRED_SIZE, 418, GroupLayout.PREFERRED_SIZE)
+								.addComponent(nameText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblMiejsce)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(locationText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblTyp))
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addGap(8)
+							.addComponent(lblPocztekWydarzenia, GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblGodzina)
+								.addComponent(lblNewLabel_1))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(startDateText, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+								.addComponent(startHourText, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblKoniecWydarzenia, GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblGodzina_1)
+								.addComponent(lblData))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(endDateText, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+								.addComponent(endHourText, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap())
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap(237, Short.MAX_VALUE)
+					.addComponent(save)
+					.addGap(229))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblDodawanieNowegoZdarzenia)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNaz)
+						.addComponent(nameText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblNewLabel)
+						.addComponent(descriptionText, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE))
+					.addGap(13)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblMiejsce)
+						.addComponent(locationText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblTyp)
+					.addGap(18)
+					.addComponent(lblPocztekWydarzenia)
+					.addGap(23)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel_1)
+						.addComponent(startDateText, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(lblGodzina)
+						.addComponent(startHourText, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(lblKoniecWydarzenia)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(23)
+							.addComponent(lblData))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(endDateText, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
+					.addGap(17)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblGodzina_1)
+						.addComponent(endHourText, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(save)
+					.addContainerGap(71, Short.MAX_VALUE))
+		);
+		getContentPane().setLayout(groupLayout);
+		
+		
 		this.setVisible(true);
-		
-		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(dateHour.getText()));
-		Date startDate = calendar.getTime();
-		
-		//u.addEvent(String name, String description, Date startDate, Date endDate, 
-			//	String location, int eventTypeId)
-	}
 
+		nameString = nameText.getText();
+		locationString = locationText.getText();
+		descriptionString = descriptionText.getText();
+		
+		startDateString = startDateText.getText();
+		endDateString = endDateText.getText();
+		startHourString = startHourText.getText();
+		endHourString = endHourText.getText();
+		
+		/*
+		 * TODO: Dalsza walidacja danych
+		 * TODO: konwersja początku i końca na Date
+		 * FIXME: możliwe że za pomocą innego obiektu Calendar ???
+		 */		
+		
+		/*
+		 * TODO: wywołanie 
+		 * util.addEvent(String name, String description, Date startDate, Date endDate, 
+				String location, int eventTypeId)
+		 */
+		
+
+	}
 }

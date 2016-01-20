@@ -38,7 +38,7 @@ public class OptionsFrame extends JFrame implements ActionListener {
 	
 		public OptionsFrame(int x, int y, int numberOfTheDay, Calendar calendar, Utilities util) {
 			
-			addListener = new AddListener(calendar);
+			addListener = new AddListener(calendar, util);
 			this.util = util;
 			this.calendar = calendar;
 			this.setTitle("Opcje");

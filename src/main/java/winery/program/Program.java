@@ -13,7 +13,7 @@ import winery.documents.ExciseTaxViewController;
 import winery.documents.PredictingLitersOfWineViewContoller;
 import winery.documents.SeedAddViewController;
 import winery.documents.SelectGenerateDocumentViewController;
-import winery.documents.WineAddViewController;
+import winery.documents.WineAddController;
 import winery.rss.RSSController;
 import winery.view.Controller;
 import winery.view.View;
@@ -41,7 +41,7 @@ public class Program {
 	public static void main(String[] args) {
 		new Program(new AccountsController(), new CalendarView(), new SelectGenerateDocumentViewController(),
 				new PredictingLitersOfWineViewContoller(), new EnterDocumentViewController(),
-				new ExciseTaxViewController(), new RSSController(), new WineAddViewController(), new SeedAddViewController());
+				new ExciseTaxViewController(), new RSSController(), new WineAddController(), new SeedAddViewController());
 	}
 
 	private JFrame frame_;

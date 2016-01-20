@@ -1,25 +1,21 @@
 package winery.view;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import dbapi.DBManager;
-/* Kontrolery */
-
 import winery.accounts.AccountsController;
 import winery.calendar.CalendarView;
+import winery.config.ConfigWizardFrame;
 import winery.documents.EnterDocumentViewController;
 import winery.documents.ExciseTaxViewController;
 import winery.documents.PredictingLitersOfWineViewContoller;
-// Widoki
 import winery.documents.SelectGenerateDocumentViewController;
 import winery.documents.WineAddViewController;
 import winery.guardian.Guardian;
 import winery.rss.RSSController;
-import winery.accounts.AccountsController;
-import winery.calendar.CalendarView;
 
 /**
  * Zawiera punkt startowy programu. Jako główne okno, prezentuje panele-widoki
@@ -42,10 +38,9 @@ public class Program {
 	 *            argumenty wywołania, ignorowane
 	 */
 	public static void main(String[] args) {
-		ConfigFrame.loadConfig();
 		new Program(new AccountsController(), new CalendarView(), new SelectGenerateDocumentViewController(),
-				new PredictingLitersOfWineViewContoller(), new EnterDocumentViewController(), new ExciseTaxViewController(), 
-				new RSSController(), new WineAddViewController() );
+				new PredictingLitersOfWineViewContoller(), new EnterDocumentViewController(),
+				new ExciseTaxViewController(), new RSSController(), new WineAddViewController());
 	}
 
 	private JFrame frame_;
@@ -63,14 +58,16 @@ public class Program {
 		 * gdy logowanie przebiegnie pomyślnie. Wtedy program ruszy dalej i
 		 * wyświetli właściwe okno programu.
 		 */
-		CountDownLatch loginSignal = new CountDownLatch(1);
-		Guardian.initialize(loginSignal);
 		try {
-			loginSignal.await();
+			Semaphore loginSignal = new Semaphore(0);
+			ConfigWizardFrame.loadConfig(loginSignal);
+			loginSignal.acquire();
+			Guardian.initialize(loginSignal);
+			loginSignal.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		frame_ = new JFrame("Winery");
 		tabbedPane_ = new JTabbedPane();
 

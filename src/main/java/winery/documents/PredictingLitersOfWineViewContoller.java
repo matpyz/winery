@@ -27,8 +27,8 @@ import javax.swing.JTextField;
 
 import dbapi.DBManager;
 import dbapi.Seed;
+import winery.config.ConfigWizardFrame;
 import winery.model.Model;
-import winery.view.ConfigFrame;
 import winery.view.Controller;
 import winery.view.View;
 
@@ -293,7 +293,7 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 	public String readFromFile() throws IOException {
 		
 		String text="";
-	    Path path = Paths.get(ConfigFrame.path);
+	    Path path = Paths.get(ConfigWizardFrame.path);
 	    try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())){
 	        String line = null;
 	        while ((line = reader.readLine()) != null) {

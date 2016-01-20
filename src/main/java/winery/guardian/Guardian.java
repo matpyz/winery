@@ -3,7 +3,7 @@ package winery.guardian;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 
 import dbapi.*;
 
@@ -13,7 +13,7 @@ public class Guardian {
 	private static User user = null;
 
 	private static GuardianView view;
-	private static CountDownLatch loginSignal;
+	private static Semaphore signal;
 
 	// private SecureRandom random;
 	/*
@@ -22,9 +22,9 @@ public class Guardian {
 	 * 
 	 * return instance; }
 	 */
-	public static void initialize(CountDownLatch signal) {
+	public static void initialize(Semaphore semaphore) {
 		instance = new Guardian();
-		loginSignal = signal;
+		signal = semaphore;
 		view = new GuardianView(instance, 200, 300);
 	}
 
@@ -38,8 +38,8 @@ public class Guardian {
 	 * @return kolekcja typu ArrayList<String>
 	 */
 	public static List<String> getPermissions() {
-		List<Permission> permissionList = new LinkedList<Permission>(DBManager
-				.getPermissionsForGroupId(user.getGroupId()).values());
+		List<Permission> permissionList = new LinkedList<Permission>(
+				DBManager.getPermissionsForGroupId(user.getGroupId()).values());
 		List<String> permissions = new ArrayList<>();
 		for (Permission permission : permissionList)
 			permissions.add(permission.getName());
@@ -50,7 +50,7 @@ public class Guardian {
 	protected static boolean login(String login, String password) {
 		user = DBManager.signIn(login, password);
 		if (user != null) {
-			loginSignal.countDown();
+			signal.release();
 			return true;
 		} else
 			return false;

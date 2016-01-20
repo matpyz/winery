@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -27,8 +26,8 @@ import javax.swing.JTextField;
 
 import dbapi.DBManager;
 import dbapi.Seed;
+import winery.config.ConfigWizardFrame;
 import winery.model.Model;
-import winery.view.ConfigFrame;
 import winery.view.Controller;
 import winery.view.View;
 
@@ -293,7 +292,7 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 	public String readFromFile() throws IOException {
 		
 		String text="";
-	    Path path = Paths.get(ConfigFrame.path);
+	    Path path = ConfigWizardFrame.getPath();
 	    try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())){
 	        String line = null;
 	        while ((line = reader.readLine()) != null) {

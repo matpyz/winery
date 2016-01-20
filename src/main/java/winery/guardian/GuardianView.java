@@ -74,7 +74,7 @@ class GuardianView extends JFrame implements ActionListener {
 		pane.setBorder(BorderFactory.createEmptyBorder(borderWidth, borderWidth, borderWidth, borderWidth));
 
 		add(pane, new GridBagConstraints());
-		
+
 		getRootPane().setDefaultButton(btn_login);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -82,7 +82,7 @@ class GuardianView extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (Guardian.login(txt_login.getText(), txt_password.getText())) {
-			setVisible(false); 
+			setVisible(false);
 			dispose();
 		} else {
 			JOptionPane.showMessageDialog(this, "Nieudane logowanie");

@@ -43,8 +43,7 @@ public class CompanyInfoPanel extends JPanel {
 				|| streetName.equals("") || buildingNo.equals("") || phoneNo.equals("") || nip.equals("")
 				|| regon.equals("") || evidenceNo.equals("");
 		if (incorrectData) {
-			System.out.println("Niepoprawne dane");
-			JOptionPane.showMessageDialog((Component) null, "Wprowadzono błędne dane!.", "Błąd",
+			JOptionPane.showMessageDialog((Component) null, "Wprowadzono błędne lub niekompletne dane!", "Błąd",
 					JOptionPane.ERROR_MESSAGE);
 		} else {
 			String s = "CompanyName " + companyName + "\nCity " + cityName + "\nPostalCode " + postalCode + "\nStreet "

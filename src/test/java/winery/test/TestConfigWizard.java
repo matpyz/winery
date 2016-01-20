@@ -7,7 +7,7 @@ import winery.config.ConfigWizardFrame;
 public class TestConfigWizard {
 
 	public static void main(String[] args) {
-		ConfigWizardFrame.loadConfig(new Semaphore(0));
+		new ConfigWizardFrame(new Semaphore(0));
 	}
 
 }

@@ -81,7 +81,6 @@ public class ConfigWizardFrame extends JFrame implements ActionListener {
 
 	private void writeToFile(String first, String second) {
 		PrintWriter configFile;
-		System.out.println("Pisze dopliku");
 		try {
 			configFile = new PrintWriter(path, "UTF-8");
 			configFile.println(first);

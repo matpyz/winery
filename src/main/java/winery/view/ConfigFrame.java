@@ -21,7 +21,7 @@ public class ConfigFrame extends JFrame implements ActionListener {
 	private JPanel pane[] = { new ConfigCompanyInfoPanel(this), new ConfigFieldPanel(this) };
 	private int i = 0;
 	private boolean ready = false;
-	private static String path = "E:\\Dropbox\\Eclip\\winery\\.config";
+	public static String path = "E:\\Dropbox\\Eclip\\winery\\.config";
 
 	/**
 	 * Odpal konfigurację w razie potrzeby.

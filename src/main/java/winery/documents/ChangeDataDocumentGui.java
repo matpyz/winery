@@ -113,7 +113,8 @@ public class ChangeDataDocumentGui extends JFrame {
 		LinfoHorizontal = new JLabel[size]; // czego dane z dokumentu dotyczą
 		TFhorizontal = new JTextField[size]; // textfield służacy do zmiany
 												// danych
-
+	    if (dokument instanceof Document4){   size=2;}
+	    if (dokument instanceof Document4){   end=5;}
 		for (int i = 0; i < size; i++) {
 			PpanelTable[i] = new JPanel();
 
@@ -131,18 +132,91 @@ public class ChangeDataDocumentGui extends JFrame {
 			TFhorizontal[i].setText(data[itt][i]);
 			PpanelTable[i].add(LinfoHorizontal[i]);
 			PpanelTable[i].add(TFhorizontal[i]);
-
+    
 		}
 
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent we) {
-
+                 
 				dispose();
 			}
 		});
 
 		setVisible(true);
 
+	}
+	
+	public String[][] sumTable(DocumentBasic o,  String[][]  data){
+	    if (o instanceof Document4){  
+	    	 int s1 = 0,s2 = 0,s3 = 0,s4 = 0;
+	   
+	    	for( int  i=0; i<o.size; i++ )
+	    	{   if(i!=12 && i!=6)
+	    	      {	    
+	    		    try
+		    			{
+		    			   s1=s1+ Integer.parseInt(data[i][0]);
+		    			   s2=s2+ Integer.parseInt(data[i][1]);
+		    			   s3=s3+ Integer.parseInt(data[i][2]);
+		    			   s4=s4+ Integer.parseInt(data[i][3]);
+		    			}
+		    			catch (NumberFormatException nfe)
+		    			{
+		    			  
+		    			}	
+	    	      }
+	    	
+	    	else {
+	    		data[i][0]=Integer.toString(s1);
+	    	      data[i][0]=Integer.toString(s1); 
+	    	      data[i][1]=Integer.toString(s2);  
+	    	      data[i][2]=Integer.toString(s3); 
+	    	      data[i][3]=Integer.toString(s4);
+	    		
+	    	     }
+	    	
+	    		
+	    		
+	    		
+	    		
+	    	}
+	    	
+	    	
+	    } //do what you want
+	    else {}
+	    
+	    return data;
+	}
+	
+	
+	public String[][] changeTable(DocumentBasic o,  String[][]  data, int i){
+	    if (o instanceof Document4){  
+	    	 int s1 = 0,s2 = 0,s3 = 0;
+	   
+	        
+	    		    try
+		    			{ System.out.println("x");
+		    			   s1= Integer.parseInt(data[i][0]);
+		    			   s2= Integer.parseInt(data[i][1]);
+		    			   s3=s1+s2;
+		    			   System.out.println(s3);
+		 	    	      data[i][2]=Integer.toString(s3); 
+		 	    	      data[i][3]=Integer.toString(s3);
+		 	  	
+		    			
+		    			}
+		    			catch (NumberFormatException nfe)
+		    			{
+		    			  
+		    			}	
+	    	     
+	    	
+	  
+	    	
+	    }
+	    else {}
+	    
+	    return data;
 	}
 
 	public class ButtonListener implements ActionListener {
@@ -172,12 +246,13 @@ public class ChangeDataDocumentGui extends JFrame {
 				}
 				if (itt == end - 1)
 					Bnext.setText("Koniec");
+				    data=changeTable(dokument,data,itt-1);
 			} else {
 				for (int i = 0; i < size; i++) {
 					data[itt][i] = TFhorizontal[i].getText();
 				} // Ostatnie dane zostają pobrane,
-
-				dokument.createPDF(path, firmInfo, data); // generujemy
+				  data=changeTable(dokument,data,itt);
+				dokument.createPDF(path, firmInfo, sumTable(dokument,data)); // generujemy
 															// dokument.
 
 				dispose();// okienko się zamyka.

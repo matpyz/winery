@@ -178,11 +178,11 @@ public class Document4 extends DocumentBasic {
 				data[i][1] = Integer.toString(b) ;
 				s1=s1+b;
 				data[i][0] = Integer.toString(r+ c);
-				s2=s1+r+c;
+				s2=s2+r+c;
 				data[i][2] =Integer.toString(r+b+c);
-				s3=s1+r+c+b;
+				s3=s3+r+c+b;
 				data[i][3] = Integer.toString(r+b+c);
-				s4=s1+r+c+b;
+				s4=s4+r+c+b;
 				
 		
 		}

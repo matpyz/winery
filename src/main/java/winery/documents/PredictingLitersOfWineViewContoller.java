@@ -1,13 +1,22 @@
 package winery.documents;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map.Entry;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -16,7 +25,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import dbapi.DBManager;
+import dbapi.Seed;
 import winery.model.Model;
+import winery.view.ConfigFrame;
 import winery.view.Controller;
 import winery.view.View;
 
@@ -70,11 +82,11 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 
 		numWine = new String[5]; // Tabela ilości krzewów winogron, póżniej te
 									// danę bedą pobierane z bazy danych
-		numWine[0] = "0";
-		numWine[1] = "0";
-		numWine[2] = "0";
-		numWine[3] = "0";
-		numWine[4] = "0";
+		numWine[0] = Integer.toString(addValueFromHashMap( 0));
+		numWine[1] = Integer.toString(addValueFromHashMap( 1));;
+		numWine[2] = Integer.toString(addValueFromHashMap( 2));;
+		numWine[3] = Integer.toString(addValueFromHashMap( 3));;
+		numWine[4] =Integer.toString(addValueFromHashMap( 4));;
 
 		setSize(a, b);
 		Pmaks = new JPanel(); // Panel główny, do którego wszystko wkładamy.
@@ -104,6 +116,7 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 			PpanelTable[i] = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			Lhekto[i] = new JLabel("Ilość Sadzonek");
 			Lname[i] = new JLabel(nameTab[i]);
+			Lname[i].setForeground(Color.DARK_GRAY);
 			Lname[i].setMinimumSize(new Dimension(100, 30));
 
 			TchangeData[i] = new JTextField(15);
@@ -215,7 +228,13 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 
 		public void actionPerformed(ActionEvent event) {
 
-			String data = "Dane Wystawczy";
+			String data;
+			try {
+				data = readFromFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				data= " ";
+			}
 			if ( !model.getVpath().trim().equals("")) // Sprawdzanie,
 																			// czy
 																			// możemy
@@ -256,6 +275,34 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 	protected void update(Model model) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public int addValueFromHashMap( int type) {
+		int sum=0;
+		HashMap<Integer, Seed>  hash = DBManager.getSeedsByType(type);
+		for ( Entry<Integer, Seed> entry : hash.entrySet()) {
+		  
+		    Seed seed= entry.getValue();
+		    sum=sum+ seed.getQuantity();
+		    // do something with key and/or tab
+		}
+		
+		return (int) (sum*  (3.5 / 2.0) * 0.001);
+	}
+	
+	public String readFromFile() throws IOException {
+		
+		String text="";
+	    Path path = Paths.get(ConfigFrame.path);
+	    try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())){
+	        String line = null;
+	        while ((line = reader.readLine()) != null) {
+	          text=text+line + " ";
+          
+	    }
+	        
+	} catch (Exception e) {}
+	    return text;
 	}
 
 }

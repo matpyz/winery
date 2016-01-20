@@ -4,7 +4,13 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Locale;
 
 import javax.swing.JButton;
@@ -17,6 +23,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 import winery.model.Model;
+import winery.view.ConfigFrame;
 import winery.view.Controller;
 import winery.view.View;
 
@@ -88,6 +95,14 @@ public class SelectGenerateDocumentViewController extends View implements Contro
 				"<html> Dane Firmy.");
 		Pmaks.add(Linfo2); // zwykłe info o tym co trzeba wpisać do textArea.
 		Tdata = new JTextArea(3, 30);
+		Tdata.setLineWrap(true);
+		Tdata.setWrapStyleWord(true);
+		try {
+			Tdata.setText(readFromFile());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		Pmaks.add(Tdata);
 		Bready = new JButton(" Generuj Dokument."); // Przycisk, którego
@@ -96,14 +111,14 @@ public class SelectGenerateDocumentViewController extends View implements Contro
 		Bready.addActionListener(new GenerateDocListener());
 
 		Pmin = new JPanel();
-		Bdirectory = new JButton("Wybierz Katalog oraz podaj nazwę!"); // Przycisk
+		Bdirectory = new JButton("Wybierz Katalog !"); // Przycisk
 																		// którego
 																		// klikniecie
 																		// powoduje
 																		// wybranie
 																		// katalogu.
 		Lfile = new JLabel(" Brak wybranego Karalogu. "); // Jaki katalog
-															// wybrano
+														// wybrano
 															// informacja.
 		Bdirectory.addActionListener(new PathSelectListener());
 
@@ -249,5 +264,21 @@ public class SelectGenerateDocumentViewController extends View implements Contro
 	@Override
 	public View getView() {
 		return this;
+	}
+	
+	
+	public String readFromFile() throws IOException {
+		
+		String text="";
+	    Path path = Paths.get(ConfigFrame.path);
+	    try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())){
+	        String line = null;
+	        while ((line = reader.readLine()) != null) {
+	          text=text+line + " ";
+          
+	    }
+	        
+	} catch (Exception e) {}
+	    return text;
 	}
 }

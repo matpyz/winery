@@ -6,11 +6,11 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import winery.accounts.AccountsController;
-import winery.calendar.CalendarView;
+import winery.calendar.CalendarViewController;
 import winery.config.ConfigWizardFrame;
 import winery.documents.EnterDocumentViewController;
 import winery.documents.ExciseTaxViewController;
-import winery.documents.PredictingLitersOfWineViewContoller;
+import winery.documents.PredictingLitersOfWineViewController;
 import winery.documents.SeedAddViewController;
 import winery.documents.SelectGenerateDocumentViewController;
 import winery.documents.WineAddController;
@@ -39,9 +39,10 @@ public class Program {
 	 *            argumenty wywołania, ignorowane
 	 */
 	public static void main(String[] args) {
-		new Program(new AccountsController(), new CalendarView(), new SelectGenerateDocumentViewController(),
-				new PredictingLitersOfWineViewContoller(), new EnterDocumentViewController(),
-				new ExciseTaxViewController(), new RSSController(), new WineAddController(), new SeedAddViewController());
+		new Program(new AccountsController(), new CalendarViewController(), new SelectGenerateDocumentViewController(),
+				new PredictingLitersOfWineViewController(), new EnterDocumentViewController(),
+				new ExciseTaxViewController(), new RSSController(), new WineAddController(),
+				new SeedAddViewController());
 	}
 
 	private JFrame frame_;
@@ -55,7 +56,7 @@ public class Program {
 	 */
 	public Program(Controller... controllers) {
 		/**
-		 * Tworzy sygnał o wartości 1, który Guardian aktywuje (obniży do 0),
+		 * Tworzy sygnał o wartości 0, który Guardian aktywuje (podniesie do 1),
 		 * gdy logowanie przebiegnie pomyślnie. Wtedy program ruszy dalej i
 		 * wyświetli właściwe okno programu.
 		 */

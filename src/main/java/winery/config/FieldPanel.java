@@ -162,7 +162,7 @@ public class FieldPanel extends JPanel {
 	}
 
 	public String getFieldData() {
-		StringBuilder sb = null;
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < sectors.size(); i++) {
 			sb = new StringBuilder();
 			sb.append(sectors.get(i));
@@ -172,7 +172,6 @@ public class FieldPanel extends JPanel {
 			sb.append(rows.get(i));
 			sb.append("\n");
 		}
-
 		return sb.toString();
 	}
 

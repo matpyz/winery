@@ -1,5 +1,6 @@
 package winery.program;
 
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import javax.swing.JFrame;
@@ -39,14 +40,35 @@ public class Program {
 	 *            argumenty wywołania, ignorowane
 	 */
 	public static void main(String[] args) {
-		new Program(new AccountsController(), new CalendarViewController(), new SelectGenerateDocumentViewController(),
-				new PredictingLitersOfWineViewController(), new EnterDocumentViewController(),
-				new ExciseTaxViewController(), new RSSController(), new WineAddController(),
-				new SeedAddViewController());
+		new Program();
 	}
 
-	private JFrame frame_;
-	private JTabbedPane tabbedPane_;
+	private JFrame frame;
+	private JTabbedPane tabbedPane;
+	
+	private static Controller createController(String controllerID) {
+		switch (controllerID) {
+		case "accounts":
+			return new AccountsController();
+		case "calendar":
+			return new CalendarViewController();
+		case "enterdocument":
+			return new EnterDocumentViewController();
+		case "excisetax":
+			return new ExciseTaxViewController();
+		case "predictinglitersofwine":
+			return new PredictingLitersOfWineViewController();
+		case "rss":
+			return new RSSController();
+		case "seedadd":
+			return new SeedAddViewController();
+		case "selectgeneratedocument":
+			return new SelectGenerateDocumentViewController();
+		case "wineadd":
+			return new WineAddController();
+		}
+		return null;
+	}
 
 	/**
 	 * Inicjalizuje program.
@@ -54,7 +76,7 @@ public class Program {
 	 * @param views
 	 *            widoki do załadowania
 	 */
-	public Program(Controller... controllers) {
+	public Program() {
 		/**
 		 * Tworzy sygnał o wartości 0, który Guardian aktywuje (podniesie do 1),
 		 * gdy logowanie przebiegnie pomyślnie. Wtedy program ruszy dalej i
@@ -70,17 +92,19 @@ public class Program {
 			e.printStackTrace();
 		}
 
-		frame_ = new JFrame("Winery");
-		tabbedPane_ = new JTabbedPane();
+		frame = new JFrame("Winery");
+		tabbedPane = new JTabbedPane();
 
-		for (Controller controller : controllers) {
+		List<String> permissions = Guardian.getPermissions();
+		for (int i = 0; i < permissions.size(); i++) {
+			Controller controller = createController(permissions.get(i));
 			View view = controller.getView();
-			tabbedPane_.addTab(controller.getTitle(), view);
+			tabbedPane.addTab(controller.getTitle(), view);
 		}
 
-		frame_.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame_.getContentPane().add(tabbedPane_);
-		frame_.setSize(600, 600);
-		frame_.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().add(tabbedPane);
+		frame.setSize(600, 600);
+		frame.setVisible(true);
 	}
 }

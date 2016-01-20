@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -270,7 +268,7 @@ public class SelectGenerateDocumentViewController extends View implements Contro
 	public String readFromFile() throws IOException {
 		
 		String text="";
-	    Path path = Paths.get(ConfigWizardFrame.path);
+	    Path path = ConfigWizardFrame.getPath();
 	    try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())){
 	        String line = null;
 	        while ((line = reader.readLine()) != null) {

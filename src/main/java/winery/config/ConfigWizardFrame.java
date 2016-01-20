@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.Semaphore;
 
 import javax.swing.JButton;
@@ -18,10 +20,10 @@ public class ConfigWizardFrame extends JFrame implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JPanel pane[] = { new CompanyInfoPanel(this), new FieldPanel(this) };
+	private final JPanel pane[] = { new CompanyInfoPanel(this), new FieldPanel(this) };
 	private int i = 0;
-	private Semaphore ready;
-	public static String path = "E:\\Dropbox\\Eclip\\winery\\.config";
+	private final Semaphore ready;
+	private static final String path = ".config";
 
 	/**
 	 * Odpal kreator konfiguracji w przypadku pierwszego uruchomienia.
@@ -92,4 +94,7 @@ public class ConfigWizardFrame extends JFrame implements ActionListener {
 		}
 	}
 
+	public static Path getPath() {
+		return Paths.get(path);
+	}
 }

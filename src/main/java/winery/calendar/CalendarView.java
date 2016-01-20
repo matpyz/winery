@@ -37,6 +37,7 @@ public class CalendarView extends View implements ActionListener, Controller {
 	
 	private Calendar calendar;
 	private int currentMonth;
+	private Utilities util;
 
 	@SuppressWarnings("deprecation")
 	public CalendarView() {
@@ -46,7 +47,7 @@ public class CalendarView extends View implements ActionListener, Controller {
 		
 		calendar = new GregorianCalendar().getInstance();
 			
-		
+		util = new Utilities();
 		
 		createGUI();
 	}
@@ -118,13 +119,13 @@ public class CalendarView extends View implements ActionListener, Controller {
 				calendar.set(Calendar.MINUTE, calendar.getActualMaximum(Calendar.MINUTE));
 				calendar.set(Calendar.SECOND, calendar.getActualMaximum(Calendar.SECOND));
 				Date endDate = new java.sql.Date(calendar.getTime().getTime());
+				System.out.println(endDate);
 				
-				
-				ArrayList<Event> events = Utilities.getAllDayEvents(startDate, endDate);
+				ArrayList<Event> events = util.getAllDayEvents(startDate, endDate);
 				panelHolder[row][column].addEvent(events);
 				k++;
 			}
-			MyMouseListener myMouseListener = new MyMouseListener(days, panelHolder, row, column, calendar);
+			MyMouseListener myMouseListener = new MyMouseListener(days, panelHolder, row, column, calendar, util);
 			panelHolder[row][column].addMouseListener(myMouseListener);
 			days.add(panelHolder[row][column]);
 

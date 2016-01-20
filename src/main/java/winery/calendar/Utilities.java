@@ -11,8 +11,15 @@ import dbapi.User;
 import winery.guardian.Guardian;
 
 public class Utilities {
+	
+	private HashMap<Integer, Event> allEvents;
+	
+	public Utilities() {
+		allEvents = DBManager.getEvents();
+		
+	}
 
-	public static boolean addEvent(String name, String description, Date startDate, Date endDate, 
+	public boolean addEvent(String name, String description, Date startDate, Date endDate, 
 			String location, int eventTypeId) {
 		User u = DBManager.getUserById(Guardian.getUserDbId());
 		// Sprawdź pozwolenie na tworzenie eventu
@@ -29,7 +36,7 @@ public class Utilities {
 		return false;
 	}
 	
-	public static boolean editEvent(int eventId, String name, String description, Date startDate, 
+	public boolean editEvent(int eventId, String name, String description, Date startDate, 
 			Date endDate, String location, int eventTypeId) {
 		User u = DBManager.getUserById(Guardian.getUserDbId());
 		// Sprawdź pozwolenie na tworzenie eventu
@@ -46,7 +53,7 @@ public class Utilities {
 		return false;
 	}
 	
-	public static boolean removeEvent(int eventId) {
+	public boolean removeEvent(int eventId) {
 		User u = DBManager.getUserById(Guardian.getUserDbId());
 		// Sprawdź pozwolenie na tworzenie eventu
 		HashMap<Integer, Permission> perm = u.getPermissions();
@@ -61,10 +68,9 @@ public class Utilities {
 		return false;
 	}
 	
-	public static ArrayList<Event> getAllDayEvents(Date startDate, Date endDate){
-		User u = DBManager.getUserById(Guardian.getUserDbId());
+	public ArrayList<Event> getAllDayEvents(Date startDate, Date endDate){
+		//User u = DBManager.getUserById(Guardian.getUserDbId());
 		ArrayList<Event> events = new ArrayList<Event>();
-		HashMap<Integer, Event> allEvents = DBManager.getEvents();
 		for(int i : allEvents.keySet()) {
 			Event e = allEvents.get(i);
 			if(e.getStartDate().after(startDate) && e.getStartDate().before(endDate)) {

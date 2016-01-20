@@ -23,14 +23,16 @@ public class MyMouseListener implements MouseListener {
 	private int column;
 	private int x;
 	private int y;
+	private Utilities util;
 	
 	public Calendar calendar;
 	
 	private Timer timer;
 	private ShowInformation showInformation;
 	
-	public MyMouseListener(JPanel days, ColorButton[][] panelHolder, int row, int column, Calendar calendar) {
+	public MyMouseListener(JPanel days, ColorButton[][] panelHolder, int row, int column, Calendar calendar, Utilities util) {
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		this.util = util;
 		this.days = days;
 		this.panelHolder = panelHolder;
 		this.row = row;
@@ -56,7 +58,7 @@ public class MyMouseListener implements MouseListener {
 		System.out.println(x + " - " + y);
 		
 		int numberOfTheDay = Integer.parseInt(panelHolder[row][column].getText());
-		options = new OptionsFrame(x, y, numberOfTheDay, calendar);		
+		options = new OptionsFrame(x, y, numberOfTheDay, calendar, util);		
 	}
 
 	@Override

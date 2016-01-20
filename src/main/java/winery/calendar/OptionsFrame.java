@@ -25,6 +25,7 @@ public class OptionsFrame extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
 	public Calendar calendar;
+	private Utilities util;
 	private JPanel actions;
 	private JScrollPane scrollPane;
 	
@@ -35,9 +36,10 @@ public class OptionsFrame extends JFrame implements ActionListener {
 	
 	private AddListener addListener;
 	
-		public OptionsFrame(int x, int y, int numberOfTheDay, Calendar calendar) {
+		public OptionsFrame(int x, int y, int numberOfTheDay, Calendar calendar, Utilities util) {
 			
 			addListener = new AddListener(calendar);
+			this.util = util;
 			this.calendar = calendar;
 			this.setTitle("Opcje");
 			this.getContentPane().setLayout(null);
@@ -77,7 +79,7 @@ public class OptionsFrame extends JFrame implements ActionListener {
 				calendar.set(Calendar.SECOND, calendar.getActualMinimum(Calendar.SECOND));
 				Date endDate = new java.sql.Date(calendar.getTime().getTime());
 				
-				ArrayList<Event> events = Utilities.getAllDayEvents(startDate, endDate);
+				ArrayList<Event> events = util.getAllDayEvents(startDate, endDate);
 				for (Event event: events) {
 					actionsHolder[i].setBackground(Color.BLUE);
 					actionsHolder[i].setText(event.getName());

@@ -33,7 +33,6 @@ public class FieldPanel extends JPanel {
 	ArrayList<String> sectors = new ArrayList<String>();
 	ArrayList<Integer> columns = new ArrayList<Integer>();
 	ArrayList<Integer> rows = new ArrayList<Integer>();
-	private JLabel lblNewLabel;
 
 	public FieldPanel(ActionListener actionListener) {
 		setName("Wprowadź sektory winnicy.");
@@ -86,12 +85,12 @@ public class FieldPanel extends JPanel {
 				try {
 					if (check(sectorText.getText(), Integer.parseInt(columnText.getText()),
 							Integer.parseInt(rowText.getText())) == false) {
-						JOptionPane.showMessageDialog((Component) null, "Wprowadzony sektor ju� istnieje!.", "B��d",
+						JOptionPane.showMessageDialog((Component) null, "Wprowadzony sektor już istnieje!.", "Błąd",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 				} catch (NumberFormatException nfe) {
-					JOptionPane.showMessageDialog((Component) null, "Wprowadzono b��dne dane!.", "B��d",
+					JOptionPane.showMessageDialog((Component) null, "Wprowadzono błędne dane!.", "Błąd",
 							JOptionPane.ERROR_MESSAGE);
 					return;
 				}

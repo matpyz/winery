@@ -20,9 +20,9 @@ import javax.swing.JTextField;
 import dbapi.DBManager;
 import dbapi.Seed;
 import dbapi.Wine;
-import winery.documents.PredictingLitersOfWineViewContoller.GenerateDocListener;
-import winery.documents.PredictingLitersOfWineViewContoller.PathSelectListener;
-import winery.documents.PredictingLitersOfWineViewContoller.UpdateData;
+import winery.documents.PredictingLitersOfWineViewController.GenerateDocListener;
+import winery.documents.PredictingLitersOfWineViewController.PathSelectListener;
+import winery.documents.PredictingLitersOfWineViewController.UpdateData;
 import winery.model.Model;
 import winery.view.Controller;
 import winery.view.View;
@@ -207,5 +207,9 @@ public class SeedAddViewController  extends View implements Controller {
 			
 		
 		}
+	}
+	
+	public static String getID() {
+		return "seedadd";
 	}
 }

@@ -37,7 +37,7 @@ import winery.view.View;
  * @author Przemysław Iskra
  * @version 2.0
  */
-public class PredictingLitersOfWineViewContoller extends View implements Controller {
+public class PredictingLitersOfWineViewController extends View implements Controller {
 
 	/**
 	 * 
@@ -68,7 +68,7 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 	private JButton BgenerateDoc;
 	private String[] numWine;
 
-	public PredictingLitersOfWineViewContoller()
+	public PredictingLitersOfWineViewController()
 
 	{
 		model = new PredictingLitersOfWineModel();
@@ -324,4 +324,7 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 	    return text;
 	}
 
+	public static String getID() {
+		return "predictinglitersofwine";
+	}
 }

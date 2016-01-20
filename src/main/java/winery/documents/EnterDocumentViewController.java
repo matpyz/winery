@@ -156,4 +156,8 @@ public class EnterDocumentViewController extends View implements Controller, Act
 		}
 
 	}
+	
+	public static String getID() {
+		return "enterdocument";
+	}
 }

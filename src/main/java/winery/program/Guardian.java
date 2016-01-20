@@ -8,8 +8,6 @@ import java.util.concurrent.Semaphore;
 import dbapi.*;
 
 public class Guardian {
-
-	private static Guardian instance = null;
 	private static User user = null;
 	private static Semaphore signal;
 

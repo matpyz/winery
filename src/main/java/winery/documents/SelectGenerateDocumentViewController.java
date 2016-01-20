@@ -266,17 +266,19 @@ public class SelectGenerateDocumentViewController extends View implements Contro
 	
 	
 	public String readFromFile() throws IOException {
-		
 		String text="";
 	    Path path = ConfigWizardFrame.getPath();
 	    try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())){
 	        String line = null;
 	        while ((line = reader.readLine()) != null) {
 	          text=text+line + " ";
-          
+	        }
+	    } catch (Exception e) {
 	    }
-	        
-	} catch (Exception e) {}
 	    return text;
+	}
+	
+	public static String getID() {
+		return "selectgeneratedocument";
 	}
 }

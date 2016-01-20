@@ -1,20 +1,20 @@
 package winery.documents;
 
-import dbapi.DBManager;
+import java.util.LinkedList;
 
+import dbapi.Wine;
 import winery.model.Model;
 
 public class WineAddModel extends Model {
 
-	
-	WineAddModel() {
-		
+	public LinkedList<String> getWineList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	public void firstUse() {
 
-
+	public Wine getWine() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	
+
 }

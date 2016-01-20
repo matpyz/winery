@@ -1367,6 +1367,26 @@ public class DBManager {
 		}
 	}
 	
+	public static HashMap<Integer, Wine> getAllWines() {
+		
+		HashMap<Integer, Wine> wines = new HashMap<Integer, Wine>();
+		String query = "SELECT * FROM `wine`";
+		
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			while (rs.next()) {
+				Wine wine = new Wine(rs.getInt("id"), rs.getString("name"), rs.getString("grapes"), rs.getString("color"),
+						rs.getInt("produced"), rs.getInt("sold"), rs.getInt("baseprice"), rs.getInt("productionCost"), rs.getInt("year"), rs.getInt("protectedOrigin"), rs.getInt("forSale"));
+				wines.put(rs.getInt("id"), wine);
+				conn.close();
+			}
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return wines;
+	}
+	
 	/**
 	 * Metoda zwracający obiekt wina
 	 * 
@@ -2139,4 +2159,41 @@ public static HashMap<Integer, Seed> getSeedsByType(int type) {
 		}
 	}
 	
+
+	/**
+	 * @author Aleks
+	 */
+	public static HashMap<String, Integer> getEventType() {
+		HashMap<String, Integer> result = new HashMap<String, Integer>();
+		String query = "SELECT * FROM `eventType`";
+		ResultSet rs = dbManager.selectQuery(query);
+		try {
+			while (rs.next()) {
+				result.put(rs.getString("name"), rs.getInt("id"));
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/**
+	 * @author Aleks
+	 */
+	public static boolean addEventType(String name) {
+		String query = "INSERT INTO `eventType` (`name`) VALUES ('" + name + ");";
+		try {
+			dbManager.otherQuery(query);
+			conn.close();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	
 }
+

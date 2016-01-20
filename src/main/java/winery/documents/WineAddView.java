@@ -38,7 +38,7 @@ public class WineAddView extends View implements ActionListener {
 
 	private JTextField txt_name;
 	private JTextField txt_year;
-	private JTextField txt_grapes;
+	private JTextField txt_sold;
 	private JTextField txt_produced;
 	private JTextField txt_forSale;
 	private JTextField txt_cost;
@@ -54,7 +54,7 @@ public class WineAddView extends View implements ActionListener {
 
 	private JLabel lbl_name;
 	private JLabel lbl_year;
-	private JLabel lbl_grapes;
+	private JLabel lbl_sold;
 	private JLabel lbl_produced;
 	private JLabel lbl_forSale;
 	private JLabel lbl_cost;
@@ -155,13 +155,13 @@ public class WineAddView extends View implements ActionListener {
 		panel_accountData.add(txt_produced, "4, 6, fill, default");
 		txt_produced.setColumns(10);
 
-		lbl_grapes = new JLabel("Kolor");
-		panel_accountData.add(lbl_grapes, "2, 8, right, default");
+		lbl_sold = new JLabel("Sprzedano");
+		panel_accountData.add(lbl_sold, "2, 8, right, default");
 
-		txt_grapes = new JTextField();
-		txt_grapes.setEditable(false);
-		panel_accountData.add(txt_grapes, "4, 8, fill, default");
-		txt_grapes.setColumns(10);
+		txt_sold = new JTextField();
+		txt_sold.setEditable(false);
+		panel_accountData.add(txt_sold, "4, 8, fill, default");
+		txt_sold.setColumns(10);
 
 		lbl_forSale = new JLabel("Na sprzedaż");
 		panel_accountData.add(lbl_forSale, "2, 10, right, default");
@@ -208,7 +208,7 @@ public class WineAddView extends View implements ActionListener {
 		txtList.add(txt_name);
 		txtList.add(txt_year);
 		txtList.add(txt_produced);
-		txtList.add(txt_grapes);
+		txtList.add(txt_sold);
 		txtList.add(txt_forSale);
 		txtList.add(txt_cost);
 		txtList.add(txt_price);
@@ -227,11 +227,11 @@ public class WineAddView extends View implements ActionListener {
 		cBox_wineList.removeAllItems();
 		cBox_wineList.setActionCommand("select");
 
-		for (String account : wineAddModel.getWineList())
+		for (String wine : wineAddModel.getWineList())
 			// Tak wiem, ale cóż
-			if (((DefaultComboBoxModel<String>) cBox_wineList.getModel()).getIndexOf(account) == -1)
-				cBox_wineList.addItem(account);
-
+			if (((DefaultComboBoxModel<String>) cBox_wineList.getModel()).getIndexOf(wine) == -1)
+				cBox_wineList.addItem(wine);
+/*
 		int j;
 		for (int i = 0; i < wineAddModel.getWine().getData().size(); i++) {
 			j = (i >= 3) ? 1 : 0;
@@ -243,7 +243,7 @@ public class WineAddView extends View implements ActionListener {
 				lbl_result.setText(++actionNumber + ": " + controller.response);
 			}
 		});
-
+*/
 	}
 
 	@Override
@@ -301,7 +301,7 @@ public class WineAddView extends View implements ActionListener {
 		String name = txt_name.getText();
 		String surname = txt_year.getText();
 		String login = txt_produced.getText();
-		String password = txt_grapes.getText();
+		String password = txt_sold.getText();
 		String mail = txt_forSale.getText();
 		String payment = txt_cost.getText();
 		String group = txt_price.getText();
@@ -310,9 +310,10 @@ public class WineAddView extends View implements ActionListener {
 	}
 
 	private void rmvAccount() {
-		String login = txt_produced.getText();
+		String name = txt_name.getText();
+		String year = txt_year.getText();
 
-		controller.deleteAccount(login);
+		controller.deleteWine(name+year);
 	}
 
 	private void addAccount() {
@@ -348,12 +349,12 @@ public class WineAddView extends View implements ActionListener {
 		String name = txt_name.getText();
 		String surname = txt_year.getText();
 		String login = txt_produced.getText();
-		String password = txt_grapes.getText();
+		String password = txt_sold.getText();
 		String mail = txt_forSale.getText();
 		String payment = txt_price.getText();
 		String group = txt_price.getText();
 
-		controller.newAccount(name, surname, login, password, mail, payment, group);
+		//controller.newWine(name, surname, login, password, mail, payment, group);
 	}
 
 }

@@ -256,4 +256,8 @@ public class WineAddViewController extends View implements Controller, ItemListe
 		errorLabel.setForeground(Color.RED);
 		errorLabel.setText(err);
 	}
+	
+	public static String getID() {
+		return "wineadd";
+	}
 }

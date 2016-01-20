@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 
 public class CalendarFrame extends JFrame {
 	
-	public CalendarView calendarView = new CalendarView();
+	public CalendarViewController calendarView = new CalendarViewController();
 
 	public CalendarFrame() {
 		JFrame calendarFrame = new JFrame("Kalendarz");

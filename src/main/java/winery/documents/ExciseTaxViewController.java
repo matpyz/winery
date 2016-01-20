@@ -231,4 +231,8 @@ public class ExciseTaxViewController extends View implements Controller, ItemLis
 		errorLabel.setForeground(Color.RED);
 		errorLabel.setText(err);
 	}
+	
+	public static String getID() {
+		return "excisetax";
+	}
 }

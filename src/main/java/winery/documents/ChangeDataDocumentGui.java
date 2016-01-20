@@ -148,17 +148,17 @@ public class ChangeDataDocumentGui extends JFrame {
 	
 	public String[][] sumTable(DocumentBasic o,  String[][]  data){
 	    if (o instanceof Document4){  
-	    	 int s1 = 0,s2 = 0,s3 = 0,s4 = 0;
+	    	 Double s1 = (double) 0,s2 = (double) 0,s3 = (double) 0,s4 = (double) 0;
 	   
 	    	for( int  i=0; i<o.size; i++ )
 	    	{   if(i!=12 && i!=6)
 	    	      {	    
 	    		    try
 		    			{
-		    			   s1=s1+ Integer.parseInt(data[i][0]);
-		    			   s2=s2+ Integer.parseInt(data[i][1]);
-		    			   s3=s3+ Integer.parseInt(data[i][2]);
-		    			   s4=s4+ Integer.parseInt(data[i][3]);
+		    			   s1=s1+ Double.parseDouble(data[i][0]);
+		    			   s2=s2+ Double.parseDouble(data[i][1]);
+		    			   s3=s3+ Double.parseDouble(data[i][2]);
+		    			   s4=s4+ Double.parseDouble(data[i][3]);
 		    			}
 		    			catch (NumberFormatException nfe)
 		    			{
@@ -167,11 +167,11 @@ public class ChangeDataDocumentGui extends JFrame {
 	    	      }
 	    	
 	    	else {
-	    		data[i][0]=Integer.toString(s1);
-	    	      data[i][0]=Integer.toString(s1); 
-	    	      data[i][1]=Integer.toString(s2);  
-	    	      data[i][2]=Integer.toString(s3); 
-	    	      data[i][3]=Integer.toString(s4);
+	    		data[i][0]=Double.toString(s1);
+	    	      data[i][0]=Double.toString(s1); 
+	    	      data[i][1]=Double.toString(s2);  
+	    	      data[i][2]=Double.toString(s3); 
+	    	      data[i][3]=Double.toString(s4);
 	    		
 	    	     }
 	    	
@@ -191,17 +191,17 @@ public class ChangeDataDocumentGui extends JFrame {
 	
 	public String[][] changeTable(DocumentBasic o,  String[][]  data, int i){
 	    if (o instanceof Document4){  
-	    	 int s1 = 0,s2 = 0,s3 = 0;
+	    	 Double s1 = (double) 0,s2 = (double) 0,s3 = (double) 0;
 	   
 	        
 	    		    try
 		    			{ System.out.println("x");
-		    			   s1= Integer.parseInt(data[i][0]);
-		    			   s2= Integer.parseInt(data[i][1]);
+		    			   s1= Double.parseDouble(data[i][0]);
+		    			   s2= Double.parseDouble(data[i][1]);
 		    			   s3=s1+s2;
 		    			   System.out.println(s3);
-		 	    	      data[i][2]=Integer.toString(s3); 
-		 	    	      data[i][3]=Integer.toString(s3);
+		 	    	      data[i][2]=Double.toString(s3); 
+		 	    	      data[i][3]=Double.toString(s3);
 		 	  	
 		    			
 		    			}

@@ -81,14 +81,14 @@ public class Document2 extends DocumentBasic {
 		data=this.getTable();
 		for (int i = 0; i < size; i++) {
 		
-				data[i][0] = Integer.toString(addValueFromHashMap( i));
+				data[i][0] = Double.toString(addValueFromHashMap( i));
 		}
 		return data;
 		
 		
 	}
 	
-	public int addValueFromHashMap( int type) {
+	public double addValueFromHashMap( int type) {
 		int sum=0;
 		HashMap<Integer, Seed>  hash = DBManager.getSeedsByType(type);
 		for ( Entry<Integer, Seed> entry : hash.entrySet()) {
@@ -98,7 +98,7 @@ public class Document2 extends DocumentBasic {
 		    // do something with key and/or tab
 		}
 		
-		return (int) (sum*  (3.5 / 2.0) * 0.001);
+		return (sum*  (3.5 / 2.0) * 0.001);
 	}
 	
 }

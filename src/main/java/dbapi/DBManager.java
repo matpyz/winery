@@ -1903,7 +1903,7 @@ public static HashMap<Integer, Seed> getSeedsByType(int type) {
 		Seed seed = null;
 		
 		String query = "INSERT INTO `seed` (`name`, `qty`, `protectedOrigin`, `year`, `additional`, `additional2`) VALUES ('" + name + "', '"
-				+ qty + "', '" + additional + "');";
+				+ qty + "', '" +  protectedOrigin  + "', '"  +  year  + "', '"  +additional  + "', '"  + additional2+ "');";
 		
 		try {
 			int result = dbManager.otherQuery(query);

@@ -169,40 +169,40 @@ public class Document4 extends DocumentBasic {
 	public String[][] getSpecifyTable() {
 		String[][] data = new String[size][size2];
 		data=this.getTable();
-		int s1=0,s2=0,s3=0,s4=0;
+		Double s1=(double) 0,s2=(double) 0,s3=(double) 0,s4=(double) 0;
 		for (int i = 0; i < 5; i++) {
-		        int c,r,b;
+		        Double c,r,b;
 		        c=addValueFromHashMap(Color.CZERWONE.toString(), i);
 		        r=addValueFromHashMap(Color.RÓŻOWE.toString(), i);
 		        b=addValueFromHashMap(Color.BIAŁE.toString(), i);
-				data[i][1] = Integer.toString(b) ;
+				data[i][1] = Double.toString(b) ;
 				s1=s1+b;
-				data[i][0] = Integer.toString(r+ c);
+				data[i][0] = Double.toString(r+ c);
 				s2=s2+r+c;
-				data[i][2] =Integer.toString(r+b+c);
+				data[i][2] =Double.toString(r+b+c);
 				s3=s3+r+c+b;
-				data[i][3] = Integer.toString(r+b+c);
+				data[i][3] = Double.toString(r+b+c);
 				s4=s4+r+c+b;
 				
 		
 		}
 		
-		data[6][1] =Integer.toString(s1) ;
+		data[6][1] =Double.toString(s1) ;
 		
-		data[6][0] = Integer.toString(s2) ;
+		data[6][0] = Double.toString(s2) ;
 		
-		data[6][2] =Integer.toString(s3) ;
+		data[6][2] =Double.toString(s3) ;
 		
-		data[6][3] =Integer.toString(s4) ;
+		data[6][3] =Double.toString(s4) ;
 		
 		
-      data[12][1] =Integer.toString(s1) ;
+      data[12][1] =Double.toString(s1) ;
 
-		data[12][0] = Integer.toString(s2) ;
+		data[12][0] = Double.toString(s2) ;
 		
-		data[12][2] =Integer.toString(s3) ;
+		data[12][2] =Double.toString(s3) ;
 		
-		data[12][3] =Integer.toString(s4) ;
+		data[12][3] =Double.toString(s4) ;
 	
 		
 		return data;

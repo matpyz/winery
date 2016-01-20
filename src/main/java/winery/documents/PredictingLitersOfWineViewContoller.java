@@ -179,6 +179,7 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 			for (int i = 0; i < 5; i++) {
 
 				TchangeData[i].setText( Integer.toString(addValueFromHashMap( i)));
+				Lresult[i].setText(model.changeNum(TchangeData[i].getText()));
 				
 			}
 			JOptionPane.showMessageDialog(null, "Pobrano dane z bazy danych.");

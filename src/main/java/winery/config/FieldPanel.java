@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.awt.Component;
 import javax.swing.SwingConstants;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -27,46 +28,52 @@ public class FieldPanel extends JPanel {
 	private JButton btnDodaj;
 
 	JButton btnWstecz;
-	JButton btnKoniec;
+	JButton btnDalej;
 
 	ArrayList<String> sectors = new ArrayList<String>();
 	ArrayList<Integer> columns = new ArrayList<Integer>();
 	ArrayList<Integer> rows = new ArrayList<Integer>();
+	private JLabel lblNewLabel;
 
 	public FieldPanel(ActionListener actionListener) {
+		setName("Wprowadź sektory winnicy.");
 
 		setLayout(null);
+		
+		JLabel lblTitle = new JLabel(getName());
+		lblTitle.setBounds(40, 20, 400, 20);
+		add(lblTitle);
 
 		JLabel lblSektor = new JLabel("Sektor");
 		lblSektor.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblSektor.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSektor.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblSektor.setBounds(40, 20, 100, 20);
+		lblSektor.setBounds(40, 40, 100, 20);
 		add(lblSektor);
 
 		JLabel lblIloKolumn = new JLabel("Liczba kolumn");
 		lblIloKolumn.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblIloKolumn.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIloKolumn.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblIloKolumn.setBounds(150, 20, 100, 20);
+		lblIloKolumn.setBounds(150, 40, 100, 20);
 		add(lblIloKolumn);
 
 		JLabel lblIlo = new JLabel("Liczba rzędów");
 		lblIlo.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblIlo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIlo.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblIlo.setBounds(260, 20, 100, 20);
+		lblIlo.setBounds(260, 40, 100, 20);
 		add(lblIlo);
 
 		btnWstecz = new JButton("Wstecz");
-		btnWstecz.setBounds(40, 335, 89, 23);
+		btnWstecz.setBounds(40, 315, 89, 23);
 		btnWstecz.addActionListener(actionListener);
 		add(btnWstecz);
 
-		btnKoniec = new JButton("Koniec");
-		btnKoniec.setBounds(386, 335, 89, 23);
-		btnKoniec.addActionListener(actionListener);
-		add(btnKoniec);
+		btnDalej = new JButton("Dalej");
+		btnDalej.setBounds(386, 315, 89, 23);
+		btnDalej.addActionListener(actionListener);
+		add(btnDalej);
 
 		panel = new JPanel();
 		panel.setLayout(null);
@@ -156,8 +163,8 @@ public class FieldPanel extends JPanel {
 
 		scrollPane = new JScrollPane(panel);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(40, 42, 435, 260);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setBounds(40, 62, 435, 240);
 		add(scrollPane);
 	}
 
@@ -178,16 +185,6 @@ public class FieldPanel extends JPanel {
 	private boolean check(String sect, int column, int row) {
 		for (String s : sectors) {
 			if (sect.equals(s)) {
-				return false;
-			}
-		}
-		for (int i : columns) {
-			if (column == i) {
-				return false;
-			}
-		}
-		for (int i : rows) {
-			if (row == i) {
 				return false;
 			}
 		}

@@ -35,6 +35,7 @@ public class OptionsFrame extends JFrame implements ActionListener {
 	private JButton[] actionsHolder;
 	
 	private AddListener addListener;
+	private ArrayList<Event> events;
 	
 		public OptionsFrame(int x, int y, int numberOfTheDay, Calendar calendar, Utilities util) {
 			
@@ -80,8 +81,9 @@ public class OptionsFrame extends JFrame implements ActionListener {
 				calendar.set(Calendar.SECOND, calendar.getActualMinimum(Calendar.SECOND));
 				Date endDate = new java.sql.Date(calendar.getTime().getTime());
 				
-				// Przykladowe zastepcze wydarzenia
-				ArrayList<Event> events = new ArrayList();
+				ArrayList<Event> events = util.getAllDayEvents(startDate, endDate);
+				/* Dodane */	
+				/*events = new ArrayList();
 				calendar.set(Calendar.HOUR_OF_DAY, 12);
 				Date startDate1 = new java.sql.Date(calendar.getTime().getTime());
 				calendar.set(Calendar.HOUR_OF_DAY, 14);
@@ -91,15 +93,12 @@ public class OptionsFrame extends JFrame implements ActionListener {
 				events.add(event1);
 				Event event2 = new Event(1, "Zbiory", "Opis", startDate, endDate, "Winiarnia", 2,
 						3, "Spot-Win");
-				events.add(event2);
-				
-				//ArrayList<Event> events = util.getAllDayEvents(startDate, endDate);
+				events.add(event2);*/
 				int i = 0;
 				for (Event event: events) {
+					actionsHolder[i] = new JButton(event.getStartDate().toString() + " - " + event.getName());
 					//actionsHolder[i].setBackground(Color.BLUE);
 					//actionsHolder[i].setText(event.getName());
-					actionsHolder[i] = new JButton(event.getStartDate().toString() + " - " + 
-							event.getName());
 					actionsHolder[i].setMinimumSize(new Dimension(350, 50));
 					actionsHolder[i].setMaximumSize(new Dimension(350, 50));
 					actionsHolder[i].setBorder(border);
@@ -107,11 +106,12 @@ public class OptionsFrame extends JFrame implements ActionListener {
 					actionsHolder[i].addActionListener(this);
 					actionsHolder[i].setActionCommand(Integer.toString(i));
 					actions.add(actionsHolder[i]);
+					i++;
 				}
 			//}
 			
 			scrollPane = new JScrollPane(actions);
-			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 			scrollPane.setBounds(15, 15, 350, 300);
 			//scrollPane.setWheelScrollingEnabled(true);
@@ -146,8 +146,7 @@ public class OptionsFrame extends JFrame implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int command = Integer.parseInt(e.getActionCommand());
-				//System.out.println("Otworzę okno z informacja z numerem: " + command);
-				new InformationFrame(command, calendar);
+			int i = Integer.parseInt(e.getActionCommand());
+			new InformationFrame(calendar, util, events.get(i));
 		}
 }

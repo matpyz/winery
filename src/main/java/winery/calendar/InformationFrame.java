@@ -21,6 +21,9 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.SwingConstants;
 import javax.swing.text.MaskFormatter;
+
+import dbapi.Event;
+
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
@@ -107,10 +110,15 @@ public class InformationFrame extends JFrame implements ActionListener {
 		endDateText = new JFormattedTextField(formatter);
 		
 		change = new JButton("Zmień");
+		change.setActionCommand("change");
 		change.addActionListener(this);
 		
 		delete = new JButton("Usuń");
+		delete.setActionCommand("delete");
 		delete.addActionListener(this);
+		delete.setBounds(425, 500, 100, 35);
+		delete.setVisible(true);
+		this.add(delete);
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -313,8 +321,9 @@ public class InformationFrame extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
-		nameString = nameText.getText();
+		switch (e.getActionCommand()) {
+		case "delete":
+			nameString = nameText.getText();
 		locationString = locationText.getText();
 		descriptionString = descriptionText.getText();
 		
@@ -339,6 +348,42 @@ public class InformationFrame extends JFrame implements ActionListener {
 			//ex.printStackTrace();
 			System.out.println("Podano niekompletne lub błędne dane");
 		}
+
+		//util.removeEvent
+			break;
+		case "change":
+			nameString = nameText.getText();
+		locationString = locationText.getText();
+		descriptionString = descriptionText.getText();
+		
+		startDateString = startDateText.getText();
+		endDateString = endDateText.getText();
+		startHourString = startHourText.getText();
+		endHourString = endHourText.getText();
+		
+		SimpleDateFormat formatter2 = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+		String startDateInString2 = startDateString + " " + startHourString;	
+		String endDateInString2 = endDateString + " " + endHourString;
+			
+		Date startDate2;
+		Date endDate2;
+		try {
+				startDate2 = formatter2.parse(startDateInString2);
+				endDate2 = formatter2.parse(endDateInString2);
+				//System.out.println(endDate);
+				//System.out.println(formatter.format(endDate));
+
+		} catch (ParseException ex) {
+			//ex.printStackTrace();
+			System.out.println("Podano niekompletne lub błędne dane");
+		}
+
+		//util.editEvent...
+			break;
+		default:
+			break;
+		}
+		
 		
 		/*util.addEvent(nameString, descriptionString, startDate, endDate, 
 				locationString, int eventTypeId);*/

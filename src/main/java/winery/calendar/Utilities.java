@@ -2,6 +2,7 @@ package winery.calendar;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import dbapi.DBManager;
@@ -19,6 +20,7 @@ public class Utilities {
 	
 	public Utilities() {
 		allEvents = DBManager.getEvents();
+		System.out.println("AllEvents: " + allEvents);
 		user = DBManager.getUserById(Guardian.getUserId());
 		setEventTypes(DBManager.getEventType());
 		//permissions = user.getPermissions();
@@ -60,7 +62,8 @@ public class Utilities {
 		ArrayList<Event> events = new ArrayList<Event>();
 		for(int i : allEvents.keySet()) {
 			Event e = allEvents.get(i);
-			if(e.getStartDate().after(startDate) && e.getStartDate().before(endDate)) {
+			if ( (startDate.after(e.getStartDate()) && endDate.before(e.getEndDate())) || (e.getStartDate().compareTo(startDate) == 0) || (e.getEndDate().compareTo(endDate) == 0) ) {
+		//	if(e.getStartDate().after(startDate) && e.getStartDate().before(endDate)) {
 				events.add(e);
 			}
 		}

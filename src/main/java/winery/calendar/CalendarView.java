@@ -132,6 +132,9 @@ public class CalendarView extends View implements ActionListener, Controller {
 				events.add(event1);
 				*/
 				ArrayList<Event> events = util.getAllDayEvents(startDate, endDate);
+				if (events == null) {
+					System.out.println("Nie ma wydarzeń");
+				}
 				panelHolder[row][column].addEvent(events);
 				k++;
 			}

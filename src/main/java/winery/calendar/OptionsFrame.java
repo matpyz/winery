@@ -81,7 +81,7 @@ public class OptionsFrame extends JFrame implements ActionListener {
 				calendar.set(Calendar.SECOND, calendar.getActualMinimum(Calendar.SECOND));
 				Date endDate = new java.sql.Date(calendar.getTime().getTime());
 				
-				ArrayList<Event> events = util.getAllDayEvents(startDate, endDate);
+				events = util.getAllDayEvents(startDate, endDate);
 				/* Dodane */	
 				/*events = new ArrayList();
 				calendar.set(Calendar.HOUR_OF_DAY, 12);

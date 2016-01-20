@@ -290,6 +290,8 @@ public class AddFrame extends JFrame implements ActionListener {
 				endDate = formatter.parse(endDateInString);
 				System.out.println(endDate);
 				System.out.println(formatter.format(endDate));
+				util.addEvent(nameString, descriptionString, new java.sql.Date(startDate.getTime()), new java.sql.Date(endDate.getTime()), 
+						locationString, 1);
 
 		} catch (ParseException ex) {
 			//ex.printStackTrace();
@@ -310,6 +312,7 @@ public class AddFrame extends JFrame implements ActionListener {
 		 * util.addEvent(String name, String description, Date startDate, Date endDate, 
 				String location, int eventTypeId)
 		 */
+		
 		
 
 	}

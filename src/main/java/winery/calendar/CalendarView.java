@@ -56,6 +56,8 @@ public class CalendarView extends View implements ActionListener, Controller {
 		this.removeAll();
 		this.repaint();
 		this.revalidate();
+		
+		currentMonth = calendar.get(Calendar.MONTH);
 
 		previousButton = new JButton("Poprzedni");
 		previousButton.setBounds(25, 25, 120, 35);
@@ -63,7 +65,6 @@ public class CalendarView extends View implements ActionListener, Controller {
 		nextButton = new JButton("Następny");
 		nextButton.setBounds(455, 25, 120, 35);
 
-		currentMonth = calendar.get(Calendar.MONTH);
 		monthNameLabel = new JLabel(months[currentMonth]);
 		monthNameLabel.setBackground(Color.WHITE);
 		monthNameLabel.setBounds(275, 25, 200, 35);
@@ -119,7 +120,7 @@ public class CalendarView extends View implements ActionListener, Controller {
 				calendar.set(Calendar.MINUTE, calendar.getActualMaximum(Calendar.MINUTE));
 				calendar.set(Calendar.SECOND, calendar.getActualMaximum(Calendar.SECOND));
 				Date endDate = new java.sql.Date(calendar.getTime().getTime());
-				System.out.println(endDate);
+				//System.out.println(endDate);
 				
 				ArrayList<Event> events = util.getAllDayEvents(startDate, endDate);
 				panelHolder[row][column].addEvent(events);
@@ -175,19 +176,18 @@ public class CalendarView extends View implements ActionListener, Controller {
 	}
 
 	public void previousMonth() {
-		currentMonth -= 1;
-		if (currentMonth < 0) {
-			currentMonth += 12;
-		}
-		calendar.set(Calendar.MONTH, currentMonth);
-		if (currentMonth == 11) calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) - 1);
+		calendar.set(Calendar.DATE, 0);
+		calendar.add(Calendar.DATE, -1);
 		createGUI();
 	}
 
 	private void nextMonth() {
-		currentMonth = (currentMonth + 1) % 12;
-		calendar.set(Calendar.MONTH, currentMonth);
-		if (currentMonth == 0) calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
+		/**
+		 * Program działa tak, że po wygenerowaniu kalendarza obiekt calendar
+		 * jest ustawiony na ostatni dzień miesiąca. Dodanie 1 lokuje nas w
+		 * kolejnym miesiącu (też ewentualnie roku).
+		 */
+		calendar.add(Calendar.DATE, 1);
 		createGUI();
 	}
 

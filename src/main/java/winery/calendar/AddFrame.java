@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -11,7 +12,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
 import java.awt.BorderLayout;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.SwingConstants;
@@ -236,6 +239,26 @@ public class AddFrame extends JFrame implements ActionListener {
 		endDateString = endDateText.getText();
 		startHourString = startHourText.getText();
 		endHourString = endHourText.getText();
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+		String startDateInString = startDateString + " " + startHourString;	
+		String endDateInString = endDateString + " " + endHourString;
+			
+		Date startDate;
+		Date endDate;
+		try {
+				startDate = formatter.parse(startDateInString);
+				endDate = formatter.parse(endDateInString);
+				System.out.println(endDate);
+				System.out.println(formatter.format(endDate));
+
+		} catch (ParseException ex) {
+			//ex.printStackTrace();
+			System.out.println("Podano niekompletne lub błędne dane");
+		}
+		
+		/*util.addEvent(nameString, descriptionString, startDate, endDate, 
+				locationString, int eventTypeId);*/
 		
 		/*
 		 * TODO: Dalsza walidacja danych

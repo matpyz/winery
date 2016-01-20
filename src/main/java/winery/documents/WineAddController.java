@@ -1,19 +1,48 @@
 package winery.documents;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
 import dbapi.DBManager;
+import dbapi.User;
+import dbapi.Wine;
+import winery.accounts.AccountsModel;
+import winery.accounts.AccountsView;
 import winery.model.Model;
 import winery.view.Controller;
 import winery.view.View;
 
 public class WineAddController implements Controller {
 
+	HashMap<String, Integer> wineIdMap = new HashMap<>();
+	
+	WineAddModel model;
+	WineAddView view;
 	
 	protected String response;
 
 	public WineAddController() {
-		
+		model = new WineAddModel();
+		view = new WineAddView(this);
+
+		model.register(view);
+		getWineList();
 	}
 	
+	private void getWineList() {
+		HashMap<Integer, Wine> wines = DBManager.getAllWines();
+
+		List<Wine> wineList = new ArrayList<>(wines.values());
+		LinkedList<String> userData = new LinkedList<>();
+		for (Wine w : wineList) {
+			userData.add(w.getName() + " (" + w.getYear() + ")");
+			wineIdMap.put(w.getName()+w.getYear(), w.getId());
+		}
+		model.setWineList(userData);
+	}
+
 	public void firstUse() {
 
 
@@ -21,16 +50,19 @@ public class WineAddController implements Controller {
 
 	@Override
 	public View getView() {
-		// TODO Auto-generated method stub
-		return null;
+		return view;
 	}
 
 	@Override
 	public String getTitle() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Magazyn";
 	}
 
+	public String getId() {
+		// TODO Auto-generated method stub
+		return "wineadd";
+	}
+	
 	public void getWineData(String string) {
 		// TODO Auto-generated method stub
 		
@@ -41,8 +73,11 @@ public class WineAddController implements Controller {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	public static String getID() {
-		return "wineadd";
+
+	public void deleteWine(String string) {
+		// TODO Auto-generated method stub
+		
 	}
+	
+	
 }

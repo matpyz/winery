@@ -18,7 +18,6 @@ public class AccountsModel extends Model {
 	}
 	
 	public void setAccountList(ArrayList<String> userData) {
-		System.out.println(userData.toString());
 		accountList = userData;
 		change();
 	}

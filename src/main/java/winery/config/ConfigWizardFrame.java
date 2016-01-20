@@ -20,7 +20,9 @@ public class ConfigWizardFrame extends JFrame implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final JPanel pane[] = { new CompanyInfoPanel(this), new FieldPanel(this) };
+	private final CompanyInfoPanel companyInfoPanel = new CompanyInfoPanel(this);
+	private final FieldPanel fieldPanel = new FieldPanel(this);
+	private final JPanel pane[] = { new WelcomePanel(this), companyInfoPanel, fieldPanel, new ThankYouPanel(this) };
 	private int i = 0;
 	private final Semaphore ready;
 	private static final String path = ".config";
@@ -48,6 +50,7 @@ public class ConfigWizardFrame extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 550, 400);
 		setContentPane(pane[i]);
+		setTitle(pane[i].getName());
 		setVisible(true);
 	}
 
@@ -56,23 +59,23 @@ public class ConfigWizardFrame extends JFrame implements ActionListener {
 		JButton button = (JButton) e.getSource();
 		switch (button.getText()) {
 		case "Dalej":
-			pane[i].setVisible(false);
-			setContentPane(pane[++i]);
+			pane[i++].setVisible(false);
+			setContentPane(pane[i]);
+			setTitle(pane[i].getName());
 			pane[i].setVisible(true);
-			repaint();
 			break;
 		case "Wstecz":
-			pane[i].setVisible(false);
-			setContentPane(pane[--i]);
+			pane[i--].setVisible(false);
+			setContentPane(pane[i]);
+			setTitle(pane[i].getName());
 			pane[i].setVisible(true);
-			repaint();
 			break;
 		case "Koniec":
-			String personal = ((CompanyInfoPanel) pane[0]).getPersonalData();
-			String field = ((FieldPanel) pane[1]).getFieldData();
-			if (personal == null || field == null)
+			String company = companyInfoPanel.getCompanyData();
+			String field = fieldPanel.getFieldData();
+			if (company == null || field == null)
 				break;
-			writeToFile(personal, field);
+			writeToFile(company, field);
 			dispose();
 			ready.release();
 			break;

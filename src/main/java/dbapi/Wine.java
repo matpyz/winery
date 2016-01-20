@@ -1,5 +1,10 @@
 package dbapi;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+import javax.swing.JTextField;
+
 public class Wine {
 
 	private int id;
@@ -117,6 +122,12 @@ public class Wine {
 
 	public void setProtectedOrigin(int protectedOrigin) {
 		this.protectedOrigin = protectedOrigin;
+	}
+
+
+	public ArrayList<String> getData() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

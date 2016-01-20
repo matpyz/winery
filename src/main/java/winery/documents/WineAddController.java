@@ -42,5 +42,7 @@ public class WineAddController implements Controller {
 		
 	}
 	
-	
+	public static String getID() {
+		return "wineadd";
+	}
 }

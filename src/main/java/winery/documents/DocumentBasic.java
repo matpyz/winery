@@ -353,7 +353,7 @@ public class DocumentBasic {
 	
 	
 	
-	public int addValueFromHashMap(String color, int type) {
+	public double addValueFromHashMap(String color, int type) {
 		int sum=0;
 		HashMap<Integer, Wine>  hash = DBManager.getWineByCororAndType(color, type);
 		for ( Entry<Integer, Wine> entry : hash.entrySet()) {
@@ -363,7 +363,7 @@ public class DocumentBasic {
 		    // do something with key and/or tab
 		}
 		
-		return (int) (sum*0.75);
+		return  ((sum*0.75)* 0.001);
 	}
 	
 	public enum Color {

@@ -84,8 +84,8 @@ public class Document1 extends DocumentBasic {
 		String [] colortable= {Color.BIAŁE.toString(),Color.CZERWONE.toString(), Color.RÓŻOWE.toString()};
 		for (int i = 0; i < size; i++) {
 			
-				data[i][0] = Integer.toString(addValueFromHashMap(colortable[1], i)+addValueFromHashMap(colortable[2], i));
-				data[i][1] = Integer.toString(addValueFromHashMap(colortable[0], i));
+				data[i][0] = Double.toString(addValueFromHashMap(colortable[1], i)+addValueFromHashMap(colortable[2], i));
+				data[i][1] = Double.toString(addValueFromHashMap(colortable[0], i));
 		}
 		return data;
 		

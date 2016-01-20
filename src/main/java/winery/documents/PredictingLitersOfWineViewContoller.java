@@ -46,7 +46,8 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 	int a = 500;// długość
 	int b = 500;
 	private JPanel Pmaks;
-	private JButton Bupdate;
+	private JPanel Pupdate;
+	private JButton Bupdate, BupdateBD;
 	private JPanel[] PpanelTable;
 	private JLabel[] Lname;
 	private JTextField[] TchangeData;
@@ -147,7 +148,12 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 
 		Bupdate = new JButton(" Aktualizuj. ");
 		Bupdate.addActionListener(new UpdateData());
-		Pcenter.add(Bupdate);
+		BupdateBD = new JButton(" Pobierz z bazy.");
+		BupdateBD.addActionListener(new UpdateDataBD());
+		Pupdate=new JPanel();
+		Pupdate.add(Bupdate);
+		Pupdate.add(BupdateBD);
+		Pcenter.add(Pupdate);
 
 		BgenerateDoc = new JButton(" Generuj. ");
 		BgenerateDoc.addActionListener(new GenerateDocListener());
@@ -166,6 +172,20 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 
 		}
 	}
+	
+	public class UpdateDataBD implements ActionListener { // Aktualizacja danych
+
+		public void actionPerformed(ActionEvent event) {
+			for (int i = 0; i < 5; i++) {
+
+				TchangeData[i].setText( Integer.toString(addValueFromHashMap( i)));
+				Lresult[i].setText(model.changeNum(TchangeData[i].getText()));
+				
+			}
+			JOptionPane.showMessageDialog(null, "Pobrano dane z bazy danych.");
+		}
+	}
+
 
 	public class PathSelectListener implements ActionListener { // Ścieżka do
 																// pliku
@@ -286,7 +306,7 @@ public class PredictingLitersOfWineViewContoller extends View implements Control
 		    // do something with key and/or tab
 		}
 		
-		return (int) (sum*  (3.5 / 2.0) * 0.001);
+		return (int) sum;
 	}
 	
 	public String readFromFile() throws IOException {

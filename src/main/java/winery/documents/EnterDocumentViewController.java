@@ -19,8 +19,8 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import dbapi.DBManager;
-import winery.guardian.Guardian;
 import winery.model.Model;
+import winery.program.Guardian;
 import winery.view.Controller;
 import winery.view.View;
 

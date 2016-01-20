@@ -1,4 +1,4 @@
-package winery.guardian;
+package winery.program;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -11,8 +11,6 @@ public class Guardian {
 
 	private static Guardian instance = null;
 	private static User user = null;
-
-	private static GuardianView view;
 	private static Semaphore signal;
 
 	// private SecureRandom random;
@@ -25,7 +23,7 @@ public class Guardian {
 	public static void initialize(Semaphore semaphore) {
 		instance = new Guardian();
 		signal = semaphore;
-		view = new GuardianView(instance, 200, 300);
+		GuardianView view = new GuardianView(instance, 200, 300);
 	}
 
 	private Guardian() {

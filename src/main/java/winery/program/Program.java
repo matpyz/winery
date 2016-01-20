@@ -1,6 +1,5 @@
-package winery.view;
+package winery.program;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 
 import javax.swing.JFrame;
@@ -14,8 +13,9 @@ import winery.documents.ExciseTaxViewController;
 import winery.documents.PredictingLitersOfWineViewContoller;
 import winery.documents.SelectGenerateDocumentViewController;
 import winery.documents.WineAddViewController;
-import winery.guardian.Guardian;
 import winery.rss.RSSController;
+import winery.view.Controller;
+import winery.view.View;
 
 /**
  * Zawiera punkt startowy programu. Jako główne okno, prezentuje panele-widoki

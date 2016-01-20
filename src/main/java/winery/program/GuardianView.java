@@ -1,4 +1,4 @@
-package winery.guardian;
+package winery.program;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;

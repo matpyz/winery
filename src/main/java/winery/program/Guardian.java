@@ -13,21 +13,15 @@ public class Guardian {
 	private static User user = null;
 	private static Semaphore signal;
 
-	// private SecureRandom random;
-	/*
-	 * public static synchronized Guardian getInstance() { if(instance == null)
-	 * return null;
-	 * 
-	 * return instance; }
-	 */
 	public static void initialize(Semaphore semaphore) {
-		instance = new Guardian();
 		signal = semaphore;
-		GuardianView view = new GuardianView(instance, 200, 300);
+		new GuardianView(200, 300);
 	}
 
+	/**
+	 * Celowo pusty prywatny konstruktor - SINGLETON.
+	 */
 	private Guardian() {
-		/* Celowo pusty prywatny konstruktor, HAIL SINGLETON */
 	}
 
 	/**
@@ -45,7 +39,7 @@ public class Guardian {
 		return permissions;
 	}
 
-	protected static boolean login(String login, String password) {
+	static boolean login(String login, String password) {
 		user = DBManager.signIn(login, password);
 		if (user != null) {
 			signal.release();
@@ -59,9 +53,5 @@ public class Guardian {
 			return -1;
 		else
 			return user.getId();
-	}
-
-	public static int getUserDbId() {
-		return getUserId();
 	}
 }

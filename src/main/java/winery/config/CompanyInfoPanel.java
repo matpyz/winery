@@ -1,16 +1,17 @@
 package winery.config;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import java.awt.Component;
 import java.awt.event.ActionListener;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 
 public class CompanyInfoPanel extends JPanel {
 	/**
@@ -26,10 +27,6 @@ public class CompanyInfoPanel extends JPanel {
 	private JTextField tfNip;
 	private JTextField tfRegon;
 	private JTextField tfEvidenceNo;
-
-	private String getCompanyName() {
-		return tfCompanyName.getText();
-	}
 
 	public String getPersonalData() {
 		String companyName = tfCompanyName.getText();

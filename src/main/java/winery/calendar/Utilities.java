@@ -21,7 +21,7 @@ public class Utilities {
 
 	public boolean addEvent(String name, String description, Date startDate, Date endDate, 
 			String location, int eventTypeId) {
-		User u = DBManager.getUserById(Guardian.getUserDbId());
+		User u = DBManager.getUserById(Guardian.getUserId());
 		// Sprawdź pozwolenie na tworzenie eventu
 		HashMap<Integer, Permission> perm = u.getPermissions();
 		//for(int x : perm.keySet()){
@@ -38,7 +38,7 @@ public class Utilities {
 	
 	public boolean editEvent(int eventId, String name, String description, Date startDate, 
 			Date endDate, String location, int eventTypeId) {
-		User u = DBManager.getUserById(Guardian.getUserDbId());
+		User u = DBManager.getUserById(Guardian.getUserId());
 		// Sprawdź pozwolenie na tworzenie eventu
 		HashMap<Integer, Permission> perm = u.getPermissions();
 		//for(int x : perm.keySet()){
@@ -54,7 +54,7 @@ public class Utilities {
 	}
 	
 	public boolean removeEvent(int eventId) {
-		User u = DBManager.getUserById(Guardian.getUserDbId());
+		User u = DBManager.getUserById(Guardian.getUserId());
 		// Sprawdź pozwolenie na tworzenie eventu
 		HashMap<Integer, Permission> perm = u.getPermissions();
 		//for(int x : perm.keySet()){

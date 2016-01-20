@@ -27,7 +27,7 @@ class GuardianView extends JFrame implements ActionListener {
 	private JTextField txt_password;
 	private JButton btn_login;
 
-	public GuardianView(Guardian controller, int height, int width) {
+	public GuardianView(int height, int width) {
 		super("Logowanie");
 
 		createGUI(width, height);

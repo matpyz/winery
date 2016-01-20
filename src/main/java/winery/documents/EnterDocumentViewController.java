@@ -138,14 +138,7 @@ public class EnterDocumentViewController extends View implements Controller, Act
 		Blob document;
 		try {
 			document = DBManager.loadBlob(tfPath.getText());
-			/*
-			 * FIXME Jak określić poprawną wartość creatorId? Ma związek z
-			 * zalogowanym użytkownikiem, potrzebna nowa funkcjonalność
-			 * Guardiana?
-			 * 
-			 * Zwalidować dane: sprawdzić długość napisów?
-			 */
-			int creatorId = Guardian.getUserDbId();
+			int creatorId = Guardian.getUserId();
 			if (DBManager.addDocument(creatorId, tfName.getText(), editorDescription.getText(), tfType.getText(),
 					document)) {
 				JOptionPane.showMessageDialog((Component) null, "Wprowadzono poprawnie plik do bazy.", "Sukces",

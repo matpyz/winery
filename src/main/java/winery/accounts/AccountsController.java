@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.swing.SwingUtilities;
-
+import dbapi.DBManager;
+import dbapi.User;
 import winery.view.Controller;
 import winery.view.View;
-import dbapi.*;
 
 public class AccountsController implements Controller {
 
@@ -25,10 +24,10 @@ public class AccountsController implements Controller {
 	public AccountsController() {
 		model = new AccountsModel();
 		view = new AccountsView(this);
-		
+
 		model.register(view);
 		getAccountList();
-	}	
+	}
 
 	/**
 	 * Dodaje nowe konto.
@@ -37,8 +36,10 @@ public class AccountsController implements Controller {
 	 *            dane nowego konta
 	 * @return string potwierdzający lub opisujący napotkany błąd
 	 */
-	public void newAccount(String name, String surname, String login, String password, String mail, String payment, String groupName) {
-		DBManager.addUser(login, password, mail, name, surname, DBManager.getGroupIdByName(groupName), new Integer(payment));
+	public void newAccount(String name, String surname, String login, String password, String mail, String payment,
+			String groupName) {
+		DBManager.addUser(login, password, mail, name, surname, DBManager.getGroupIdByName(groupName),
+				new Integer(payment));
 		getAccountList();
 		response = "konto " + login + " zostało dodane";
 	}
@@ -49,15 +50,17 @@ public class AccountsController implements Controller {
 	 * @param accountData
 	 * @return string potwierdzający lub opisujący napotkany błąd
 	 */
-	public void modifyAccount(String name, String surname, String login, String password, String mail, String payment, String groupName) {
-		//DBManager.changeUserData(userId, login, password, mail, name, surname, groupId, payment)
+	public void modifyAccount(String name, String surname, String login, String password, String mail, String payment,
+			String groupName) {
+		// DBManager.changeUserData(userId, login, password, mail, name,
+		// surname, groupId, payment)
 		int groupId = DBManager.getGroupIdByName(groupName);
 		System.out.println(payment);
-		if(DBManager.changeUserData(userIdMap.get(login), login, password, mail, name, surname, groupId, new Integer(payment))){
+		if (DBManager.changeUserData(userIdMap.get(login), login, password, mail, name, surname, groupId,
+				new Integer(payment))) {
 			getAccountList();
 			response = "dane konta '" + login + "' zostały zaktualizowane";
-		}
-		else
+		} else
 			response = "wystąpił błąd przy zmianie danych";
 	}
 
@@ -81,8 +84,7 @@ public class AccountsController implements Controller {
 	 * @return lista stringów z danymi
 	 */
 	void getAccountData(String userLogin) {
-		User user = DBManager
-				.getUserById(userIdMap.get(userLogin));
+		User user = DBManager.getUserById(userIdMap.get(userLogin));
 		model.setAccountData(user.getData());
 		response = "";
 	}
@@ -98,8 +100,7 @@ public class AccountsController implements Controller {
 		List<User> userList = new ArrayList<>(users.values());
 		ArrayList<String> userData = new ArrayList<>();
 		for (User u : userList) {
-			userData.add(u.getName() + " " + u.getSurname() + " ("
-					+ u.getLogin() + ")");
+			userData.add(u.getName() + " " + u.getSurname() + " (" + u.getLogin() + ")");
 			userIdMap.put(u.getLogin(), u.getId());
 		}
 		model.setAccountList(userData);

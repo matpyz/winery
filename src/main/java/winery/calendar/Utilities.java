@@ -13,63 +13,48 @@ import winery.program.Guardian;
 public class Utilities {
 	
 	private HashMap<Integer, Event> allEvents;
+	private HashMap<Integer, Permission> permissions;
+	private User user;
 	
 	public Utilities() {
 		allEvents = DBManager.getEvents();
-		
+		user = DBManager.getUserById(Guardian.getUserId());
+		//permissions = user.getPermissions();
+	}
+	
+	private void updateEvents() {
+		allEvents = DBManager.getEvents();
 	}
 
 	public boolean addEvent(String name, String description, Date startDate, Date endDate, 
 			String location, int eventTypeId) {
-		User u = DBManager.getUserById(Guardian.getUserId());
-		// Sprawdź pozwolenie na tworzenie eventu
-		HashMap<Integer, Permission> perm = u.getPermissions();
-		//for(int x : perm.keySet()){
-			//if(perm.get(x).getName().equals("ADD_EVENT")) {
-				// Spróbuj utworzyć event
-				if(DBManager.addEvent(u.getId(), name, description, startDate, endDate, location, 
-						eventTypeId) == true) {
-					return true;
-				}
-			//}
-		//}
+		if(DBManager.addEvent(user.getId(), name, description, startDate, endDate, location, 
+			eventTypeId) == true) {
+			updateEvents();
+			return true;
+		}
 		return false;
 	}
 	
 	public boolean editEvent(int eventId, String name, String description, Date startDate, 
 			Date endDate, String location, int eventTypeId) {
-		User u = DBManager.getUserById(Guardian.getUserId());
-		// Sprawdź pozwolenie na tworzenie eventu
-		HashMap<Integer, Permission> perm = u.getPermissions();
-		//for(int x : perm.keySet()){
-			//if(perm.get(x).getName().equals("EDIT_EVENT")) { //sprawdzane w DBManager?
-				// Spróbuj zmienić event
-				if(DBManager.updateEventDataById(u.getId(), eventId, name, description, startDate, endDate, 
-						location, eventTypeId) == true) {
-					return true;
-				}
-			//}
-		//}
+		if(DBManager.updateEventDataById(user.getId(), eventId, name, description, startDate, endDate, 
+			location, eventTypeId) == true) {
+			updateEvents();
+			return true;
+		}
 		return false;
 	}
 	
 	public boolean removeEvent(int eventId) {
-		User u = DBManager.getUserById(Guardian.getUserId());
-		// Sprawdź pozwolenie na tworzenie eventu
-		HashMap<Integer, Permission> perm = u.getPermissions();
-		//for(int x : perm.keySet()){
-			//if(perm.get(x).getName().equals("REMOVE_EVENT")) { //sprawdzane w DBManager?
-				// Spróbuj usunąć event
-				if(DBManager.removeEventById(u.getId(), eventId) == true) {
-					return true;
-				}
-			//}
-		//}
+		if(DBManager.removeEventById(user.getId(), eventId) == true) {
+			updateEvents();
+			return true;
+		}
 		return false;
 	}
 	
 	public ArrayList<Event> getAllDayEvents(Date startDate, Date endDate){
-		//User u = DBManager.getUserById(Guardian.getUserDbId());
 		ArrayList<Event> events = new ArrayList<Event>();
 		for(int i : allEvents.keySet()) {
 			Event e = allEvents.get(i);

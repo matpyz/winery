@@ -11,6 +11,11 @@ public class Guardian {
 	private static User user = null;
 	private static Semaphore signal;
 
+	/**
+	 * @param semaphore
+	 *            Semafor który udzieli pozwolenia głównemu wątkowi przy udanym
+	 *            zalogowaniu.
+	 */
 	public static void initialize(Semaphore semaphore) {
 		signal = semaphore;
 		new GuardianView(200, 300);
@@ -28,8 +33,8 @@ public class Guardian {
 	 * @return kolekcja typu ArrayList<String>
 	 */
 	public static List<String> getPermissions() {
-		List<Permission> permissionList = new LinkedList<Permission>(
-				DBManager.getPermissionsForGroupId(user.getGroupId()).values());
+		List<Permission> permissionList = new LinkedList<Permission>(DBManager
+				.getPermissionsForGroupId(user.getGroupId()).values());
 		List<String> permissions = new ArrayList<>();
 		for (Permission permission : permissionList)
 			permissions.add(permission.getName());
@@ -37,7 +42,13 @@ public class Guardian {
 		return permissions;
 	}
 
-	static boolean login(String login, String password) {
+	/**
+	 * Loguje użytkownika.
+	 * @param login
+	 * @param password
+	 * @return true w wypadku udanego logowanie, false w przeciwnym razie
+	 */
+	protected static boolean login(String login, String password) {
 		user = DBManager.signIn(login, password);
 		if (user != null) {
 			signal.release();
@@ -46,6 +57,9 @@ public class Guardian {
 			return false;
 	}
 
+	/**
+	 * @return ID użytkownika po zalogowaniu, -1 przed
+	 */
 	public static int getUserId() {
 		if (user == null)
 			return -1;

@@ -1,9 +1,7 @@
 package dbapi;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
-
-import javax.swing.JTextField;
 
 public class Wine {
 
@@ -19,9 +17,10 @@ public class Wine {
 	private int protectedOrigin;
 	private int forSale;
 
-	public Wine(int id, String name, String grapes, String color, int produced, int sold, int basePrice,
-			int productionCost, int year, int protectedOrigin, int forSale) {
-		
+	public Wine(int id, String name, String grapes, String color, int produced,
+			int sold, int basePrice, int productionCost, int year,
+			int protectedOrigin, int forSale) {
+
 		this.id = id;
 		this.name = name;
 		this.grapes = grapes;
@@ -34,7 +33,6 @@ public class Wine {
 		this.protectedOrigin = protectedOrigin;
 		this.forSale = forSale;
 	}
-
 
 	public String getName() {
 		return name;
@@ -72,7 +70,6 @@ public class Wine {
 		return sold;
 	}
 
-
 	public void setSold(int sold) {
 		this.sold = sold;
 	}
@@ -96,7 +93,7 @@ public class Wine {
 	public int getId() {
 		return id;
 	}
-	
+
 	public int getYear() {
 		return year;
 	}
@@ -104,30 +101,29 @@ public class Wine {
 	public void setYear(int year) {
 		this.year = year;
 	}
-	
+
 	public int getForSale() {
 		return forSale;
 	}
-
 
 	public void setForSale(int forSale) {
 		this.forSale = forSale;
 	}
 
-
 	public int getProtectedOrigin() {
 		return protectedOrigin;
 	}
-
 
 	public void setProtectedOrigin(int protectedOrigin) {
 		this.protectedOrigin = protectedOrigin;
 	}
 
-
-	public ArrayList<String> getData() {
-		// TODO Auto-generated method stub
-		return null;
+	public LinkedList<String> getData() {
+		return new LinkedList<String>(Arrays.asList(name,
+				Integer.toString(year), Integer.toString(produced),
+				Integer.toString(sold), Integer.toString(forSale),
+				Integer.toString(productionCost), Integer.toString(basePrice),
+				color, grapes));
 	}
-	
+
 }

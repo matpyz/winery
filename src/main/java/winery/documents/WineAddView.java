@@ -30,10 +30,6 @@ public class WineAddView extends View implements ActionListener {
 	 */
 	protected static final long serialVersionUID = 1L;
 
-	private static int actionNumber = -2; // 2 pierwsze akcje to pobranie listy
-											// kont i wyświetlenie pierwszego z
-											// nich
-
 	private JComboBox<String> cBox_wineList;
 
 	private JTextField txt_name;
@@ -43,6 +39,8 @@ public class WineAddView extends View implements ActionListener {
 	private JTextField txt_forSale;
 	private JTextField txt_cost;
 	private JTextField txt_price;
+	private JTextField txt_colour;
+	private JTextField txt_type;
 	
 	private LinkedList<JTextField> txtList;
 
@@ -59,6 +57,8 @@ public class WineAddView extends View implements ActionListener {
 	private JLabel lbl_forSale;
 	private JLabel lbl_cost;
 	private JLabel lbl_price;
+	private JLabel lbl_colour;
+	private JLabel lbl_type;
 	private JLabel lbl_result;
 	
 	WineAddController controller;
@@ -121,15 +121,30 @@ public class WineAddView extends View implements ActionListener {
 		gbc_panel_accountData.gridy = 1;
 		add(panel_accountData, gbc_panel_accountData);
 
-		panel_accountData.setLayout(new FormLayout(
-				new ColumnSpec[] { FormSpecs.RELATED_GAP_COLSPEC, FormSpecs.DEFAULT_COLSPEC,
-						FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("default:grow"), },
-				new RowSpec[] { FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC,
-						FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
-						FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC,
-						FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
-						FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC,
-						FormSpecs.DEFAULT_ROWSPEC, }));
+		panel_accountData.setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),},
+			new RowSpec[] {
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 
 		lbl_name = new JLabel("Nazwa");
 		panel_accountData.add(lbl_name, "2, 2, right, default");
@@ -195,7 +210,7 @@ public class WineAddView extends View implements ActionListener {
 		btn_rmv.addActionListener(this);
 		btn_edit.addActionListener(this);
 
-		lbl_result = new JLabel(actionNumber + "");
+		lbl_result = new JLabel("");
 		GridBagConstraints gbc_lbl_result = new GridBagConstraints();
 		gbc_lbl_result.gridwidth = 4;
 		gbc_lbl_result.fill = GridBagConstraints.HORIZONTAL;
@@ -203,6 +218,22 @@ public class WineAddView extends View implements ActionListener {
 		gbc_lbl_result.gridx = 0;
 		gbc_lbl_result.gridy = 2;
 		add(lbl_result, gbc_lbl_result);
+		
+		lbl_colour = new JLabel("Kolor");
+		panel_accountData.add(lbl_colour, "2, 16, right, default");
+		
+		txt_colour = new JTextField();
+		txt_colour.setEditable(false);
+		txt_colour.setColumns(10);
+		panel_accountData.add(txt_colour, "4, 16, fill, default");
+		
+		lbl_type = new JLabel("Typ");
+		panel_accountData.add(lbl_type, "2, 18, right, default");
+		
+		txt_type = new JTextField();
+		txt_type.setEditable(false);
+		txt_type.setColumns(10);
+		panel_accountData.add(txt_type, "4, 18, fill, default");
 
 		txtList = new LinkedList<>();
 		txtList.add(txt_name);
@@ -212,13 +243,18 @@ public class WineAddView extends View implements ActionListener {
 		txtList.add(txt_forSale);
 		txtList.add(txt_cost);
 		txtList.add(txt_price);
-
+		txtList.add(txt_colour);
+		txtList.add(txt_type);
+		
 		btnList = new LinkedList<>();
 		btnList.add(btn_edit);
 		btnList.add(btn_rmv);
 		btnList.add(btn_add);
 	}
 
+	/* (non-Javadoc)
+	 * @see winery.view.View#update(winery.model.Model)
+	 */
 	@Override
 	public synchronized void update(Model model) {
 		WineAddModel wineAddModel = (WineAddModel) model;
@@ -231,36 +267,32 @@ public class WineAddView extends View implements ActionListener {
 			// Tak wiem, ale cóż
 			if (((DefaultComboBoxModel<String>) cBox_wineList.getModel()).getIndexOf(wine) == -1)
 				cBox_wineList.addItem(wine);
-/*
-		int j;
-		for (int i = 0; i < wineAddModel.getWine().getData().size(); i++) {
-			j = (i >= 3) ? 1 : 0;
-			txtList.get(i + j).setText(wineAddModel.getWine().getData().get(i));
-		}
+
+		for (int i = 0; i < wineAddModel.getWineData().size(); i++)
+			txtList.get(i).setText(wineAddModel.getWineData().get(i));
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				lbl_result.setText(++actionNumber + ": " + controller.response);
+				lbl_result.setText(controller.response);
 			}
 		});
-*/
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "select":
-			// Wyciąga login (z nawiasu) i podaje funkcji
-			controller.getWineData(((String) cBox_wineList.getSelectedItem()));
+			controller.getWineData((String) cBox_wineList.getSelectedItem());
 			break;
 		case "add":
-			addAccount();
+			addWine();
 			break;
 		case "rmv":
-			rmvAccount();
+			rmvWine();
 			break;
 		case "edit":
-			editAccount();
+			editWine();
 			break;
 		case "end_add":
 			endAdd();
@@ -273,7 +305,7 @@ public class WineAddView extends View implements ActionListener {
 		}
 	}
 
-	private void editAccount() {
+	private void editWine() {
 		btn_edit.setText("Zatwierdź");
 		btn_edit.setActionCommand("end_edit");
 
@@ -299,24 +331,26 @@ public class WineAddView extends View implements ActionListener {
 		}
 
 		String name = txt_name.getText();
-		String surname = txt_year.getText();
-		String login = txt_produced.getText();
-		String password = txt_sold.getText();
-		String mail = txt_forSale.getText();
-		String payment = txt_cost.getText();
-		String group = txt_price.getText();
+		int year = new Integer(txt_year.getText());
+		int produced = new Integer(txt_produced.getText());
+		int sold = new Integer(txt_sold.getText());
+		int forSale = new Integer(txt_forSale.getText());
+		int cost = new Integer(txt_cost.getText());
+		int price = new Integer(txt_price.getText());
+		String colour = txt_colour.getText();
+		String type = txt_type.getText();
 
-		controller.modifyWine(name, surname, login, password, mail, payment, group);
+		controller.modifyWine(name, type, colour, produced, sold, price, cost, year, forSale);
 	}
 
-	private void rmvAccount() {
+	private void rmvWine() {
 		String name = txt_name.getText();
 		String year = txt_year.getText();
 
-		controller.deleteWine(name+year);
+		controller.deleteWine(name+" "+year);
 	}
 
-	private void addAccount() {
+	private void addWine() {
 		btn_add.setText("Zatwierdź");
 		btn_add.setActionCommand("end_add");
 
@@ -325,11 +359,15 @@ public class WineAddView extends View implements ActionListener {
 		cBox_wineList.setEnabled(false);
 
 		for (JTextField txt : txtList) {
-			txt.setText("");
+			if(txt == txt_forSale)
+				txt.setText("0");
+			else
+				txt.setText("");
 		}
 
 		for (JTextField txt : txtList) {
-			txt.setEditable(true);
+			if(txt != txt_forSale)
+				txt.setEditable(true);
 		}
 
 	}
@@ -347,14 +385,16 @@ public class WineAddView extends View implements ActionListener {
 		}
 
 		String name = txt_name.getText();
-		String surname = txt_year.getText();
-		String login = txt_produced.getText();
-		String password = txt_sold.getText();
-		String mail = txt_forSale.getText();
-		String payment = txt_price.getText();
-		String group = txt_price.getText();
+		int year = new Integer(txt_year.getText());
+		int produced = new Integer(txt_produced.getText());
+		int sold = new Integer(txt_sold.getText());
+		int forSale = new Integer(txt_forSale.getText());
+		int cost = new Integer(txt_price.getText());
+		int price = new Integer(txt_price.getText());
+		String colour = txt_colour.getText();
+		String type = txt_type.getText();
 
-		//controller.newWine(name, surname, login, password, mail, payment, group);
+		controller.newWine(name, type, colour, produced, sold, price, cost, year, forSale);
 	}
 
 }

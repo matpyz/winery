@@ -9,10 +9,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-/**
- * 
- *
- */
 public class ClientTest {
 
 	private static Socket s;

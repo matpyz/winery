@@ -15,12 +15,11 @@ public class AccountsController implements Controller {
 	private AccountsView view;
 	String response = "";
 
+	/**
+	 * Mapa przechowująca Id pobranych kont użytkowników. Kluczami są loginy.
+	 */
 	private HashMap<String, Integer> userIdMap = new HashMap<>();
 
-	/**
-	 * @param model
-	 *            AccountsModel do komunikacji z bazą
-	 */
 	public AccountsController() {
 		model = new AccountsModel();
 		view = new AccountsView(this);
@@ -30,34 +29,31 @@ public class AccountsController implements Controller {
 	}
 
 	/**
-	 * Dodaje nowe konto.
+	 * Dodaje nowe konto. Parametry odpowiadają kolumnom w tabeli w bazie danych.
 	 * 
 	 * @param accountData
-	 *            dane nowego konta
-	 * @return string potwierdzający lub opisujący napotkany błąd
 	 */
-	public void newAccount(String name, String surname, String login, String password, String mail, String payment,
-			String groupName) {
-		DBManager.addUser(login, password, mail, name, surname, DBManager.getGroupIdByName(groupName),
-				new Integer(payment));
+	public void newAccount(String name, String surname, String login,
+			String password, String mail, String payment, String groupName) {
+		DBManager.addUser(login, password, mail, name, surname,
+				DBManager.getGroupIdByName(groupName), new Integer(payment));
 		getAccountList();
 		response = "konto " + login + " zostało dodane";
 	}
 
 	/**
-	 * Modyfikuje konto.
+	 * Modyfikuje konto. Parametry odpowiadają kolumnom w tabeli w bazie danych.
 	 * 
 	 * @param accountData
-	 * @return string potwierdzający lub opisujący napotkany błąd
 	 */
-	public void modifyAccount(String name, String surname, String login, String password, String mail, String payment,
-			String groupName) {
+	public void modifyAccount(String name, String surname, String login,
+			String password, String mail, String payment, String groupName) {
 		// DBManager.changeUserData(userId, login, password, mail, name,
 		// surname, groupId, payment)
 		int groupId = DBManager.getGroupIdByName(groupName);
 		System.out.println(payment);
-		if (DBManager.changeUserData(userIdMap.get(login), login, password, mail, name, surname, groupId,
-				new Integer(payment))) {
+		if (DBManager.changeUserData(userIdMap.get(login), login, password,
+				mail, name, surname, groupId, new Integer(payment))) {
 			getAccountList();
 			response = "dane konta '" + login + "' zostały zaktualizowane";
 		} else
@@ -65,10 +61,9 @@ public class AccountsController implements Controller {
 	}
 
 	/**
+	 * Usuwa konto.
 	 * 
-	 * 
-	 * @param accountId
-	 * @return string potwierdzający lub opisujący napotkany błąd
+	 * @param userLogin login konta do usunięcia
 	 */
 	public void deleteAccount(String userLogin) {
 		DBManager.removeUserById(userIdMap.get(userLogin));
@@ -79,9 +74,7 @@ public class AccountsController implements Controller {
 	/**
 	 * Pobiera dane o konkretnym użytkowniku z bazy.
 	 * 
-	 * @param userId
-	 *            id wybranego użytkownika
-	 * @return lista stringów z danymi
+	 * @param userLogin login wybranego użytkownika
 	 */
 	void getAccountData(String userLogin) {
 		User user = DBManager.getUserById(userIdMap.get(userLogin));
@@ -91,8 +84,6 @@ public class AccountsController implements Controller {
 
 	/**
 	 * Pobiera listę kont z bazy.
-	 * 
-	 * @return lista stringów z imionami_nazwiskami
 	 */
 	void getAccountList() {
 		HashMap<Integer, User> users = DBManager.getUsers();
@@ -100,7 +91,8 @@ public class AccountsController implements Controller {
 		List<User> userList = new ArrayList<>(users.values());
 		ArrayList<String> userData = new ArrayList<>();
 		for (User u : userList) {
-			userData.add(u.getName() + " " + u.getSurname() + " (" + u.getLogin() + ")");
+			userData.add(u.getName() + " " + u.getSurname() + " ("
+					+ u.getLogin() + ")");
 			userIdMap.put(u.getLogin(), u.getId());
 		}
 		model.setAccountList(userData);

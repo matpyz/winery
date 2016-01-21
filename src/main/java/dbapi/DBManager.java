@@ -1378,7 +1378,6 @@ public class DBManager {
 				Wine wine = new Wine(rs.getInt("id"), rs.getString("name"), rs.getString("grapes"), rs.getString("color"),
 						rs.getInt("produced"), rs.getInt("sold"), rs.getInt("baseprice"), rs.getInt("productionCost"), rs.getInt("year"), rs.getInt("protectedOrigin"), rs.getInt("forSale"));
 				wines.put(rs.getInt("id"), wine);
-				conn.close();
 			}
 			conn.close();
 		} catch (SQLException e) {

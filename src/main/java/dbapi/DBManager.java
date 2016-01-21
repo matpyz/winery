@@ -858,7 +858,7 @@ public class DBManager {
 					int result = dbManager.otherQuery(query);
 					if (result > 0) {
 						conn.close();
-						query = "SELECT `event`.`id`, `eventType`.`name` as `eventTypeName` FROM `event`, `eventType` WHERE `name`='"
+						query = "SELECT `event`.`id`, `eventType`.`name` as `eventTypeName` FROM `event`, `eventType` WHERE `event`.`name`='"
 								+ name + "' AND `creatorId`='" + creatorId + "' AND `startDate`='" + startDate
 								+ "' AND `event`.`eventTypeId`=`eventType`.`id`";
 						rs = dbManager.selectQuery(query);
@@ -1750,14 +1750,14 @@ public class DBManager {
 		
 		FieldCell fieldCell = null;
 		
-		String query = "INSERT INTO `fieldCell` (`row`, `column`, `section`, `currentStatusId`, `description`, `date`) VALUES ('" + row + "', '"
+		String query = "INSERT INTO `fieldCell` (`row`, `col`, `section`, `currentStatusId`, `description`, `date`) VALUES ('" + row + "', '"
 				+ column + "', '" + section + "', '" + currentStatusId + "', '" + description + "', '" + new java.sql.Date(date.getTime()) + "');";
 		
 		try {
 			int result = dbManager.otherQuery(query);
 			conn.close();
 			if(result > 0) {
-				query = "SELECT `id` FROM `fieldCell` WHERE `row` = '"+row+"' AND `column` = '"+column+"' AND `section` = '"+section+"' ORDER BY `id` DESC LIMIT 1";
+				query = "SELECT `id` FROM `fieldCell` WHERE `row` = '"+row+"' AND `col` = '"+column+"' AND `section` = '"+section+"' ORDER BY `id` DESC LIMIT 1";
 				ResultSet rs = dbManager.selectQuery(query);
 				if (rs.next()) {
 					int id = rs.getInt("id");
@@ -1798,7 +1798,7 @@ public class DBManager {
 		if ( column != -1 ) {
 			if (!query.isEmpty())
 				query += ", ";
-			query += "`column`='" + column + "'";
+			query += "`col`='" + column + "'";
 		}
 		if ( !section.isEmpty() ) {
 			if (!query.isEmpty())

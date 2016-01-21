@@ -1520,7 +1520,7 @@ public class DBManager {
 		if ( !color.isEmpty() ) {
 			if (!query.isEmpty())
 				query += ", ";
-			query += "`receiverAddress`='" + color + "'";
+			query += "`color`='" + color + "'";
 		}
 		if ( produced != -1 ) {
 			if (!query.isEmpty())
